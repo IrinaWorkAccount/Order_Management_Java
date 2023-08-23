@@ -1,11 +1,19 @@
 package com.bitconex.mywebapp.model;
 
+import jakarta.persistence.*;
+
 /**
  * An abstract class that contains the common properties of users (Admin and Customer), such a login name, passwort and email.
  */
 
-
+@Entity
+@Table(name = "users")
 public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+@Column(name = "Login", length = 128, nullable = false )
+
     private String loginName;
     private String email;
     private String password;
@@ -14,6 +22,10 @@ public abstract class User {
         this.loginName = loginName;
         this.email = email;
         this.password = password;
+    }
+
+    public User() {
+        //TODO?
     }
 
     public String getUserLoginName() {

@@ -1,9 +1,6 @@
 package com.bitconex.mywebapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -17,7 +14,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**private Customer customer;
+    @ManyToOne
+    private Customer customer;
+    @OneToMany
     private List<Product> products;
 
     public Order(Customer customer, List<Product> products) {
@@ -44,5 +43,4 @@ public class Order {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
-     */
 }

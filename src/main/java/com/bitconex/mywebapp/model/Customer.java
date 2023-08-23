@@ -1,10 +1,20 @@
 package com.bitconex.mywebapp.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * A subclass of "User", wich includes additional information for customers, such a name, surname, birth date and adress
  */
 
-public class Customer extends User {
+@Entity
+public abstract class Customer extends User  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
     private String surname;
     private String birthDate;
@@ -16,6 +26,10 @@ public class Customer extends User {
         this.surname = surname;
         this.birthDate = birthDate;
         this.address = address;
+    }
+
+    public Customer() {
+        //TODO?
     }
 
     public String getCustomerName() {

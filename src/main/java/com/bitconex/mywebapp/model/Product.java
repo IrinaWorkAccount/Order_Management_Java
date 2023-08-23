@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -51,7 +52,7 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Date getProductAvailableFrom() {
+    public Date getProductAvailableFrom(Calendar today) {
         return availableFrom;
     }
 
