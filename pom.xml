@@ -16,6 +16,7 @@
     <description>MyWebApp</description>
     <properties>
         <java.version>18</java.version>
+        <start-class>src/main/resources/MyWebAppApplication.java</start-class>
     </properties>
     <dependencies>
         <dependency>
