@@ -1,9 +1,6 @@
 package com.bitconex.mywebapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /**
  * A subclass of "User", wich includes additional information for customers, such a name, surname, birth date and adress
@@ -14,54 +11,60 @@ public abstract class Customer extends User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name")
+    private String customerName;
+    @Column(name = "surname")
+    private String customerSurname;
+    @Column(name = "birth_date")
+    @Temporal(TemporalType.DATE)
+    private String customerBirthDate;
+    @Column(name = "address")
+    private String customerAddress;
 
-    private String name;
-    private String surname;
-    private String birthDate;
-    private String address;
-
-    public Customer(String loginName, String email, String password, String name, String surname, String birthDate, String address) {
-        super(loginName, email, password);
-        this.name = name;
-        this.surname = surname;
-        this.birthDate = birthDate;
-        this.address = address;
+    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, String customerBirthDate, String customerAddress) {
+        super(userLoginName, userEmail, userPassword);
+        this.customerName = customerName;
+        this.customerSurname = customerSurname;
+        this.customerBirthDate = customerBirthDate;
+        this.customerAddress = customerAddress;
     }
 
     public Customer() {
-        //TODO?
+        super();
     }
 
     public String getCustomerName() {
-        return name;
+        return customerName;
     }
 
     public void setCustomerName(String name) {
-        this.name = name;
+        this.customerName = name;
     }
 
     public String getCustomerSurname() {
-        return surname;
+        return customerSurname;
     }
 
     public void setCustomerSurname(String surname) {
-        this.surname = surname;
+        this.customerSurname = surname;
     }
 
     public String getCustomerBirthDate() {
-        return birthDate;
+        return customerBirthDate;
     }
 
     public void setCustomerBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+        this.customerBirthDate = birthDate;
     }
 
     public String getCustomerAddress() {
-        return address;
+        return customerAddress;
     }
 
     public void setCustomerAddress(String address) {
-        this.address = address;
+        this.customerAddress = address;
     }
+
+    //Methods specific to Customer users
 
 }

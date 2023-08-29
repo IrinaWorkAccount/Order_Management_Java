@@ -8,20 +8,23 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 @Column(name = "Login", length = 128, nullable = false )
+    private String userLoginName;
+    @Column(name = "email")
+    private String userEmail;
+    @Column(name = "password")
+    private String userPassword;
 
-    private String loginName;
-    private String email;
-    private String password;
-
-    public User(String loginName, String email, String password) {
-        this.loginName = loginName;
-        this.email = email;
-        this.password = password;
+    public User(String userLoginName, String UserEmail, String userPassword) {
+        this.userLoginName = userLoginName;
+        this.userEmail = UserEmail;
+        this.userPassword = userPassword;
     }
 
     public User() {
@@ -29,27 +32,27 @@ public abstract class User {
     }
 
     public String getUserLoginName() {
-        return loginName;
+        return userLoginName;
     }
 
     public void setUserLoginName(String loginName) {
-        this.loginName = loginName;
+        this.userLoginName = loginName;
     }
 
     public String getUserEmail() {
-        return email;
+        return userEmail;
     }
 
     public void setUserEmail(String email) {
-        this.email = email;
+        this.userEmail = email;
     }
 
     public String getUserPassword() {
-        return password;
+        return userPassword;
     }
 
     public void setUserPassword(String password) {
-        this.password = password;
+        this.userPassword = password;
     }
 }
 

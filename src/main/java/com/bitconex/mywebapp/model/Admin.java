@@ -15,13 +15,12 @@ public class Admin extends User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Admin(String loginName, String email, String password) {
-        super(loginName, email, password);
+    public Admin(String userLoginName, String userEmail, String userPassword) {
+        super(userLoginName, userEmail, userPassword);
     }
 
     public Admin() {
         super();
-        //TODO?
     }
 
     //Methods specific to Admin users

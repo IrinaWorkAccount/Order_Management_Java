@@ -1,9 +1,6 @@
 package com.bitconex.mywebapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,19 +10,28 @@ import java.util.Date;
  */
 
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+    @Column(name = "sale_price")
     private double salePrice;
+    @Column(name = "available_from")
+    @Temporal(TemporalType.DATE)
     private Date availableFrom;
+    @Column(name = "available_until")
+    @Temporal(TemporalType.DATE)
+
     private Date availableUntil;
+    @Column(name = "quantity")
     private int quantity;
 
-    public Product(String name, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
-        this.name = name;
+    public Product(String productName, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
+        this.productName = productName;
         this.salePrice = salePrice;
         this.availableFrom = availableFrom;
         this.availableUntil = availableUntil;
@@ -33,15 +39,19 @@ public class Product {
     }
 
     public Product() {
-        //TODO ?
+        //Default constructor
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getProductName() {
-        return name;
+        return productName;
     }
 
     public void setProductName(String name) {
-        this.name = name;
+        this.productName = name;
     }
 
     public double getProductSalePrice() {
