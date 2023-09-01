@@ -1,11 +1,15 @@
 package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An abstract class that contains the common properties of users (Admin and Customer), such a login name, passwort and email.
  */
 
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)

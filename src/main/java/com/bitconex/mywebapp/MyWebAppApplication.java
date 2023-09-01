@@ -2,8 +2,13 @@ package com.bitconex.mywebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EntityScan("com.bitconex.mywebapp.model")
+@EnableJpaRepositories("com.bitconex.mywebapp.repository")
 public class MyWebAppApplication {
 
     public static void main(String[] args) {

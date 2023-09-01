@@ -16,7 +16,7 @@
     <description>MyWebApp</description>
     <properties>
         <java.version>18</java.version>
-        <start-class>src/main/resources/MyWebAppApplication.java</start-class>
+        <start-class>src/main/java/com/bitconex/mywebapp/MyWebAppApplication.java</start-class>
     </properties>
     <dependencies>
         <dependency>
@@ -56,6 +56,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
