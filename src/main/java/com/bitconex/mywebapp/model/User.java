@@ -1,6 +1,7 @@
 package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
+//import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
+//@AllArgsConstructor // Hinzugefügt, um den Konstruktor automatisch zu generieren
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +27,15 @@ public abstract class User {
     @Column(name = "password")
     private String userPassword;
 
-    public User(String userLoginName, String UserEmail, String userPassword) {
+    // Konstruktor wird nicht mehr benötigt, da er durch Lombok generiert wird
+
+    public User(String userLoginName, String userEmail, String userPassword) {
         this.userLoginName = userLoginName;
-        this.userEmail = UserEmail;
+        this.userEmail = userEmail;
         this.userPassword = userPassword;
     }
 
     public User() {
-        //TODO?
     }
 
     public String getUserLoginName() {

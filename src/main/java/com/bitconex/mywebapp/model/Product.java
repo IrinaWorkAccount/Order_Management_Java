@@ -63,7 +63,11 @@ public class Product {
     }
 
     public Date getProductAvailableFrom(Calendar today) {
-        return availableFrom;
+        if (availableFrom != null && availableFrom.after(today.getTime())) {
+            return availableFrom;
+        } else {
+            return today.getTime();
+        }
     }
 
     public void setProductAvailableFrom(Date availableFrom) {

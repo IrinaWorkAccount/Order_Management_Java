@@ -7,7 +7,7 @@ import jakarta.persistence.*;
  */
 
 @Entity
-public abstract class Customer extends User  {
+public class Customer extends User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
