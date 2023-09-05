@@ -2,6 +2,8 @@ package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 /**
  * A subclass of "User", wich includes additional information for customers, such a name, surname, birth date and adress
  */
@@ -17,11 +19,11 @@ public class Customer extends User  {
     private String customerSurname;
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
-    private String customerBirthDate;
+    private LocalDate customerBirthDate;
     @Column(name = "address")
     private String customerAddress;
 
-    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, String customerBirthDate, String customerAddress) {
+    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, LocalDate customerBirthDate, String customerAddress) {
         super(userLoginName, userEmail, userPassword);
         this.customerName = customerName;
         this.customerSurname = customerSurname;
@@ -49,11 +51,11 @@ public class Customer extends User  {
         this.customerSurname = surname;
     }
 
-    public String getCustomerBirthDate() {
+    public LocalDate getCustomerBirthDate() {
         return customerBirthDate;
     }
 
-    public void setCustomerBirthDate(String birthDate) {
+    public void setCustomerBirthDate(LocalDate birthDate) {
         this.customerBirthDate = birthDate;
     }
 
@@ -66,5 +68,9 @@ public class Customer extends User  {
     }
 
     //Methods specific to Customer users
+    @Override
+    public boolean isAdmin() {
+        return false; // A customer is not an administrator
+    }
 
 }

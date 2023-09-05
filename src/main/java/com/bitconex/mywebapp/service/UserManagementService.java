@@ -5,7 +5,7 @@ import com.bitconex.mywebapp.model.User;
 import java.util.List;
 
 /**
- * A class that implementsuser management functions, such as a adding, listing and deleting users.
+ * A class that implement user management functions, such as an adding, listing and deleting users.
  */
 
 public class UserManagementService {

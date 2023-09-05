@@ -9,6 +9,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
@@ -19,12 +22,23 @@ public class CustomerRepositoryTests {
 
     @Test
     public void testAddNewCustomer() {
-        Customer customer = new Customer("userLoginName", "userEmail", "userPassword", "customerName", "customerSurname", "customerBirthDate", "customerAddress");
+        Customer customer = new Customer();
+        customer.setUserLoginName("Endera_Hifhra");
+        customer.setUserEmail("Endera_Hifhra@gmail.com");
+        customer.setUserPassword("querty1234");
+        customer.setCustomerName("Endera");
+        customer.setCustomerSurname("Hifhra");
+
+        LocalDate birthDate = LocalDate.of(1990, 9, 14);
+        customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
+
+        customer.setCustomerAddress("Feuer Str. 21, 81546");
+
         Customer savedCustomer = customerRepository.save(customer);
 
-        Assertions.assertThat(savedCustomer).isNotNull();
-        Assertions.assertThat(savedCustomer.getId()).isGreaterThan(0);
-    }
+        boolean isNotAdmin = !savedCustomer.isAdmin();
 
-    // Weitere Tests für spezifische CustomerRepository-Methoden können hier hinzugefügt werden
+        Assertions.assertThat(savedCustomer.getId()).isGreaterThan(0);
+        Assertions.assertThat(isNotAdmin).isTrue();
+    }
 }

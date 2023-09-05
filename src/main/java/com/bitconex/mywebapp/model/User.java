@@ -61,6 +61,9 @@ public abstract class User {
     public void setUserPassword(String password) {
         this.userPassword = password;
     }
+
+    public abstract boolean isAdmin();
+
 }
 
 
