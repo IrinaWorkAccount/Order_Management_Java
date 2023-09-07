@@ -13,15 +13,18 @@ import jakarta.persistence.Id;
 public class Admin extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    public Admin(String userLoginName, String userEmail, String userPassword) {
-        super(userLoginName, userEmail, userPassword);
-    }
+    private Integer id;
 
     public Admin() {
         super();
     }
+
+    public Admin(String userLoginName, String userEmail, String userPassword) {
+    }
+
+   /* public Integer getId() {
+        return id;
+    }*/
 
     //Methods specific to Admin users
     @Override

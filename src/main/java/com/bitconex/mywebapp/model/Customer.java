@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class Customer extends User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "name")
     private String customerName;
     @Column(name = "surname")

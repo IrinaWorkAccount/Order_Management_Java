@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.Optional;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
@@ -23,5 +25,42 @@ public class AdminRepositoryTests {
 
         Assertions.assertThat(admin).isNotNull();
         Assertions.assertThat(admin.getId()).isGreaterThan(0);
+    }
+    @Test
+    public void testListAllAdmins(){
+        Iterable<Admin> admins = adminRepository.findAll();
+        Assertions.assertThat(admins).hasSizeGreaterThan(0);
+
+        for (Admin admin: admins){
+            System.out.println(admin);
+        }
+    }
+    @Test
+    public void testUpdateAdmin(){
+        Integer adminID= 1;
+                Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
+                Admin admin= optionalAdmin.get();
+                admin.setUserPassword("querty2");
+                adminRepository.save(admin);
+
+                Admin updatedAdmin=adminRepository.findById(adminID).get();
+                Assertions.assertThat(updatedAdmin.getUserPassword()).isEqualTo("querty2");
+    }
+    @Test
+    public void testGet(){
+        Integer adminID  = 1;
+        Optional<Admin>optionalAdmin=adminRepository.findById(adminID);
+
+        Assertions.assertThat(optionalAdmin).isPresent();
+        System.out.println(optionalAdmin.get());
+    }
+
+    @Test
+    public void testDelete(){
+        Integer adminID = 1;
+        adminRepository.deleteById(adminID);
+
+        Optional<Admin>optionalAdmin = adminRepository.findById(adminID);
+        Assertions.assertThat(optionalAdmin).isNotPresent();
     }
 }

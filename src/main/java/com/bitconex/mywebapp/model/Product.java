@@ -14,7 +14,7 @@ import java.util.Date;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
@@ -42,7 +42,7 @@ public class Product {
         //Default constructor
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

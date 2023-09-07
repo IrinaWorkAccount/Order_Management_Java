@@ -12,9 +12,9 @@
         <class>com.bitconex.mywebapp.model.Admin</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/yourdb"/>
-            <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/CatalogProDB"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="password"/>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <property name="hibernate.archive.autodetect" value="class"/>
