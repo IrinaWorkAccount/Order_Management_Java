@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 //import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
 
 /**
  * An abstract class that contains the common properties of users (Admin and Customer), such a login name, passwort and email.
@@ -20,7 +21,8 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-@Column(name = "Login", length = 128, nullable = false )
+    @Column(name = "Login", length = 128)
+    @NonNull
     private String userLoginName;
     @Column(name = "email")
     private String userEmail;
@@ -29,7 +31,7 @@ public abstract class User {
 
     // Konstruktor wird nicht mehr benötigt, da er durch Lombok generiert wird
 
-    public User(String userLoginName, String userEmail, String userPassword) {
+    public User(@NonNull String userLoginName, String userEmail, String userPassword) {
         this.userLoginName = userLoginName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
@@ -38,6 +40,7 @@ public abstract class User {
     public User() {
     }
 
+    @NonNull
     public String getUserLoginName() {
         return userLoginName;
     }

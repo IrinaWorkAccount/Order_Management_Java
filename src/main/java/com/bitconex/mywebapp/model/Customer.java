@@ -10,9 +10,9 @@ import java.time.LocalDate;
 
 @Entity
 public class Customer extends User  {
-    @Id
+   /* @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id;*/
     @Column(name = "name")
     private String customerName;
     @Column(name = "surname")

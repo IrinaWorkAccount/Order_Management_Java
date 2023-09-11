@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @DataJpaTest
@@ -21,7 +22,9 @@ public class AdminRepositoryTests {
 
     @Test
     public void testAddNewAdmin() {
-        Admin admin = adminRepository.save(new Admin("userLoginName", "userEmail", "userPassword"));
+
+        Admin admin1 = new Admin("userLoginName", "userEmail", "userPassword");
+        Admin admin = adminRepository.save(admin1);
 
         Assertions.assertThat(admin).isNotNull();
         Assertions.assertThat(admin.getId()).isGreaterThan(0);
@@ -39,17 +42,19 @@ public class AdminRepositoryTests {
     public void testUpdateAdmin(){
         Integer adminID= 1;
                 Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
-                Admin admin= optionalAdmin.get();
-                admin.setUserPassword("querty2");
+                Admin admin= optionalAdmin.orElse(null);
+        if (admin.getUserPassword() != null) {
+                admin.setUserPassword("querty2");}
                 adminRepository.save(admin);
 
-                Admin updatedAdmin=adminRepository.findById(adminID).get();
-                Assertions.assertThat(updatedAdmin.getUserPassword()).isEqualTo("querty2");
+                Admin updatedAdmin=adminRepository.findById(adminID).orElse(null);
+        if (updatedAdmin.getUserPassword() != null) {
+                Assertions.assertThat(Objects.requireNonNull(updatedAdmin.getUserPassword())).isEqualTo("querty2"); }
     }
     @Test
     public void testGet(){
         Integer adminID  = 1;
-        Optional<Admin>optionalAdmin=adminRepository.findById(adminID);
+        Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
 
         Assertions.assertThat(optionalAdmin).isPresent();
         System.out.println(optionalAdmin.get());

@@ -10,8 +10,9 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Calendar;
+import java.util.Objects;
 
-@SpringBootTest
+@SpringBootTest//in dem test entity scan scan machen , der findet entity nicht
 public class HibernateTests {
     public static void main(String[] args) {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().
@@ -30,7 +31,11 @@ public class HibernateTests {
         Calendar today = Calendar.getInstance();
         product.setProductAvailableFrom(today.getTime());
 
-        session.save(product);
+        if (Objects.isNull(session.find(Product.class, product.getId()))) {
+            session.persist(product);
+        } else {
+            session.merge(product);
+        }
         transaction.commit();
         session.close();
         sessionFactory.close();
