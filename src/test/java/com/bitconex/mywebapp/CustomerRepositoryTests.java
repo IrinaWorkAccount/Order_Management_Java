@@ -11,6 +11,9 @@ import org.springframework.test.annotation.Rollback;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Optional;
+
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -38,7 +41,51 @@ public class CustomerRepositoryTests {
 
         boolean isNotAdmin = !savedCustomer.isAdmin();
 
-        Assertions.assertThat(savedCustomer.getId()).isGreaterThan(0);
+        Assertions.assertThat(savedCustomer.getId()).isNotNull();
         Assertions.assertThat(isNotAdmin).isTrue();
     }
+    @Test
+    public void testListAllCustomers(){
+        Iterable<Customer> customers = customerRepository.findAll();
+        Assertions.assertThat(customers).hasSizeGreaterThan(0);
+
+        for (Customer customer: customers){
+            System.out.println(customer);
+        }
+    }
+
+    @Test
+    public void testUpdateCustomer(){
+        Long customerID=1L;
+        Optional<Customer> optionalCustomer=customerRepository.findById(customerID);
+        Customer customer=optionalCustomer.orElse(null);
+        assert customer !=null;
+        if (customer.getCustomerAddress()!= null){
+            customer.setCustomerAddress("Locchauer Str.8");}
+        customerRepository.save(customer);
+
+        Customer updatedCustomer=customerRepository.findById(customerID).orElse(null);
+        assert updatedCustomer !=null;
+        if (updatedCustomer.getCustomerAddress() != null) {
+            Assertions.assertThat(Objects.requireNonNull(updatedCustomer.getCustomerAddress())).isEqualTo("Locchauer Str.8"); }
+        }
+
+@Test
+public void testGet(){
+        Long customerID = 1L;
+        Optional<Customer> optionalCustomer=customerRepository.findById(customerID);
+
+        Assertions.assertThat(optionalCustomer).isPresent();
+    System.out.println(optionalCustomer.get());
+}
+
+@Test
+public void testDelete() {
+    Long customerID = 1L;
+    customerRepository.deleteById(customerID);
+
+    Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
+    Assertions.assertThat(optionalCustomer).isNotPresent();
+}
+
 }

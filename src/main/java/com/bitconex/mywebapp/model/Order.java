@@ -13,7 +13,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     private Customer customer;
@@ -26,7 +26,12 @@ public class Order {
     }
 
     public Order() {
+        //Default constructor
     }
+
+    /*public Long getId() {
+        return id;
+    }*/
 
     public Customer getCustomer() {
         return customer;

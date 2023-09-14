@@ -1,32 +1,32 @@
 package com.bitconex.mywebapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import static com.bitconex.mywebapp.security.Role.ADMIN;
 
 /**
  * A subclass of "Users", which includes additional information for admin users.
  */
 
-@Entity
+@Entity (name = "Admin")
+@DiscriminatorValue("ADMIN")
 public class Admin extends User{
 
-   /* @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;*/
-
-    public Admin() {}
+    private Long id;
 
     public Admin(String userLoginName, String userEmail, String userPassword) {
-        setUserLoginName(userLoginName);
-        setUserEmail(userEmail);
-        setUserPassword(userPassword);
+        super(userLoginName, userEmail, userPassword, ADMIN);
     }
 
-   /* public Integer getId() {
+    public Admin() {
+        //Default constructor
+    }
+
+    public Long getId() {
         return id;
-    }*/
+    }
 
     //Methods specific to Admin users
     @Override

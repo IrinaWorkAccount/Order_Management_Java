@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @DataJpaTest
@@ -33,5 +35,48 @@ public class ProductRepositoryTests {
         Assertions.assertThat(savedProduct.getId()).isGreaterThan(0);
     }
 
+    @Test
+    public void testListProducts(){
+        Iterable<com.bitconex.mywebapp.model.Product> products = productRepository.findAll();
+        Assertions.assertThat(products).hasSizeGreaterThan(0);
+
+        for (Product product: products){
+            System.out.println(product);
+        }
+    }
+
+    @Test
+    public void testUpdateProduct(){
+        Long productID= 3L;
+        Optional<Product> optionalProduct=productRepository.findById(productID);
+        Product product= optionalProduct.orElse(null);
+        assert product != null;
+        if (product.getProductName() != null) {
+            product.setProductQuantity(265);}
+        productRepository.save(product);
+
+        Product updatedProduct=productRepository.findById(productID).orElse(null);
+        assert updatedProduct != null;
+        if (updatedProduct.getProductName() != null) {
+            Assertions.assertThat(updatedProduct.getProductQuantity()).isEqualTo(265); }
+    }
+
+    @Test
+    public void testGet(){
+        Long productID  = 3L;
+        Optional<Product> optionalProduct=productRepository.findById(productID);
+
+        Assertions.assertThat(optionalProduct).isPresent();
+        System.out.println(optionalProduct.get());
+    }
+
+    @Test
+    public void testDelete(){
+        Long productID = 4L;
+        productRepository.deleteById(productID);
+
+        Optional<Product>optionalProduct = productRepository.findById(productID);
+        Assertions.assertThat(optionalProduct).isNotPresent();
+    }
 
 }

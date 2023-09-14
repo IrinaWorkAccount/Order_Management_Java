@@ -43,7 +43,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/edit/{id}")
-    public String showEditForm(@PathVariable("id") Integer id, Model model, RedirectAttributes ra) {
+    public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         try {
             Customer customer = service.get(id);
             model.addAttribute("customer", customer);
@@ -57,7 +57,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/delete/{id}")
-    public String deleteCustomer(@PathVariable("id") Integer id, RedirectAttributes ra) {
+    public String deleteCustomer(@PathVariable("id") Long id, RedirectAttributes ra) {
         try {
             service.delete(id);
             ra.addFlashAttribute("message", "The customer ID " + id + " has been deleted.");

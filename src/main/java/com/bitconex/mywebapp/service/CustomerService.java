@@ -20,7 +20,7 @@ public class CustomerService {
         repo.save(user);
     }
 
-    public Customer get(Integer id) throws Exception {
+    public Customer get(Long id) throws Exception {
         Optional<Customer> result = repo.findById(id);
         if (result.isPresent()) {
             return result.get();
@@ -28,8 +28,8 @@ public class CustomerService {
         throw new Exception("Could not find any users with ID " + id);
     }
 
-    public void delete(Integer id) throws Exception {
-        Integer count = repo.countById(id);
+    public void delete(Long id) throws Exception {
+        Long count = repo.countById(id);
         if (count == null || count == 0) {
             throw new Exception("Could not find any users with ID " + id);
         }

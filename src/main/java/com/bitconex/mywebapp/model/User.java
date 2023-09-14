@@ -1,23 +1,29 @@
 package com.bitconex.mywebapp.model;
 
+import com.bitconex.mywebapp.security.Role;
 import jakarta.persistence.*;
-//import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
 import org.springframework.lang.NonNull;
 
 /**
- * An abstract class that contains the common properties of users (Admin and Customer), such a login name, passwort and email.
+ * An abstract class that contains the common properties of users (Admin and Customer), such a login name, password and email.
  */
 
 @Getter
 @Setter
-@Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
-//@AllArgsConstructor // Hinzugefügt, um den Konstruktor automatisch zu generieren
+//@Table(name = "users")
+@MappedSuperclass
+//@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING) // Added to distinguish the entity type
+
+
+
+
 public abstract class User {
     @Id
+    //@Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -29,15 +35,21 @@ public abstract class User {
     @Column(name = "password")
     private String userPassword;
 
-    // Konstruktor wird nicht mehr benötigt, da er durch Lombok generiert wird
+    private Role role;
 
-    public User(@NonNull String userLoginName, String userEmail, String userPassword) {
+    public User(@NonNull String userLoginName, String userEmail, String userPassword, Role role) {
         this.userLoginName = userLoginName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+        this.role = role;
     }
 
     public User() {
+        //Default constructor
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @NonNull
@@ -45,7 +57,7 @@ public abstract class User {
         return userLoginName;
     }
 
-    public void setUserLoginName(String loginName) {
+    public void setUserLoginName(@NonNull String loginName) {
         this.userLoginName = loginName;
     }
 
@@ -66,6 +78,11 @@ public abstract class User {
     }
 
     public abstract boolean isAdmin();
+
+    public void addRole(Role role){
+        this.role=role;
+    }
+
 
 }
 

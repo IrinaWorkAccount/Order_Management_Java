@@ -4,15 +4,18 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+import static com.bitconex.mywebapp.security.Role.CUSTOMER;
+
 /**
- * A subclass of "User", wich includes additional information for customers, such a name, surname, birth date and adress
+ * A subclass of "User", which includes additional information for customers, such a name, surname, birthdate and address
  */
 
-@Entity
+@Entity (name = "Customer")
+@DiscriminatorValue("CUSTOMER")
 public class Customer extends User  {
-   /* @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;*/
+    public Long id;
     @Column(name = "name")
     private String customerName;
     @Column(name = "surname")
@@ -24,7 +27,7 @@ public class Customer extends User  {
     private String customerAddress;
 
     public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, LocalDate customerBirthDate, String customerAddress) {
-        super(userLoginName, userEmail, userPassword);
+        super(userLoginName, userEmail, userPassword, CUSTOMER);
         this.customerName = customerName;
         this.customerSurname = customerSurname;
         this.customerBirthDate = customerBirthDate;
@@ -32,7 +35,11 @@ public class Customer extends User  {
     }
 
     public Customer() {
-        super();
+        //Default constructor
+    }
+
+   public Long getId() {
+        return id;
     }
 
     public String getCustomerName() {

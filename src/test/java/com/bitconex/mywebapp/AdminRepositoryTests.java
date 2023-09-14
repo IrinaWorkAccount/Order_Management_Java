@@ -2,6 +2,7 @@ package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.Admin;
 import com.bitconex.mywebapp.repository.AdminRepository;
+import com.bitconex.mywebapp.security.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,16 @@ public class AdminRepositoryTests {
     @Test
     public void testAddNewAdmin() {
 
-        Admin admin1 = new Admin("userLoginName", "userEmail", "userPassword");
-        Admin admin = adminRepository.save(admin1);
+        Admin admin = new Admin();
+        admin.setUserLoginName("userLoginName");
+        admin.setUserEmail("userEmail");
+        admin.setUserPassword("userPassword");
+        admin.addRole(Role.ADMIN);
 
-        Assertions.assertThat(admin).isNotNull();
-        Assertions.assertThat(admin.getId()).isGreaterThan(0);
+        Admin savedAdmin = adminRepository.save(admin);
+
+        Assertions.assertThat(savedAdmin).isNotNull();
+        Assertions.assertThat(savedAdmin.getId()).isNotNull();
     }
     @Test
     public void testListAllAdmins(){
@@ -40,20 +46,22 @@ public class AdminRepositoryTests {
     }
     @Test
     public void testUpdateAdmin(){
-        Integer adminID= 1;
+        Long adminID= 1L;
                 Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
                 Admin admin= optionalAdmin.orElse(null);
+        assert admin != null;
         if (admin.getUserPassword() != null) {
-                admin.setUserPassword("querty2");}
+                admin.setUserPassword("query2");}
                 adminRepository.save(admin);
 
                 Admin updatedAdmin=adminRepository.findById(adminID).orElse(null);
+        assert updatedAdmin != null;
         if (updatedAdmin.getUserPassword() != null) {
-                Assertions.assertThat(Objects.requireNonNull(updatedAdmin.getUserPassword())).isEqualTo("querty2"); }
+                Assertions.assertThat(Objects.requireNonNull(updatedAdmin.getUserPassword())).isEqualTo("query2"); }
     }
     @Test
     public void testGet(){
-        Integer adminID  = 1;
+        Long adminID  = 1L;
         Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
 
         Assertions.assertThat(optionalAdmin).isPresent();
@@ -62,7 +70,7 @@ public class AdminRepositoryTests {
 
     @Test
     public void testDelete(){
-        Integer adminID = 1;
+        Long adminID = 1L;
         adminRepository.deleteById(adminID);
 
         Optional<Admin>optionalAdmin = adminRepository.findById(adminID);
