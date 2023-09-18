@@ -28,7 +28,7 @@ public class AdminRepositoryTests {
         admin.setUserLoginName("userLoginName");
         admin.setUserEmail("userEmail");
         admin.setUserPassword("userPassword");
-        admin.addRole(Role.ADMIN);
+        admin.setRole(Role.ADMIN);
 
         Admin savedAdmin = adminRepository.save(admin);
 

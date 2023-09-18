@@ -1,9 +1,11 @@
 package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * A class that represents a product in the product catalog, including name, sale price, availability dates and quantity
@@ -18,6 +20,7 @@ public class Product {
 
     @Column(name = "product_name", nullable = false)
     private String productName;
+
     @Column(name = "sale_price")
     private double salePrice;
     @Column(name = "available_from")
@@ -27,8 +30,19 @@ public class Product {
     @Temporal(TemporalType.DATE)
 
     private Date availableUntil;
+
     @Column(name = "quantity")
     private int quantity;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<Product> orderProduct;
+
+    @Id
+    @ManyToOne
+    @JoinColumn
+    private Order order;
+
+
 
     public Product(String productName, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
         this.productName = productName;
@@ -62,12 +76,8 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Date getProductAvailableFrom(Calendar today) {
-        if (availableFrom != null && availableFrom.after(today.getTime())) {
-            return availableFrom;
-        } else {
-            return today.getTime();
-        }
+    public Date getProductAvailableFrom() {
+        return availableFrom;
     }
 
     public void setProductAvailableFrom(Date availableFrom) {
@@ -90,6 +100,21 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public Set<Product> getProduct() {
+        return orderProduct;
+    }
+
+    public void setProduct(Set<Product> product) {
+        this.orderProduct = product;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }
 
 

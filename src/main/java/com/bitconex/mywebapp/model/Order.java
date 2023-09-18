@@ -3,6 +3,7 @@ package com.bitconex.mywebapp.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A class that represents an order and contains the selected  products and the customer.
@@ -15,37 +16,61 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Customer customer;
-    @OneToMany
-    private List<Product> products;
 
-    public Order(Customer customer, List<Product> products) {
-        this.customer = customer;
-        this.products = products;
-    }
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<Product> product;
+
+    @Id
+    @ManyToOne
+    @JoinColumn
+    private Product products;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+    private String status;
 
     public Order() {
         //Default constructor
     }
 
-    /*public Long getId() {
+    public Order(User user, String status, Set<Product> product) {
+        this.user = user;
+        this.status = status;
+        for(Product op : product) op.setOrder(this);
+        this.product = product;
+    }
+
+    public long getId() {
         return id;
-    }*/
-
-    public Customer getCustomer() {
-        return customer;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public Set<Product> getProduct() {
+        return product;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public void setProduct(Set<Product> product) {
+        this.product = product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public User getUser() {
+        return user;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
 }
