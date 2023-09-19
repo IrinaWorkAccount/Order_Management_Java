@@ -14,33 +14,29 @@ import java.util.Optional;
 
 public class OrderService {
     @Autowired
-    private OrderRepository repo;
+    OrderRepository or;
 
-    /*public List<Order> getAllOrders() {
-        return repo.findAll();
-    }*/
-
-    public Order createOrder() {
-        Order newOrder = new Order();
-newOrder.setUser(newOrder.getUser());
-newOrder.setProduct(newOrder.getProduct());
-        return repo.save(newOrder);
+    public void save(Order order) {
+        or.save(order);
+    }
+    public List<Order> getAllOrders(){
+        return (List<Order>) or.findAll();
     }
 
-    public void deleteOrder(Long orderId) {
-        Optional<Order>existingOrder= repo.findById(orderId);
+    public Order create() {
+        Order newOrder = new Order();
+newOrder.setUser(newOrder.getUser());
+newOrder.setOrderProduct(newOrder.getOrderProduct());
+        return or.save(newOrder);
+    }
+
+    public void delete(Long id) {
+        Optional<Order>existingOrder= or.findById(id);
         if(existingOrder.isPresent()){
-            repo.deleteById(orderId);
+            or.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Order with ID " + orderId + " not found.");
+            throw new IllegalArgumentException("Order with ID " + id + " not found.");
         }
     }
 
-    /*public Order updateOrder(Long orderId) {
-Optional<Order> optionalOrder=repo.findById(orderId);
-
-        return repo.save();
-    }*/
-
-    // Weitere Methoden hinzufügen, z.B. Export
 }

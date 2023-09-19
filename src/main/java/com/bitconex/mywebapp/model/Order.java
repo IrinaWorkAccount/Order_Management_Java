@@ -1,9 +1,8 @@
 package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
-
-import java.util.List;
 import java.util.Set;
+
 
 /**
  * A class that represents an order and contains the selected  products and the customer.
@@ -16,17 +15,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private Set<Product> product;
+    private Set<OrderProduct> orderProduct;
 
-    @Id
-    @ManyToOne
-    @JoinColumn
-    private Product products;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private String status;
@@ -35,11 +27,11 @@ public class Order {
         //Default constructor
     }
 
-    public Order(User user, String status, Set<Product> product) {
+    public Order(User user, String status, Set<OrderProduct> orderProduct) {
         this.user = user;
         this.status = status;
-        for(Product op : product) op.setOrder(this);
-        this.product = product;
+        for(OrderProduct op : orderProduct) op.setOrder(this);
+        this.orderProduct = orderProduct;
     }
 
     public long getId() {
@@ -49,12 +41,12 @@ public class Order {
         this.id = id;
     }
 
-    public Set<Product> getProduct() {
-        return product;
+    public Set<OrderProduct> getOrderProduct() {
+        return orderProduct;
     }
 
-    public void setProduct(Set<Product> product) {
-        this.product = product;
+    public void setOrderProduct(Set<OrderProduct> orderProduct) {
+        this.orderProduct = orderProduct;
     }
 
     public User getUser() {

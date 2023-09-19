@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ProductCatalogService {
 
     @Autowired
-    private ProductRepository repo;
+    private ProductRepository pr;
 
     public Product addProduct(Product product) {
 
@@ -24,19 +24,19 @@ public class ProductCatalogService {
         product.setProductAvailableUntil(product.getProductAvailableUntil());
         product.setProductQuantity(product.getProductQuantity());
 
-        return repo.save(product);
+        return pr.save(product);
 
     }
 
     public List<Product> getAllProducts() {
-        return (List<Product>) repo.findAll();
+        return (List<Product>) pr.findAll();
     }
 
 
-    public void deleteProduct(Long id) {
-        Optional<Product> existingProduct = repo.findById(id);
+    public void delete(Long id) {
+        Optional<Product> existingProduct = pr.findById(id);
         if (existingProduct.isPresent()) {
-            repo.deleteById(id);
+            pr.deleteById(id);
         } else {
             throw new IllegalArgumentException("Product with ID " + id + " not found.");
         }

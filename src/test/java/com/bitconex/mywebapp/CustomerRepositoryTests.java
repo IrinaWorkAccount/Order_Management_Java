@@ -1,6 +1,7 @@
 package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.Customer;
+import com.bitconex.mywebapp.model.CustomerAddress;
 import com.bitconex.mywebapp.repository.CustomerRepository;
 import com.bitconex.mywebapp.security.Role;
 import org.assertj.core.api.Assertions;
@@ -12,7 +13,6 @@ import org.springframework.test.annotation.Rollback;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -37,7 +37,13 @@ public class CustomerRepositoryTests {
         LocalDate birthDate = LocalDate.of(1990, 9, 14);
         customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
 
-        customer.setCustomerAddress("Feuer Str. 21, 81546");
+        CustomerAddress address = new CustomerAddress();
+        address.setStreet("Feuer Str. 21");
+        address.setZipCode("81546");
+        address.setCity("Musterstadt");
+        address.setCountry("Musterland");
+
+        customer.setCustomerAddress(address);
 
         Customer savedCustomer = customerRepository.save(customer);
 
@@ -62,15 +68,27 @@ public class CustomerRepositoryTests {
         Optional<Customer> optionalCustomer=customerRepository.findById(customerID);
         Customer customer=optionalCustomer.orElse(null);
         assert customer !=null;
-        if (customer.getCustomerAddress()!= null){
-            customer.setCustomerAddress("Locchauer Str.8");}
+
+        CustomerAddress address = new CustomerAddress();
+        address.setStreet("Locchauer Str. 8");
+        address.setZipCode("12345");
+        address.setCity("Musterstadt");
+        address.setCountry("Musterland");
+
+        customer.setCustomerAddress(address);
+
         customerRepository.save(customer);
 
         Customer updatedCustomer=customerRepository.findById(customerID).orElse(null);
         assert updatedCustomer !=null;
-        if (updatedCustomer.getCustomerAddress() != null) {
-            Assertions.assertThat(Objects.requireNonNull(updatedCustomer.getCustomerAddress())).isEqualTo("Locchauer Str.8"); }
-        }
+
+        CustomerAddress updatedAddress = updatedCustomer.getCustomerAddress();
+        Assertions.assertThat(updatedAddress).isNotNull();
+        Assertions.assertThat(updatedAddress.getStreet()).isEqualTo("Locchauer Str. 8");
+        Assertions.assertThat(updatedAddress.getZipCode()).isEqualTo("12345");
+        Assertions.assertThat(updatedAddress.getCity()).isEqualTo("Musterstadt");
+        Assertions.assertThat(updatedAddress.getCountry()).isEqualTo("Musterland");
+    }
 
 @Test
 public void testGet(){

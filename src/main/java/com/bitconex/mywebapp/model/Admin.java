@@ -26,29 +26,10 @@ public class Admin extends User{
     public Admin(String userLoginName, String userEmail, String userPassword) {
         super(userLoginName, userEmail, userPassword, ADMIN);
     }
-   /* public Admin(String[] anArray){
-        super(anArray[0],anArray[1],anArray[2], Role.valueOf(anArray[3]));
-    }*/
-
-
 
     public Admin() {
         //Default constructor
     }
-
-    /*public String[] getFullUser() {
-        String[] FullAdminInfo = new String[5];
-        FullAdminInfo[0] = String.valueOf(super.getId());
-        FullAdminInfo[1] = super.getUserLoginName();
-        FullAdminInfo[2] = super.getUserEmail();
-        FullAdminInfo[3] = super.getUserPassword();
-        FullAdminInfo[4] = String.valueOf(super.getRole());
-        return FullAdminInfo;
-    }*/
-
-    /*public String ToString(){
-        return super.toString()+"role : "+ ADMIN;
-    }*/
 
         public Long getId() {
         return id;

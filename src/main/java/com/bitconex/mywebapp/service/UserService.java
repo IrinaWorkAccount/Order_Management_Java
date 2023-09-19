@@ -1,8 +1,6 @@
 package com.bitconex.mywebapp.service;
 
-import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.User;
-import com.bitconex.mywebapp.repository.CustomerRepository;
 import com.bitconex.mywebapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,31 +10,35 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private static UserRepository repo;
+    private static UserRepository ur;
 
-    public static List<User> listAll() {
-        return repo.findAll();
+    public static List<User> getAllUsers() {
+        return ur.findAll();
     }
 
     public void save(User user) {
-        repo.save(user);
+        ur.save(user);
     }
 
     public User getUser(Long id) throws Exception {
-        Optional<User> existingUser = repo.findById(id);
+        Optional<User> existingUser = ur.findById(id);
         if (existingUser.isPresent()) {
             return existingUser.get();
         }
         throw new IllegalArgumentException("User with ID " + id + " not found.");
     }
 
-    public void deleteUser(Long id) {
-        Optional<User> existingUser = repo.findById(id);
+    public void deleteUser(String loginName) {
+        Optional<User> existingUser = ur.findByLoginName(loginName);
         if (existingUser.isPresent()) {
-            repo.deleteById(id);
+            ur.delete(existingUser.get());
         } else {
-            throw new IllegalArgumentException("User with ID " + id + " not found.");
+            throw new IllegalArgumentException("User with ID " + loginName  + " not found.");
         }
     }
 
+    //help methods
+    public Optional<User> findByLoginName(String loginName) {
+        return ur.findByLoginName(loginName);
+    }
 }

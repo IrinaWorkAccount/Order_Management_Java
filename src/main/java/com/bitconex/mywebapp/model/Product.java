@@ -1,9 +1,6 @@
 package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
-
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
