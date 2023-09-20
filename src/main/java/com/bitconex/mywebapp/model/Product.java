@@ -2,7 +2,6 @@ package com.bitconex.mywebapp.model;
 
 import jakarta.persistence.*;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +28,10 @@ public class Product {
     private Date availableUntil;
     @Column(name = "quantity")
     private int quantity;
+
+    @ManyToOne
+    @JoinColumn
+    private Order order;
 
     public Product(String productName, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
         this.productName = productName;
@@ -62,12 +65,8 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public Date getProductAvailableFrom(Calendar today) {
-        if (availableFrom != null && availableFrom.after(today.getTime())) {
-            return availableFrom;
-        } else {
-            return today.getTime();
-        }
+    public Date getProductAvailableFrom() {
+        return availableFrom;
     }
 
     public void setProductAvailableFrom(Date availableFrom) {
@@ -90,6 +89,13 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }
 
 

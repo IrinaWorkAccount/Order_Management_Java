@@ -24,9 +24,10 @@ public class Customer extends User  {
     @Temporal(TemporalType.DATE)
     private LocalDate customerBirthDate;
     @Column(name = "address")
-    private String customerAddress;
+    @Embedded
+    private CustomerAddress customerAddress;
 
-    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, LocalDate customerBirthDate, String customerAddress) {
+    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, LocalDate customerBirthDate, CustomerAddress customerAddress) {
         super(userLoginName, userEmail, userPassword, CUSTOMER);
         this.customerName = customerName;
         this.customerSurname = customerSurname;
@@ -66,18 +67,18 @@ public class Customer extends User  {
         this.customerBirthDate = birthDate;
     }
 
-    public String getCustomerAddress() {
+    public CustomerAddress getCustomerAddress() {
         return customerAddress;
     }
 
-    public void setCustomerAddress(String address) {
+    public void setCustomerAddress(CustomerAddress address) {
         this.customerAddress = address;
     }
 
     //Methods specific to Customer users
-    @Override
+   /* @Override
     public boolean isAdmin() {
         return false; // A customer is not an administrator
-    }
+    }*/
 
 }

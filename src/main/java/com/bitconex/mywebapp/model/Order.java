@@ -15,23 +15,40 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Customer customer;
-    @OneToMany
-    private List<Product> products;
+    @OneToMany( cascade = CascadeType.ALL)//mappedBy = "order",(wird fehler angezeigt
+    private List<Product> product;
 
-    public Order(Customer customer, List<Product> products) {
-        this.customer = customer;
-        this.products = products;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
+
+    @Column(name = "status")
+    private String status;
 
     public Order() {
         //Default constructor
     }
+    public Order(Customer customer, List<Product> products, String status) {
+        this.customer = customer;
+        this.status = status;
+        for (Product product : products) {
+            product.setOrder(this);
+        }
+    }
 
-    /*public Long getId() {
+        public Long getId() {
         return id;
-    }*/
+    }
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public List<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(List<Product> product) {
+        this.product = product;
+    }
 
     public Customer getCustomer() {
         return customer;
@@ -41,11 +58,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }

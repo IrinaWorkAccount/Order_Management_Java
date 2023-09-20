@@ -11,11 +11,15 @@ import static com.bitconex.mywebapp.security.Role.ADMIN;
 @Entity (name = "Admin")
 @DiscriminatorValue("ADMIN")
 public class Admin extends User{
-
+    /**
+     * @param id
+     * @param userLoginName The admins login name that extends from the user class
+     * @param userEmail The user e-mail that extends from the user class
+     * @param userPassword The user password that extends from the user class
+     */
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     public Admin(String userLoginName, String userEmail, String userPassword) {
         super(userLoginName, userEmail, userPassword, ADMIN);
     }
@@ -29,9 +33,9 @@ public class Admin extends User{
     }
 
     //Methods specific to Admin users
-    @Override
+    /*@Override
     public boolean isAdmin() {
         return true; // An admin is always an administrator
-    }
+    }*/
 
 }

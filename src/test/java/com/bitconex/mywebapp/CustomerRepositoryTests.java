@@ -1,7 +1,9 @@
 package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.Customer;
+import com.bitconex.mywebapp.model.CustomerAddress;
 import com.bitconex.mywebapp.repository.CustomerRepository;
+import com.bitconex.mywebapp.security.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.test.annotation.Rollback;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 
@@ -32,17 +33,25 @@ public class CustomerRepositoryTests {
         customer.setCustomerName("Endera");
         customer.setCustomerSurname("Hifhra");
 
+        customer.setRole(Role.CUSTOMER);
+
         LocalDate birthDate = LocalDate.of(1990, 9, 14);
         customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
 
-        customer.setCustomerAddress("Feuer Str. 21, 81546");
+        CustomerAddress address = new CustomerAddress();
+        address.setCity("Musterstadt");
+        address.setCountry("Musterland");
+        address.setStreet("Feuer Str. 21");
+        address.setZipCode("81546");
+
+        customer.setCustomerAddress(address);
 
         Customer savedCustomer = customerRepository.save(customer);
 
-        boolean isNotAdmin = !savedCustomer.isAdmin();
+        /*boolean isNotAdmin = !savedCustomer.isAdmin();*/
 
         Assertions.assertThat(savedCustomer.getId()).isNotNull();
-        Assertions.assertThat(isNotAdmin).isTrue();
+        /*Assertions.assertThat(isNotAdmin).isTrue();*/
     }
     @Test
     public void testListAllCustomers(){
@@ -55,25 +64,37 @@ public class CustomerRepositoryTests {
     }
 
     @Test
-    public void testUpdateCustomer(){
-        Long customerID=1L;
-        Optional<Customer> optionalCustomer=customerRepository.findById(customerID);
-        Customer customer=optionalCustomer.orElse(null);
-        assert customer !=null;
-        if (customer.getCustomerAddress()!= null){
-            customer.setCustomerAddress("Locchauer Str.8");}
+    public void testUpdateCustomer() {
+        Long customerID = 3L;
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
+        Customer customer = optionalCustomer.orElse(null);
+        assert customer != null;
+
+        CustomerAddress address = new CustomerAddress();
+        address.setStreet("Locchauer Str. 5");
+        address.setZipCode("81755");
+        address.setCity("Musterstadt");
+        address.setCountry("Musterland");
+
+        customer.setCustomerAddress(address);
+
         customerRepository.save(customer);
 
-        Customer updatedCustomer=customerRepository.findById(customerID).orElse(null);
-        assert updatedCustomer !=null;
-        if (updatedCustomer.getCustomerAddress() != null) {
-            Assertions.assertThat(Objects.requireNonNull(updatedCustomer.getCustomerAddress())).isEqualTo("Locchauer Str.8"); }
-        }
+        Customer updatedCustomer = customerRepository.findById(customerID).orElse(null);
+        assert updatedCustomer != null;
+
+        CustomerAddress updatedAddress = updatedCustomer.getCustomerAddress();
+        Assertions.assertThat(updatedAddress).isNotNull();
+        Assertions.assertThat(updatedAddress.getStreet()).isEqualTo("Locchauer Str. 5");
+        Assertions.assertThat(updatedAddress.getZipCode()).isEqualTo("81755");
+        Assertions.assertThat(updatedAddress.getCity()).isEqualTo("Musterstadt");
+        Assertions.assertThat(updatedAddress.getCountry()).isEqualTo("Musterland");
+    }
 
 @Test
 public void testGet(){
-        Long customerID = 1L;
-        Optional<Customer> optionalCustomer=customerRepository.findById(customerID);
+    Long customerID = 3L;
+    Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
 
         Assertions.assertThat(optionalCustomer).isPresent();
     System.out.println(optionalCustomer.get());
@@ -81,7 +102,7 @@ public void testGet(){
 
 @Test
 public void testDelete() {
-    Long customerID = 1L;
+    Long customerID = 2L;
     customerRepository.deleteById(customerID);
 
     Optional<Customer> optionalCustomer = customerRepository.findById(customerID);

@@ -46,7 +46,7 @@ public class AdminRepositoryTests {
     }
     @Test
     public void testUpdateAdmin(){
-        Long adminID= 1L;
+        Long adminID= 2L;
                 Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
                 Admin admin= optionalAdmin.orElse(null);
         assert admin != null;
@@ -61,7 +61,7 @@ public class AdminRepositoryTests {
     }
     @Test
     public void testGet(){
-        Long adminID  = 1L;
+        Long adminID  = 2L;
         Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
 
         Assertions.assertThat(optionalAdmin).isPresent();

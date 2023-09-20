@@ -47,7 +47,7 @@ public class ProductRepositoryTests {
 
     @Test
     public void testUpdateProduct(){
-        Long productID= 3L;
+        Long productID= 2L;
         Optional<Product> optionalProduct=productRepository.findById(productID);
         Product product= optionalProduct.orElse(null);
         assert product != null;
@@ -63,7 +63,7 @@ public class ProductRepositoryTests {
 
     @Test
     public void testGet(){
-        Long productID  = 3L;
+        Long productID  = 2L;
         Optional<Product> optionalProduct=productRepository.findById(productID);
 
         Assertions.assertThat(optionalProduct).isPresent();

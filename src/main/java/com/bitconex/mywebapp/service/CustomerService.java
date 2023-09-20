@@ -21,9 +21,9 @@ public class CustomerService {
     }
 
     public Customer get(Long id) throws Exception {
-        Optional<Customer> result = repo.findById(id);
-        if (result.isPresent()) {
-            return result.get();
+        Optional<Customer> existingCustomer = repo.findById(id);
+        if (existingCustomer.isPresent()) {
+            return existingCustomer.get();
         }
         throw new Exception("Could not find any users with ID " + id);
     }
