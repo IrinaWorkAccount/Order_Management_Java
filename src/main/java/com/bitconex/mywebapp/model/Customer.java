@@ -75,10 +75,5 @@ public class Customer extends User  {
         this.customerAddress = address;
     }
 
-    //Methods specific to Customer users
-   /* @Override
-    public boolean isAdmin() {
-        return false; // A customer is not an administrator
-    }*/
 
 }

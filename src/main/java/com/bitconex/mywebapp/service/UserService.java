@@ -30,8 +30,8 @@ public class UserService {
         throw new IllegalArgumentException("User with ID " + id + " not found.");
     }
 
-/*    public void deleteUser(String loginName) {
-        Optional<User> existingUser = ur.findByLoginName(loginName);
+   public void deleteUser(String loginName) {
+        Optional<User> existingUser = ur.findByUserLoginName(loginName);
         if (existingUser.isPresent()) {
             ur.delete(existingUser.get());
         } else {
@@ -41,6 +41,6 @@ public class UserService {
 
     //help methods
     public Optional<User> findByLoginName(String loginName) {
-        return ur.findByLoginName(loginName);
-    }*/
+        return ur.findByUserLoginName(loginName);
+    }
 }

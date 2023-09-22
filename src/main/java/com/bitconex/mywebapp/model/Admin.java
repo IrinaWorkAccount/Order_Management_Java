@@ -32,10 +32,4 @@ public class Admin extends User{
         return id;
     }
 
-    //Methods specific to Admin users
-    /*@Override
-    public boolean isAdmin() {
-        return true; // An admin is always an administrator
-    }*/
-
 }

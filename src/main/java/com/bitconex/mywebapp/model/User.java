@@ -88,8 +88,6 @@ public abstract class User {
         this.userPassword = password;
     }
 
-    /* public abstract boolean isAdmin();*/
-
     @Enumerated(EnumType.STRING)
     public void addRole(Role role) {
         this.role = role;

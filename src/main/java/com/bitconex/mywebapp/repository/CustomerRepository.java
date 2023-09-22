@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     long countById(Long id);
-   //Optional<Customer> findByLoginName(String userLoginName);
+   Optional<Customer> findByUserLoginName(String userLoginName);
 }
