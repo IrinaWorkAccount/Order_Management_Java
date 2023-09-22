@@ -15,12 +15,12 @@ import java.util.List;
 
 @Getter
 @Setter
-@Table(name = "users")
-@MappedSuperclass
+//@Table(name = "users")
+//@MappedSuperclass
 //@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING) // Added to distinguish the entity type
+//@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING) // Added to distinguish the entity type
 
-//@Entity
+@Entity(name="users")
 public abstract class User {
     @Id
     @Column(name = "id", nullable = false, unique = true)
@@ -105,13 +105,13 @@ public abstract class User {
         this.role = role;
     }
 
-   /* public List<Order> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
-*/
+    }
 }
 
 

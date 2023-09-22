@@ -16,7 +16,7 @@ public class ProductCatalogService {
     @Autowired
     private ProductRepository pr;
 
-    public Product addProduct(Product product) {
+    public Product add(Product product) {
 
         product.setProductName(product.getProductName());
         product.setProductSalePrice(product.getProductSalePrice());
@@ -28,7 +28,7 @@ public class ProductCatalogService {
 
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> listAll() {
         return (List<Product>) pr.findAll();
     }
 

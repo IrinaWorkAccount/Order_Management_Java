@@ -19,7 +19,7 @@ import java.util.Optional;
 public class AdminRepositoryTests {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminRepository ar;
 
     @Test
     public void testAddNewAdmin() {
@@ -30,14 +30,14 @@ public class AdminRepositoryTests {
         admin.setUserPassword("userPassword");
         admin.addRole(Role.ADMIN);
 
-        Admin savedAdmin = adminRepository.save(admin);
+        Admin savedAdmin = ar.save(admin);
 
         Assertions.assertThat(savedAdmin).isNotNull();
         Assertions.assertThat(savedAdmin.getId()).isNotNull();
     }
     @Test
     public void testListAllAdmins(){
-        Iterable<Admin> admins = adminRepository.findAll();
+        Iterable<Admin> admins = ar.findAll();
         Assertions.assertThat(admins).hasSizeGreaterThan(0);
 
         for (Admin admin: admins){
@@ -47,14 +47,14 @@ public class AdminRepositoryTests {
     @Test
     public void testUpdateAdmin(){
         Long adminID= 2L;
-                Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
+                Optional<Admin> optionalAdmin= ar.findById(adminID);
                 Admin admin= optionalAdmin.orElse(null);
         assert admin != null;
         if (admin.getUserPassword() != null) {
                 admin.setUserPassword("query2");}
-                adminRepository.save(admin);
+                ar.save(admin);
 
-                Admin updatedAdmin=adminRepository.findById(adminID).orElse(null);
+                Admin updatedAdmin= ar.findById(adminID).orElse(null);
         assert updatedAdmin != null;
         if (updatedAdmin.getUserPassword() != null) {
                 Assertions.assertThat(Objects.requireNonNull(updatedAdmin.getUserPassword())).isEqualTo("query2"); }
@@ -62,7 +62,7 @@ public class AdminRepositoryTests {
     @Test
     public void testGet(){
         Long adminID  = 2L;
-        Optional<Admin> optionalAdmin=adminRepository.findById(adminID);
+        Optional<Admin> optionalAdmin= ar.findById(adminID);
 
         Assertions.assertThat(optionalAdmin).isPresent();
         System.out.println(optionalAdmin.get());
@@ -71,9 +71,9 @@ public class AdminRepositoryTests {
     @Test
     public void testDelete(){
         Long adminID = 1L;
-        adminRepository.deleteById(adminID);
+        ar.deleteById(adminID);
 
-        Optional<Admin>optionalAdmin = adminRepository.findById(adminID);
+        Optional<Admin>optionalAdmin = ar.findById(adminID);
         Assertions.assertThat(optionalAdmin).isNotPresent();
     }
 }

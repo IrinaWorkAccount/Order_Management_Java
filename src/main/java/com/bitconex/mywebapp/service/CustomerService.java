@@ -10,29 +10,29 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    @Autowired private CustomerRepository repo;
+    @Autowired private CustomerRepository cr;
 
     public List<Customer> listAll() {
-        return (List<Customer>) repo.findAll();
+        return (List<Customer>) cr.findAll();
     }
 
-    public void save(Customer user) {
-        repo.save(user);
+    public void save(Customer customer) {
+        cr.save(customer);
     }
 
     public Customer get(Long id) throws Exception {
-        Optional<Customer> existingCustomer = repo.findById(id);
+        Optional<Customer> existingCustomer = cr.findById(id);
         if (existingCustomer.isPresent()) {
             return existingCustomer.get();
         }
-        throw new Exception("Could not find any users with ID " + id);
+        throw new Exception("Could not find any customers with ID " + id);
     }
 
     public void delete(Long id) throws Exception {
-        Long count = repo.countById(id);
+        Long count = cr.countById(id);
         if (count == null || count == 0) {
-            throw new Exception("Could not find any users with ID " + id);
+            throw new Exception("Could not find any customers with ID " + id);
         }
-        repo.deleteById(id);
+        cr.deleteById(id);
     }
 }

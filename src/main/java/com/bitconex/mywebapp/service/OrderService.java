@@ -22,12 +22,12 @@ public class OrderService {
         return (List<Order>) or.findAll();
     }
 
-    public Order create() {
+    /*public Order create() {
         Order newOrder = new Order();
         newOrder.setCustomer(newOrder.getCustomer());
         newOrder.setProduct(newOrder.getProduct());
         return or.save(newOrder);
-    }
+    }*/
 
     public void delete(Long id) {
         Optional<Order> existingOrder= or.findById(id);

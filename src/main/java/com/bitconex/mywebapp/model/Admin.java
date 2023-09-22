@@ -8,8 +8,8 @@ import static com.bitconex.mywebapp.security.Role.ADMIN;
  * A subclass of "Users", which includes additional information for admin users.
  */
 
-@Entity (name = "Admin")
-@DiscriminatorValue("ADMIN")
+@Entity//(name = "Admin")
+//@DiscriminatorValue("ADMIN")
 public class Admin extends User{
     /**
      * @param id
