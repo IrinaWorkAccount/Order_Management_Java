@@ -18,7 +18,7 @@ import java.util.Optional;
 @Rollback(false)
 public class ProductRepositoryTests {
     @Autowired
-    private ProductRepository productRepository;
+    private ProductRepository pr;
 
     @Test
     public void testAddNewProduct(){
@@ -28,7 +28,7 @@ public class ProductRepositoryTests {
         Calendar today = Calendar.getInstance();
         product.setProductAvailableFrom(today.getTime());
 
-        Product savedProduct = productRepository.save(product);
+        Product savedProduct = pr.save(product);
 
         Assertions.assertThat(savedProduct).isNotNull();
         Assertions.assertThat(savedProduct.getId()).isGreaterThan(0);
@@ -36,7 +36,7 @@ public class ProductRepositoryTests {
 
     @Test
     public void testListProducts(){
-        Iterable<com.bitconex.mywebapp.model.Product> products = productRepository.findAll();
+        Iterable<com.bitconex.mywebapp.model.Product> products = pr.findAll();
         Assertions.assertThat(products).hasSizeGreaterThan(0);
 
         for (Product product: products){
@@ -47,14 +47,14 @@ public class ProductRepositoryTests {
     @Test
     public void testUpdateProduct(){
         Long productID= 2L;
-        Optional<Product> optionalProduct=productRepository.findById(productID);
+        Optional<Product> optionalProduct= pr.findById(productID);
         Product product= optionalProduct.orElse(null);
         assert product != null;
         if (product.getProductName() != null) {
             product.setProductQuantity(265);}
-        productRepository.save(product);
+        pr.save(product);
 
-        Product updatedProduct=productRepository.findById(productID).orElse(null);
+        Product updatedProduct= pr.findById(productID).orElse(null);
         assert updatedProduct != null;
         if (updatedProduct.getProductName() != null) {
             Assertions.assertThat(updatedProduct.getProductQuantity()).isEqualTo(265); }
@@ -63,7 +63,7 @@ public class ProductRepositoryTests {
     @Test
     public void testGet(){
         Long productID  = 2L;
-        Optional<Product> optionalProduct=productRepository.findById(productID);
+        Optional<Product> optionalProduct= pr.findById(productID);
 
         Assertions.assertThat(optionalProduct).isPresent();
         System.out.println(optionalProduct.get());
@@ -72,9 +72,9 @@ public class ProductRepositoryTests {
     @Test
     public void testDelete(){
         Long productID = 4L;
-        productRepository.deleteById(productID);
+        pr.deleteById(productID);
 
-        Optional<Product>optionalProduct = productRepository.findById(productID);
+        Optional<Product>optionalProduct = pr.findById(productID);
         Assertions.assertThat(optionalProduct).isNotPresent();
     }
 

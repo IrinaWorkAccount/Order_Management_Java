@@ -3,6 +3,7 @@ package com.bitconex.mywebapp.service;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.Optional;
 /**
  * A class that implements product catalog functions, such as adding, listing and deleteing products.
  */
-
+@Service
 public class ProductCatalogService {
 
     @Autowired
@@ -26,6 +27,10 @@ public class ProductCatalogService {
 
         return pr.save(product);
 
+    }
+
+    public void save(Product product) {
+        pr.save(product);
     }
 
     public List<Product> listAll() {

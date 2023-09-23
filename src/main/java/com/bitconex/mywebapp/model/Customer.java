@@ -10,20 +10,16 @@ import static com.bitconex.mywebapp.security.Role.CUSTOMER;
  * A subclass of "User", which includes additional information for customers, such a name, surname, birthdate and address
  */
 
-@Entity //(name = "Customer")
+@Entity
 //@DiscriminatorValue("CUSTOMER")
 public class Customer extends User  {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-    @Column(name = "name")
     private String customerName;
-    @Column(name = "surname")
     private String customerSurname;
-    @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
     private LocalDate customerBirthDate;
-    @Column(name = "address")
     @Embedded
     private CustomerAddress customerAddress;
 
@@ -71,8 +67,8 @@ public class Customer extends User  {
         return customerAddress;
     }
 
-    public void setCustomerAddress(CustomerAddress address) {
-        this.customerAddress = address;
+    public void setCustomerAddress(CustomerAddress customerAddress) {
+        this.customerAddress = customerAddress;
     }
 
 

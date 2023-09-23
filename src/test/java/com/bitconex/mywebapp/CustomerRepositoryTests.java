@@ -22,7 +22,7 @@ import java.util.Optional;
 public class CustomerRepositoryTests {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerRepository cr;
 
     @Test
     public void testAddNewCustomer() {
@@ -46,7 +46,7 @@ public class CustomerRepositoryTests {
 
         customer.setCustomerAddress(address);
 
-        Customer savedCustomer = customerRepository.save(customer);
+        Customer savedCustomer = cr.save(customer);
 
         /*boolean isNotAdmin = !savedCustomer.isAdmin();*/
 
@@ -55,7 +55,7 @@ public class CustomerRepositoryTests {
     }
     @Test
     public void testListAllCustomers(){
-        Iterable<Customer> customers = customerRepository.findAll();
+        Iterable<Customer> customers = cr.findAll();
         Assertions.assertThat(customers).hasSizeGreaterThan(0);
 
         for (Customer customer: customers){
@@ -66,7 +66,7 @@ public class CustomerRepositoryTests {
     @Test
     public void testUpdateCustomer() {
         Long customerID = 3L;
-        Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
+        Optional<Customer> optionalCustomer = cr.findById(customerID);
         Customer customer = optionalCustomer.orElse(null);
         assert customer != null;
 
@@ -78,9 +78,9 @@ public class CustomerRepositoryTests {
 
         customer.setCustomerAddress(address);
 
-        customerRepository.save(customer);
+        cr.save(customer);
 
-        Customer updatedCustomer = customerRepository.findById(customerID).orElse(null);
+        Customer updatedCustomer = cr.findById(customerID).orElse(null);
         assert updatedCustomer != null;
 
         CustomerAddress updatedAddress = updatedCustomer.getCustomerAddress();
@@ -94,7 +94,7 @@ public class CustomerRepositoryTests {
 @Test
 public void testGet(){
     Long customerID = 3L;
-    Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
+    Optional<Customer> optionalCustomer = cr.findById(customerID);
 
         Assertions.assertThat(optionalCustomer).isPresent();
     System.out.println(optionalCustomer.get());
@@ -103,9 +103,9 @@ public void testGet(){
 @Test
 public void testDelete() {
     Long customerID = 2L;
-    customerRepository.deleteById(customerID);
+    cr.deleteById(customerID);
 
-    Optional<Customer> optionalCustomer = customerRepository.findById(customerID);
+    Optional<Customer> optionalCustomer = cr.findById(customerID);
     Assertions.assertThat(optionalCustomer).isNotPresent();
 }
 

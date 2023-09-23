@@ -3,6 +3,7 @@ package com.bitconex.mywebapp.service;
 import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import java.util.Optional;
 /**
  * A class that implements the order process and includes functions to create orders, display the order history of a customer and confirm the order.
  */
-
+@Service
 public class OrderService {
     @Autowired
     OrderRepository or;
@@ -24,8 +25,8 @@ public class OrderService {
 
     public Order create() {
         Order newOrder = new Order();
-        newOrder.setCustomer(newOrder.getCustomer());
-        newOrder.setProduct(newOrder.getProduct());
+        newOrder.setUser(newOrder.getUser());
+        newOrder.setOrderItem(newOrder.getOrderItem());
         return or.save(newOrder);
     }
 

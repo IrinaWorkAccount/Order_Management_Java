@@ -9,7 +9,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +29,7 @@ public class Product {
     @Column(name = "quantity")
     private int quantity;
 
-    @ManyToOne
-    @JoinColumn
-    private Order order;
+
 
     public Product(String productName, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
         this.productName = productName;
@@ -89,13 +87,7 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Order getOrder() {
-        return order;
-    }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }
 
 

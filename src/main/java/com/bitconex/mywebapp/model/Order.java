@@ -5,21 +5,23 @@ import jakarta.persistence.*;
 import java.util.List;
 
 /**
- * A class that represents an order and contains the selected  products and the customer.
+ * A class that represents an order and contains the selected products and the customer.
  */
 
 @Entity
-@Table(name = "customer_order")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany( cascade = CascadeType.ALL)//mappedBy = "order",(wird fehler angezeigt
-    private List<Product> product;
+    @OneToMany(cascade = CascadeType.ALL)
+//mappedBy = "order", (An error is displayed) In one order, multiple OrderItems can be included.
+    private List<OrderItem> orderItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Customer customer;
+    //Multiple orders can belong to one customer. This means that a customer can place several orders.
+    private User user;
 
     @Column(name = "status")
     private String status;
@@ -27,40 +29,43 @@ public class Order {
     public Order() {
         //Default constructor
     }
-    public Order(Customer customer, List<Product> products, String status) {
-        this.customer = customer;
+
+    public Order(User user, List<OrderItem> orderItem, String status) {
+        this.user = user;
         this.status = status;
-        for (Product product : products) {
-            product.setOrder(this);
-        }
+        this.orderItem = orderItem;
+        for (OrderItem oi : orderItem) oi.setOrder(this);
     }
 
-        public Long getId() {
+
+    public Long getId() {
         return id;
     }
-        public void setId(Long id) {
-            this.id = id;
-        }
 
-        public List<Product> getProduct() {
-        return product;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setProduct(List<Product> product) {
-        this.product = product;
+    public List<OrderItem> getOrderItem() {
+        return orderItem;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public void setOrderItem(List<OrderItem> orderItem) {
+        this.orderItem = orderItem;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
