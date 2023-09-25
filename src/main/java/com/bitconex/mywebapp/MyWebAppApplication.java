@@ -1,12 +1,10 @@
 package com.bitconex.mywebapp;
 
-import com.bitconex.mywebapp.model.Admin;
-import com.bitconex.mywebapp.model.Customer;
-import com.bitconex.mywebapp.model.CustomerAddress;
-import com.bitconex.mywebapp.model.Product;
+import com.bitconex.mywebapp.model.*;
 import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.AdminService;
 import com.bitconex.mywebapp.service.CustomerService;
+import com.bitconex.mywebapp.service.OrderItemService;
 import com.bitconex.mywebapp.service.ProductCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,6 +31,9 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
     @Autowired
     ProductCatalogService productCatalogService;
 
+    @Autowired
+    OrderItemService orderItemService;
+
     public static void main(String[] args) {
         SpringApplication.run(MyWebAppApplication.class, args);
     }
@@ -46,7 +47,7 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
         //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
-        for (int i = 0; i <= 1; i++) {
+/*        for (int i = 0; i <= 1; i++) {
             Customer customer = new Customer();
             customer.setUserEmail("userEmail_" + i);
             customer.setUserLoginName("userLoginName_" + i);
@@ -137,11 +138,18 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             System.out.println("Product Available Until: " + products.getProductAvailableUntil());
             System.out.println("Product Quantity: " + products.getProductQuantity());
             System.out.println();
-        }
+        }*/
+
+       /* Order order = new Order();
+        List<OrderItem> allOrders =  orderItemService.listAll();
+        List<Product> allProducts =  productCatalogService.listAll();
+        allProducts.get(1);*/
+
+}
 
     }
 
 
-}
+//}
 
 

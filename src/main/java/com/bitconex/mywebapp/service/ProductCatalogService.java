@@ -1,5 +1,6 @@
 package com.bitconex.mywebapp.service;
 
+import com.bitconex.mywebapp.model.Admin;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,12 @@ public class ProductCatalogService {
             throw new IllegalArgumentException("Product with ID " + id + " not found.");
         }
     }
+    public Product get(Long id) throws Exception {
+        Optional<Product> existingProduct = pr.findById(id);
+        if (existingProduct.isPresent()) {
+            return existingProduct.get();
+        }
+        throw new Exception("Could not find any products with ID " + id);
+    }
+
 }

@@ -48,7 +48,7 @@ public class ProductRepositoryTests {
     public void testUpdateProduct(){
         Long productID= 2L;
         Optional<Product> optionalProduct= pr.findById(productID);
-        Product product= optionalProduct.orElse(null);
+        Product product= optionalProduct.orElse(null);//Returns the value contained in the Optional object if there is one (i.e., if the product is found); otherwise, it returns the specified default value, which in this case is null.
         assert product != null;
         if (product.getProductName() != null) {
             product.setProductQuantity(265);}

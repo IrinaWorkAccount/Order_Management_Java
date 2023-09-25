@@ -19,7 +19,7 @@ public class OrderService {
     public void save(Order order) {
         or.save(order);
     }
-    public List<Order> getAllOrders(){
+    public List<Order> listAll(){
         return (List<Order>) or.findAll();
     }
 

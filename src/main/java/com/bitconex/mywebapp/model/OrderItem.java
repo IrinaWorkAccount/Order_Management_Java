@@ -27,7 +27,6 @@ public class OrderItem implements Serializable {
     }
 
     public OrderItem() {
-
     }
 
     public int getOrderItemQuantity() {
