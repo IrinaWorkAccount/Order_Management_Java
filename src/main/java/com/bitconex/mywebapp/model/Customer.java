@@ -35,7 +35,7 @@ public class Customer extends User  {
         //Default constructor
     }
 
-/*   public Long getId() {
+   /*public Long getId() {
         return id;
     }*/
 

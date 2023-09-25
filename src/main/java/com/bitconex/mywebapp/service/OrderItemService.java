@@ -1,6 +1,5 @@
 package com.bitconex.mywebapp.service;
 
-import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.OrderItem;
 import com.bitconex.mywebapp.repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,4 +14,5 @@ public class OrderItemService {
     public List<OrderItem> listAll() {
         return (List<OrderItem>)  oir.findAll();
     }
+    public void save(OrderItem orderItem){ oir.save(orderItem);}
 }

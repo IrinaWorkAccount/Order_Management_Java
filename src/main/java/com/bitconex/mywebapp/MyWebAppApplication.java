@@ -2,10 +2,7 @@ package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.*;
 import com.bitconex.mywebapp.security.Role;
-import com.bitconex.mywebapp.service.AdminService;
-import com.bitconex.mywebapp.service.CustomerService;
-import com.bitconex.mywebapp.service.OrderItemService;
-import com.bitconex.mywebapp.service.ProductCatalogService;
+import com.bitconex.mywebapp.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +30,8 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
 
     @Autowired
     OrderItemService orderItemService;
+    @Autowired
+    OrderService orderService;
 
     public static void main(String[] args) {
         SpringApplication.run(MyWebAppApplication.class, args);
@@ -47,7 +46,7 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
         //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
-/*        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 1; i++) {
             Customer customer = new Customer();
             customer.setUserEmail("userEmail_" + i);
             customer.setUserLoginName("userLoginName_" + i);
@@ -138,18 +137,55 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             System.out.println("Product Available Until: " + products.getProductAvailableUntil());
             System.out.println("Product Quantity: " + products.getProductQuantity());
             System.out.println();
-        }*/
+        }
 
-       /* Order order = new Order();
-        List<OrderItem> allOrders =  orderItemService.listAll();
-        List<Product> allProducts =  productCatalogService.listAll();
-        allProducts.get(1);*/
+        Order order = new Order();
+        order.setStatus("Pending");
+        Customer customer = new Customer();
+        customer.setId(2L);
+        order.setUser(customer);
+        orderService.save(order);
 
+        List<Order> allOrders = orderService.listAll();
+        System.out.println("Number of persisted orders: " + allOrders.size());
+
+        for (Order orders : allOrders) {
+            System.out.println(orders.toString());
+            System.out.println("Order ID: " + orders.getId());
+            System.out.println("Order Status: " + orders.getStatus());
+            System.out.println("Order User ID: " + orders.getUser().getId());
+            System.out.println();
+        }
+
+        for (int i = 0; i <= 1; i++) {
+            Product product1 = new Product();
+            product1.setProductName("productName_" + i);
+            product1.setProductSalePrice((1290.78) + i);
+            Calendar today = Calendar.getInstance();
+            product1.setProductAvailableFrom(today.getTime());
+            Calendar futureDate = Calendar.getInstance();
+            futureDate.add(Calendar.YEAR, 1);
+            product1.setProductAvailableUntil((futureDate.getTime()));
+            Random rn = new Random();
+            int quantityRn = rn.nextInt(10) + 1;
+            product1.setProductQuantity(quantityRn);
+            productCatalogService.save(product1);
+            OrderItem orderItem = new OrderItem(product1, 3);
+            OrderItemService.save(orderItem);
+
+            List<OrderItem> allOrderItems = orderItemService.listAll();
+            System.out.println("Number of persisted order items: " + allOrderItems.size());
+            for (OrderItem orderItems : allOrderItems) {
+                System.out.println("OrderItem Product: " + orderItems.getProduct().getProductName());
+                System.out.println("OrderItem Quantity: " + orderItems.getOrderItemQuantity());
+                System.out.println();
+
+            }
+        }
+    }
 }
 
-    }
 
 
-//}
 
 
