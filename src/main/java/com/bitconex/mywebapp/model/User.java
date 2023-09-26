@@ -20,7 +20,8 @@ import java.util.List;
 //@Inheritance(strategy = InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING) // Added to distinguish the entity type
 
-@Entity(name="users")
+@Entity
+@Table(name="users", schema = "public")
 public abstract class User {
     @Id
     @Column(name = "id", nullable = false, unique = true)

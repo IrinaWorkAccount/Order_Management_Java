@@ -1,13 +1,11 @@
 package com.bitconex.mywebapp;
 
-import com.bitconex.mywebapp.model.Admin;
-import com.bitconex.mywebapp.model.Customer;
-import com.bitconex.mywebapp.model.CustomerAddress;
-import com.bitconex.mywebapp.model.Product;
+import com.bitconex.mywebapp.model.*;
 import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.AdminService;
 import com.bitconex.mywebapp.service.CustomerService;
-import com.bitconex.mywebapp.service.ProductCatalogService;
+import com.bitconex.mywebapp.service.OrderService;
+import com.bitconex.mywebapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,7 +29,9 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
     @Autowired
     AdminService adminService;
     @Autowired
-    ProductCatalogService productCatalogService;
+    ProductService productCatalogService;
+    @Autowired
+    OrderService orderService;
 
     public static void main(String[] args) {
         SpringApplication.run(MyWebAppApplication.class, args);
@@ -139,9 +139,40 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             System.out.println();
         }
 
+        // Insert the required number of new entries (of type 'order') into the Order table. The loop increments each individual Product by 1.
+        Product product1 = new Product();
+        product1.setProductName("productName_0");
+        product1.setProductSalePrice(1290.78);
+        Calendar today = Calendar.getInstance();
+        product1.setProductAvailableFrom(today.getTime());
+        Calendar futureDate = Calendar.getInstance();
+        futureDate.add(Calendar.YEAR, 1);
+        product1.setProductAvailableUntil(futureDate.getTime());
+        Random rn = new Random();
+        int quantityRn = rn.nextInt(10) + 1;
+        product1.setProductQuantity(quantityRn);
+        productCatalogService.save(product1);
+
+
+        Customer customer = new Customer();
+        customer.setId(2L);
+        Order order1 = orderService.create(customer, 1, product1, "Pending");
+        Order order2 = orderService.create(customer, 3, product1, "Pending");
+
+        //orderService.delete(3L);
+
+       /* List<Order> allOrds = orderService.listAll();
+        System.out.println("Number of persisted orders: " + allOrds.size());
+        for (Order orders : allOrds) {
+            System.out.println(orders.toString());
+            System.out.println("Order ID: " + orders.getId());
+            System.out.println("Order Status: " + orders.getStatus());
+            System.out.println("Order contains Products: " + orders.getProduct());
+            System.out.println("Order below to the Customer: " + orders.getUser());
+            System.out.println("Order Quantity: " + orders.getQuantity());
+            System.out.println();*/
+        }
     }
 
-
-}
 
 

@@ -1,6 +1,8 @@
 package com.bitconex.mywebapp.service;
 
 import com.bitconex.mywebapp.model.Order;
+import com.bitconex.mywebapp.model.Product;
+import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +21,16 @@ public class OrderService {
     public void save(Order order) {
         or.save(order);
     }
-    public List<Order> getAllOrders(){
+    public List<Order> listAll(){
         return (List<Order>) or.findAll();
     }
 
-    public Order create() {
+    public Order create(User user, int quantity, Product product, String status) {
         Order newOrder = new Order();
-        newOrder.setUser(newOrder.getUser());
-        newOrder.setOrderItem(newOrder.getOrderItem());
+        newOrder.setUser(user);
+        newOrder.setQuantity(quantity);
+        newOrder.setProduct(product);
+        newOrder.setStatus(status);
         return or.save(newOrder);
     }
 

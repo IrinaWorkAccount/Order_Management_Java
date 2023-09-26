@@ -9,15 +9,17 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", schema = "public")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
-//mappedBy = "order", (An error is displayed) In one order, multiple OrderItems can be included.
-    private List<OrderItem> orderItem;
+    private int quantity;
+
+    @ManyToOne
+    //@JoinColumn
+    private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
@@ -30,11 +32,11 @@ public class Order {
         //Default constructor
     }
 
-    public Order(User user, List<OrderItem> orderItem, String status) {
+    public Order(User user, String status, Product product, int quantity) {
         this.user = user;
         this.status = status;
-        this.orderItem = orderItem;
-        for (OrderItem oi : orderItem) oi.setOrder(this);
+        this.product = product;
+        this.quantity = quantity;
     }
 
 
@@ -46,13 +48,24 @@ public class Order {
         this.id = id;
     }
 
-    public List<OrderItem> getOrderItem() {
-        return orderItem;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setOrderItem(List<OrderItem> orderItem) {
-        this.orderItem = orderItem;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
+
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+
 
     public User getUser() {
         return user;

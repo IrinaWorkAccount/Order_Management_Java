@@ -12,7 +12,7 @@ import java.util.Optional;
  * A class that implements product catalog functions, such as adding, listing and deleteing products.
  */
 @Service
-public class ProductCatalogService {
+public class ProductService {
 
     @Autowired
     private ProductRepository pr;

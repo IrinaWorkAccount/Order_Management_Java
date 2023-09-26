@@ -9,7 +9,8 @@ import static com.bitconex.mywebapp.security.Role.ADMIN;
  */
 
 @Entity
-//@DiscriminatorValue("ADMIN")
+@Table(name = "admins", schema = "public")
+@DiscriminatorValue("ADMIN")
 public class Admin extends User{
 
 /*   @Id

@@ -1,2 +1,4 @@
-package com.bitconex.mywebapp;public class OrderServiceTest {
+package com.bitconex.mywebapp;
+
+public class OrderServiceTest {
 }

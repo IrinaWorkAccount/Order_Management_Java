@@ -11,7 +11,8 @@ import static com.bitconex.mywebapp.security.Role.CUSTOMER;
  */
 
 @Entity
-//@DiscriminatorValue("CUSTOMER")
+@Table(name = "customers", schema = "public")
+@DiscriminatorValue("CUSTOMER")
 public class Customer extends User  {
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
