@@ -21,12 +21,7 @@ import java.util.Random;
 @SpringBootApplication
 @EntityScan("com.bitconex.mywebapp")
 @EnableJpaRepositories("com.bitconex.mywebapp.repository")
-public class MyWebAppApplication implements CommandLineRunner { //implements CommandLineRunner
-
-/*    @Autowired
-    CustomerService customerService;
-    @Autowired
-    AdminService adminService;*/
+public class MyWebAppApplication implements CommandLineRunner {
     @Autowired
     UserService userService;
     @Autowired
