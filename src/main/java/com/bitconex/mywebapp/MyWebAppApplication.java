@@ -150,14 +150,22 @@ public class MyWebAppApplication implements CommandLineRunner {
         productService.save(product1);
 
 
-        Customer customer = new Customer();
-        customer.setId(2L);
-        Order order1 = orderService.create(customer, 1, product1, "Pending");
-        Order order2 = orderService.create(customer, 3, product1, "Pending");
+        Customer customer2 = new Customer();
+        Customer customer3 = new Customer();
+        customer2.setId(2L);
+        customer3.setId(3L);
+        Order order1 = orderService.create(customer2, product1.getProductQuantity(), product1, "Pending");
+        Order order2 = orderService.create(customer3, product1.getProductQuantity(), product1, "Pending");
         //orderService.delete(5L);
 
-      /*  List<Order> allOrds = orderService.listAll();
+        List<Order> allOrds = orderService.listAll();
+        allOrds.add(7,order1);
+        allOrds.add(2,order2);
+
+        String orderList = allOrds.toString();
+
         System.out.println("Number of persisted orders: " + allOrds.size());
+        System.out.println("Liste aller Bestellungen: " +  orderList );
 
         for (Order order : allOrds) {
             System.out.println("Order ID: " + order.getId());
@@ -175,11 +183,12 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             // Access and print the associated customer (user)
             System.out.println("Order belongs to the Customer: ");
-            System.out.println("   Customer ID: " + customer.getId());
+            System.out.println("   Customer ID: " + order.getUser().getId());
 
-            System.out.println(); // Add a blank line to separate orders*/
+            System.out.println(); // Add a blank line to separate orders
         }
-        }
+    }
+}
 
 
 

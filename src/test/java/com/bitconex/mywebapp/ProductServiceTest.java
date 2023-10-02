@@ -27,14 +27,14 @@ public class ProductServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testAddProduct() {
         Product product = new Product();
-        product.setProductName("Test Product");
-        product.setProductSalePrice(50.0);
+        product.setProductName("productName");
+        product.setProductSalePrice(129.78);
         Calendar today = Calendar.getInstance();
         product.setProductAvailableFrom(today.getTime());
         Calendar futureDate = Calendar.getInstance();
@@ -47,10 +47,10 @@ public class ProductServiceTest {
         Product addedProduct = productService.add(product);
 
         assertNotNull(addedProduct);
-        assertEquals("Test Product", addedProduct.getProductName());
-        assertEquals(50.0, addedProduct.getProductSalePrice());
-        assertEquals("2023-09-28", addedProduct.getProductAvailableFrom());
-        assertEquals("2024-09-24", addedProduct.getProductAvailableUntil());
+        assertEquals("productName", addedProduct.getProductName());
+        assertEquals(129.78, addedProduct.getProductSalePrice());
+        assertEquals(today.getTime(), addedProduct.getProductAvailableFrom());
+        assertEquals(futureDate.getTime(), addedProduct.getProductAvailableUntil());
         assertEquals(10, addedProduct.getProductQuantity());
 
         verify(productRepository, times(1)).save(any(Product.class));

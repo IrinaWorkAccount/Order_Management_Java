@@ -1,38 +1,32 @@
 package com.bitconex.mywebapp;
 
-import com.bitconex.mywebapp.model.Admin;
+import com.bitconex.mywebapp.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
-class MyWebAppApplicationTests {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+@SpringBootTest(classes = MyWebAppApplication.class)
+@Transactional
+public class MyWebAppApplicationTests  {
 
-    /*@Test
-    void contextLoads() {
-    }*/
-
-    public static void main(String[] args) {
-        Configuration configuration = new Configuration().configure().addAnnotatedClass(Admin.class);
-
-
+    @Test
+    public void testUserEntity() {
+        Configuration configuration = new Configuration().configure().addAnnotatedClass(User.class);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
 
-        Session session = sessionFactory.getCurrentSession();
-
-        try {
+        try (sessionFactory) {
+            Session session = sessionFactory.getCurrentSession();
             session.beginTransaction();
 
-            Admin admin = session.get(Admin.class, 1);
-            System.out.println(admin.getUserLoginName());
-            System.out.println(admin.getUserEmail());
+            User user = session.get(User.class, 1);
+            assertNotNull(user);
 
             session.getTransaction().commit();
 
-        } finally {
-            sessionFactory.close();
         }
     }
-
 }

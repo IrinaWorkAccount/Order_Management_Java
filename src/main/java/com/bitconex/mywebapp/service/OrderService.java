@@ -24,6 +24,9 @@ public class OrderService {
     public List<Order> listAll(){
         return (List<Order>) or.findAll();
     }
+    public List<Order> getAllOrdersForUser(User id) {
+        return or.findById(id);
+    }
 
     public Order create(User user, int quantity, Product product, String status) {
         Order newOrder = new Order();
@@ -32,6 +35,25 @@ public class OrderService {
         newOrder.setProduct(product);
         newOrder.setStatus(status);
         return or.save(newOrder);
+    }
+
+    public double confirmOrder(Order order) {
+        double totalPrice = calculateTotalPrice(order);
+        order.setStatus("bestätigt");
+        or.save(order);
+        return totalPrice;
+    }
+
+    private double calculateTotalPrice(Order order) {
+
+        List<Product> products = order.getProducts();
+
+        double totalPrice = 0.0;
+        for (Product product : products) {
+            totalPrice += product.getProductSalePrice() * order.getQuantity();
+        }
+
+        return totalPrice;
     }
 
     public void delete(Long id) {
@@ -44,3 +66,4 @@ public class OrderService {
     }
 
 }
+

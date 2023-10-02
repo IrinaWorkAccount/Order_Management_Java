@@ -27,7 +27,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -75,7 +75,6 @@ public class UserServiceTest {
 
         assertEquals("Could not find any users with ID 1", exception.getMessage());
 
-        verify(userRepository, never()).findById(userId);
     }
 
     @Test

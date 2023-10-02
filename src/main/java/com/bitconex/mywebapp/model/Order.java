@@ -17,9 +17,13 @@ public class Order {
 
     private int quantity;
 
+
     @ManyToOne
     //@JoinColumn
     private Product product;
+
+    @ManyToMany
+    private List<Product> products;
 
     @ManyToOne(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
@@ -65,8 +69,12 @@ public class Order {
         this.product = product;
     }
 
-
-
+    public List<Product> getProducts() {
+        return products;
+    }
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
     public User getUser() {
         return user;
     }

@@ -19,11 +19,11 @@ import java.util.List;
 @Controller
 public class CustomerController {
     @Autowired
-    private UserService service;
+    private UserService us;
 
     @GetMapping("/customers")
     public String showCustomerList(Model model) {
-        List<User> listCustomers = service.listAll();
+        List<User> listCustomers = us.listAll();
         model.addAttribute("listCustomers", listCustomers);
 
         return "customers";
@@ -38,7 +38,7 @@ public class CustomerController {
 
     @PostMapping("/customers/save")
     public String saveCustomer(Customer customer, RedirectAttributes ra) {
-        service.save(customer);
+        us.save(customer);
         ra.addFlashAttribute("message", "The customer has been saved successfully.");
         return "redirect:/customers";
     }
@@ -46,7 +46,7 @@ public class CustomerController {
     @GetMapping("/customers/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         try {
-            User customer = service.get(id);
+            User customer = us.get(id);
             model.addAttribute("customer", customer);
             model.addAttribute("pageTitle", "Edit Customer (ID: " + id + ")");
 
