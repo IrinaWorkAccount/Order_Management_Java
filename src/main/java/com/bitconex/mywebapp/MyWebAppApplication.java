@@ -5,6 +5,8 @@ import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.OrderService;
 import com.bitconex.mywebapp.service.ProductService;
 import com.bitconex.mywebapp.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +24,8 @@ import java.util.Random;
 @EntityScan("com.bitconex.mywebapp")
 @EnableJpaRepositories("com.bitconex.mywebapp.repository")
 public class MyWebAppApplication implements CommandLineRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringBootApplication.class);
+
     @Autowired
     UserService userService;
     @Autowired
@@ -30,16 +34,18 @@ public class MyWebAppApplication implements CommandLineRunner {
     OrderService orderService;
 
     public static void main(String[] args) {
+        LOG.info("\n 1. STARTING : Spring boot application starting");//First logger message
         SpringApplication.run(MyWebAppApplication.class, args);
+        LOG.info("\n 3. STOPPED : Spring boot application stopped");
     }
 
     @Override
     public void run(String... args) throws Exception {
 
         System.out.println("Hallo User");
+        LOG.info("\n 2. EXECUTING : command line runner");
 
-
-        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
+/*        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
         for (int i = 0; i <= 1; i++) {
@@ -185,10 +191,10 @@ public class MyWebAppApplication implements CommandLineRunner {
             System.out.println("Order belongs to the Customer: ");
             System.out.println("   Customer ID: " + order.getUser().getId());
 
-            System.out.println(); // Add a blank line to separate orders
+            System.out.println(); // Add a blank line to separate orders*/
         }
     }
-}
+
 
 
 
