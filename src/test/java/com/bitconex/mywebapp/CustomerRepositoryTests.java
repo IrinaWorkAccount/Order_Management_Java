@@ -48,10 +48,8 @@ public class CustomerRepositoryTests {
 
         Customer savedCustomer = cr.save(customer);
 
-        /*boolean isNotAdmin = !savedCustomer.isAdmin();*/
-
         Assertions.assertThat(savedCustomer.getId()).isNotNull();
-        /*Assertions.assertThat(isNotAdmin).isTrue();*/
+        
     }
     @Test
     public void testListAllCustomers(){

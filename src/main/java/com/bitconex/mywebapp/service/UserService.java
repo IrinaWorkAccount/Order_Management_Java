@@ -12,9 +12,9 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private static UserRepository ur;
+    UserRepository ur;
 
-    public static List<User> getAllUsers() {
+    public List<User> listAll() {
         return ur.findAll();
     }
 
@@ -22,15 +22,15 @@ public class UserService {
         ur.save(user);
     }
 
-    public User getUser(Long id) throws Exception {
+    public User get(Long id) {
         Optional<User> existingUser = ur.findById(id);
         if (existingUser.isPresent()) {
             return existingUser.get();
         }
-        throw new IllegalArgumentException("User with ID " + id + " not found.");
+        throw new IllegalArgumentException("Could not find any users with ID " + id );
     }
 
-   public void deleteUser(String loginName) {
+   public void delete(String loginName) {
         Optional<User> existingUser = ur.findByUserLoginName(loginName);
         if (existingUser.isPresent()) {
             ur.delete(existingUser.get());
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     //help methods
-    public Optional<User> findByLoginName(String loginName) {
+    /*public Optional<User> findByLoginName(String loginName) {
         return ur.findByUserLoginName(loginName);
-    }
+    }*/
 }

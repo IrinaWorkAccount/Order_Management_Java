@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-configuration>
     <session-factory>
-            <property name="connection.url">jdbc:postgresql://localhost:5432/CatalogProDB</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">password</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
@@ -9,7 +9,13 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.format_sql">true</property>
+
         <prop key="hibernate.default_schema">public</prop>
+
         <mapping class="com.bitconex.mywebapp.model.Admin"/>
+        <mapping class="com.bitconex.mywebapp.model.Customer"/>
+        <mapping class="com.bitconex.mywebapp.model.User"/>
+        <mapping class="com.bitconex.mywebapp.model.Product"/>
+        <mapping class="com.bitconex.mywebapp.model.Order"/>
     </session-factory>
 </hibernate-configuration>

@@ -2,10 +2,11 @@ package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.*;
 import com.bitconex.mywebapp.security.Role;
-import com.bitconex.mywebapp.service.AdminService;
-import com.bitconex.mywebapp.service.CustomerService;
 import com.bitconex.mywebapp.service.OrderService;
 import com.bitconex.mywebapp.service.ProductService;
+import com.bitconex.mywebapp.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,28 +23,29 @@ import java.util.Random;
 @SpringBootApplication
 @EntityScan("com.bitconex.mywebapp")
 @EnableJpaRepositories("com.bitconex.mywebapp.repository")
-public class MyWebAppApplication implements CommandLineRunner { //implements CommandLineRunner
+public class MyWebAppApplication implements CommandLineRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringBootApplication.class);
 
     @Autowired
-    CustomerService customerService;
+    UserService userService;
     @Autowired
-    AdminService adminService;
-    @Autowired
-    ProductService productCatalogService;
+    ProductService productService;
     @Autowired
     OrderService orderService;
 
     public static void main(String[] args) {
+        LOG.info("\n 1. STARTING : Spring boot application starting");//First logger message
         SpringApplication.run(MyWebAppApplication.class, args);
+        LOG.info("\n 3. STOPPED : Spring boot application stopped");
     }
 
     @Override
     public void run(String... args) throws Exception {
 
         System.out.println("Hallo User");
+        LOG.info("\n 2. EXECUTING : command line runner");
 
-
-        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
+/*        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
         for (int i = 0; i <= 1; i++) {
@@ -64,15 +66,15 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             address.setZipCode("81546");
 
             customer.setCustomerAddress(address);
-            customerService.save(customer);
+            userService.save(customer);
         }
 
 
         //Output all new entries from the list to the command line.
 
-        List<Customer> allCus = customerService.listAll();
+        List<User> allCus = userService.listAll();
         System.out.println("Number of persisted customers: " + allCus.size());
-        for (Customer customers : allCus) {
+        for (User customers : allCus) {
             System.out.println(customers.toString());
             System.out.println("Customer ID: " + customers.getId());
             System.out.println("Customer Email: " + customers.getUserEmail());
@@ -91,15 +93,15 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             admin.setUserLoginName("userLoginName_" + i);
             admin.setUserPassword("userPassword_" + i);
             admin.addRole(Role.ADMIN);
-            adminService.save(admin);
+            userService.save(admin);
         }
 
 
         //Output all new entries from the list to the command line.
 
-        List<Admin> allAdms = adminService.listAll();
+        List<User> allAdms = userService.listAll();
         System.out.println("Number of persisted admins: " + allAdms.size());
-        for (Admin admins : allAdms) {
+        for (User admins : allAdms) {
             System.out.println(admins.toString());
             System.out.println("Admin ID: " + admins.getId());
             System.out.println("Admin Email: " + admins.getUserEmail());
@@ -121,12 +123,12 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
             Random rn = new Random();
             int quantityRn = rn.nextInt(10) + 1;
             product.setProductQuantity(quantityRn);
-            productCatalogService.save(product);
+            productService.save(product);
         }
 
         //Output all new entries from the list to the command line.
 
-        List<Product> allPrds = productCatalogService.listAll();
+        List<Product> allPrds = productService.listAll();
         System.out.println("Number of persisted products: " + allPrds.size());
         for (Product products : allPrds) {
             System.out.println(products.toString());
@@ -151,30 +153,52 @@ public class MyWebAppApplication implements CommandLineRunner { //implements Com
         Random rn = new Random();
         int quantityRn = rn.nextInt(10) + 1;
         product1.setProductQuantity(quantityRn);
-        productCatalogService.save(product1);
+        productService.save(product1);
 
 
-        Customer customer = new Customer();
-        customer.setId(2L);
-        Order order1 = orderService.create(customer, 1, product1, "Pending");
-        Order order2 = orderService.create(customer, 3, product1, "Pending");
+        Customer customer2 = new Customer();
+        Customer customer3 = new Customer();
+        customer2.setId(2L);
+        customer3.setId(3L);
+        Order order1 = orderService.create(customer2, product1.getProductQuantity(), product1, "Pending");
+        Order order2 = orderService.create(customer3, product1.getProductQuantity(), product1, "Pending");
+        //orderService.delete(5L);
 
-        //orderService.delete(3L);
+        List<Order> allOrds = orderService.listAll();
+        allOrds.add(7,order1);
+        allOrds.add(2,order2);
 
-       /* List<Order> allOrds = orderService.listAll();
+        String orderList = allOrds.toString();
+
         System.out.println("Number of persisted orders: " + allOrds.size());
-        for (Order orders : allOrds) {
-            System.out.println(orders.toString());
-            System.out.println("Order ID: " + orders.getId());
-            System.out.println("Order Status: " + orders.getStatus());
-            System.out.println("Order contains Products: " + orders.getProduct());
-            System.out.println("Order below to the Customer: " + orders.getUser());
-            System.out.println("Order Quantity: " + orders.getQuantity());
-            System.out.println();*/
+        System.out.println("Liste aller Bestellungen: " +  orderList );
+
+        for (Order order : allOrds) {
+            System.out.println("Order ID: " + order.getId());
+            System.out.println("Order Status: " + order.getStatus());
+            System.out.println("Order Quantity: " + order.getQuantity());
+
+            // Access and print the associated product
+            Product product = order.getProduct();
+            System.out.println("Order contains Product: ");
+            System.out.println("   Product Name: " + product.getProductName());
+            System.out.println("   Sale Price: " + product.getProductSalePrice());
+            System.out.println("   Available From: " + product.getProductAvailableFrom());
+            System.out.println("   Available Until: " + product.getProductAvailableUntil());
+            System.out.println("   Product Quantity: " + product.getProductQuantity());
+
+            // Access and print the associated customer (user)
+            System.out.println("Order belongs to the Customer: ");
+            System.out.println("   Customer ID: " + order.getUser().getId());
+
+            System.out.println(); // Add a blank line to separate orders*/
         }
     }
 
     //test
+
+
+
 
 
 
