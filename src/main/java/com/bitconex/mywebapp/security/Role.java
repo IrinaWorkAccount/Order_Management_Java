@@ -5,7 +5,6 @@ public enum Role {
     Required roles for my project
      */
         CUSTOMER,
-        ADMIN;
-
+        ADMIN
     }
 
