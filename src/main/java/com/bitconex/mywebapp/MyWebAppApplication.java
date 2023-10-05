@@ -1,7 +1,9 @@
 package com.bitconex.mywebapp;
 
 import com.bitconex.mywebapp.model.*;
-import com.bitconex.mywebapp.security.Role;
+import com.bitconex.mywebapp.repository.CustomerRepository;
+import com.bitconex.mywebapp.repository.OrderRepository;
+import com.bitconex.mywebapp.repository.ProductRepository;
 import com.bitconex.mywebapp.service.OrderService;
 import com.bitconex.mywebapp.service.ProductService;
 import com.bitconex.mywebapp.service.UserService;
@@ -14,11 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SpringBootApplication
 @EntityScan("com.bitconex.mywebapp")
@@ -32,7 +30,12 @@ public class MyWebAppApplication implements CommandLineRunner {
     ProductService productService;
     @Autowired
     OrderService orderService;
-
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    ProductRepository productRepository;
     public static void main(String[] args) {
         LOG.info("\n 1. STARTING : Spring boot application starting");//First logger message
         SpringApplication.run(MyWebAppApplication.class, args);
@@ -45,7 +48,78 @@ public class MyWebAppApplication implements CommandLineRunner {
         System.out.println("Hallo User");
         LOG.info("\n 2. EXECUTING : command line runner");
 
-/*        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
+        Scanner scanner = new Scanner(System.in);
+
+        boolean isRunning = true;
+
+        while (isRunning) {
+            System.out.println("Order Management System");
+            System.out.println("1. Neue Bestellung aufgeben");
+            System.out.println("2. Bestellung anzeigen");
+            System.out.println("3. Programm beenden");
+            System.out.print("Bitte geben Sie die gewünschte Option ein: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Geben Sie die Benutzer-ID ein: ");
+                    long userId = scanner.nextLong();
+                    Optional<Customer> customerOptional = customerRepository.findById(userId);
+
+                    if (customerOptional.isPresent()) {
+                        Customer customer = customerOptional.get();
+                        // Verwenden Sie 'customer' für weitere Verarbeitung
+                    } else {
+                        System.out.println("Benutzer mit der ID " + userId + " wurde nicht gefunden.");
+                        break;
+                    }
+                    System.out.print("Geben Sie die Produkt-ID ein: ");
+                    long productId = scanner.nextLong();
+                    Optional<Product> productOptional = productRepository.findById(productId);
+
+                    if (productOptional.isPresent()) {
+                        Product product = productOptional.get();
+                        // Verwenden Sie 'product' für weitere Verarbeitung
+                    } else {
+                        System.out.println("Produkt mit der ID " + productId + " wurde nicht gefunden.");
+                        break;
+                    }
+
+                case 2:
+                    System.out.println("Sie haben die Option 'Bestellung anzeigen' gewählt.");
+                    // Bestellungen anzeigen
+                    System.out.print("Geben Sie die Bestellung-ID ein, um Bestellungen anzuzeigen: ");
+                    Long orderId = scanner.nextLong();
+
+                    Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+                    if (orderOptional.isPresent()) {
+                        Order order = orderOptional.get();
+                        System.out.println("Bestellungs-ID: " + order.getId());
+                        System.out.println("Status: " + order.getStatus());
+                        System.out.println("Produkt: " + order.getProduct().getProductName());
+                        System.out.println("Menge: " + order.getQuantity());
+                        System.out.println("Customer ID: " + order.getUser().getId());
+                    } else {
+                        System.out.println("Bestellung mit der ID " + orderId + " wurde nicht gefunden.");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Programm wird beendet.");
+                    isRunning = false;
+                    break;
+                default:
+                    System.out.println("Ungültige Option. Bitte wählen Sie eine gültige Option.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+
+ /*       //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
         for (int i = 0; i <= 1; i++) {
@@ -165,13 +239,13 @@ public class MyWebAppApplication implements CommandLineRunner {
         //orderService.delete(5L);
 
         List<Order> allOrds = orderService.listAll();
-        allOrds.add(7,order1);
-        allOrds.add(2,order2);
+        allOrds.add(7, order1);
+        allOrds.add(2, order2);
 
         String orderList = allOrds.toString();
 
         System.out.println("Number of persisted orders: " + allOrds.size());
-        System.out.println("Liste aller Bestellungen: " +  orderList );
+        System.out.println("Liste aller Bestellungen: " + orderList);
 
         for (Order order : allOrds) {
             System.out.println("Order ID: " + order.getId());
@@ -191,9 +265,10 @@ public class MyWebAppApplication implements CommandLineRunner {
             System.out.println("Order belongs to the Customer: ");
             System.out.println("   Customer ID: " + order.getUser().getId());
 
-            System.out.println(); // Add a blank line to separate orders*/
-        }
-    }
+            System.out.println(); // Add a blank line to separate orders
+        }*/
+
+
 
 
 

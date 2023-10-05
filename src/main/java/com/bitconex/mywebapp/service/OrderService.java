@@ -24,9 +24,24 @@ public class OrderService {
     public List<Order> listAll(){
         return (List<Order>) or.findAll();
     }
-    public List<Order> getAllOrdersForUser(User id) {
-        return or.findById(id);
+
+    public Order find(Long id) {
+        Optional<Order> existingOrder= or.findById(id);
+        if(existingOrder.isPresent()){
+            or.findById(id);
+        } else {
+            throw new IllegalArgumentException("Order with ID " + id + " not found.");
+        }
+        return null;
     }
+
+/*    public List<Order> findOrdersById(Long orderId) {
+        return or.findById(orderId);
+    }
+
+    public List<Order> getAllOrdersForUser(Long orderId) {
+        return or.findById(orderId);
+    }*/
 
     public Order create(User user, int quantity, Product product, String status) {
         Order newOrder = new Order();

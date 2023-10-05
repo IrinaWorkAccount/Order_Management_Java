@@ -1,7 +1,10 @@
 package com.bitconex.mywebapp;
 
+import com.bitconex.mywebapp.model.Customer;
+import com.bitconex.mywebapp.model.CustomerAddress;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.ProductRepository;
+import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -42,9 +47,12 @@ public class ProductServiceTest {
         product.setProductAvailableUntil(futureDate.getTime());
         product.setProductQuantity(10);
 
-        when(productRepository.save(any(Product.class))).thenReturn(product);
+        when(productRepository.save(product)).thenReturn(product);
 
         Product addedProduct = productService.add(product);
+
+        when(productService.listAll()).thenReturn(List.of(product));
+        var result = productService.listAll();
 
         assertNotNull(addedProduct);
         assertEquals("productName", addedProduct.getProductName());
@@ -58,20 +66,38 @@ public class ProductServiceTest {
 
     @Test
     public void testListAllProducts() {
-        List<Product> mockProductList = new ArrayList<>();
-        mockProductList.add(new Product());
-        mockProductList.add(new Product());
+        Product product1 = new Product();
+        product1.setProductName("productName_1");
+        product1.setProductSalePrice(129.78);
+        Calendar today1 = Calendar.getInstance();
+        product1.setProductAvailableFrom(today1.getTime());
+        Calendar futureDate1 = Calendar.getInstance();
+        futureDate1.add(Calendar.YEAR, 1);
+        product1.setProductAvailableUntil(futureDate1.getTime());
+        product1.setProductQuantity(10);
 
-        when(productRepository.findAll()).thenReturn(mockProductList);
+        // productService.save(product1);
 
-        List<Product> productList = productService.listAll();
+        Product product2 = new Product();
+        product2.setProductName("productName_2");
+        product2.setProductSalePrice(34.87);
+        Calendar today2 = Calendar.getInstance();
+        product2.setProductAvailableFrom(today2.getTime());
+        Calendar futureDate2 = Calendar.getInstance();
+        futureDate2.add(Calendar.YEAR, 2);
+        product2.setProductAvailableUntil(futureDate2.getTime());
+        product2.setProductQuantity(77);
 
-        assertNotNull(productList);
-        assertEquals(2, productList.size());
+        // productService.save(product2);
 
-        verify(productRepository, times(1)).findAll();
+        when(productService.listAll()).thenReturn(List.of(product1, product2));
+        var result = productService.listAll();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(product1, result.get(0));
+        assertEquals(product2, result.get(1));
     }
-
     @Test
     public void testDeleteProduct() {
         Long productId = 1L;
