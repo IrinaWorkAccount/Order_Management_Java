@@ -25,7 +25,7 @@ public class Order {
     @ManyToMany
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
     private User user;
 

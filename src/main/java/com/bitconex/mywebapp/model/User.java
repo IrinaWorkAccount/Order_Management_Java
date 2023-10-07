@@ -1,6 +1,7 @@
 package com.bitconex.mywebapp.model;
 
 import com.bitconex.mywebapp.security.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.List;
 //@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING) // Added to distinguish the entity type
 
 @Entity
-@Table(name="users", schema = "public")
+@Table(name="user", schema = "public")
 public abstract class User {
     @Id
     @Column(name = "id", nullable = false, unique = true)
@@ -34,6 +35,7 @@ public abstract class User {
     @Column(name = "email")//später hinzufügen : , unique = true
     private String userEmail;
     @Column(name = "password")
+    @JsonIgnore
     private String userPassword;
 
     @Enumerated(EnumType.STRING)

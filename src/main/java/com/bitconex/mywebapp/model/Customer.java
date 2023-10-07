@@ -14,9 +14,9 @@ import static com.bitconex.mywebapp.security.Role.CUSTOMER;
 @Table(name = "customers", schema = "public")
 @DiscriminatorValue("CUSTOMER")
 public class Customer extends User  {
-   @Id
+/*   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    public Long id;*/
     private String customerName;
     private String customerSurname;
     @Temporal(TemporalType.DATE)
@@ -36,9 +36,9 @@ public class Customer extends User  {
         //Default constructor
     }
 
-   public Long getId() {
+   /*public Long getId() {
         return id;
-    }
+    }*/
 
     public String getCustomerName() {
         return customerName;
@@ -71,6 +71,5 @@ public class Customer extends User  {
     public void setCustomerAddress(CustomerAddress customerAddress) {
         this.customerAddress = customerAddress;
     }
-
 
 }

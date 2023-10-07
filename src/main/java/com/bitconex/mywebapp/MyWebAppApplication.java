@@ -4,6 +4,7 @@ import com.bitconex.mywebapp.model.*;
 import com.bitconex.mywebapp.repository.CustomerRepository;
 import com.bitconex.mywebapp.repository.OrderRepository;
 import com.bitconex.mywebapp.repository.ProductRepository;
+import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.OrderService;
 import com.bitconex.mywebapp.service.ProductService;
 import com.bitconex.mywebapp.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @SpringBootApplication
@@ -36,6 +38,7 @@ public class MyWebAppApplication implements CommandLineRunner {
     CustomerRepository customerRepository;
     @Autowired
     ProductRepository productRepository;
+
     public static void main(String[] args) {
         LOG.info("\n 1. STARTING : Spring boot application starting");//First logger message
         SpringApplication.run(MyWebAppApplication.class, args);
@@ -47,8 +50,9 @@ public class MyWebAppApplication implements CommandLineRunner {
 
         System.out.println("Hallo User");
         LOG.info("\n 2. EXECUTING : command line runner");
+        System.out.println(userService.listAllJSOn());
 
-        Scanner scanner = new Scanner(System.in);
+/*        Scanner scanner = new Scanner(System.in);
 
         boolean isRunning = true;
 
@@ -117,12 +121,12 @@ public class MyWebAppApplication implements CommandLineRunner {
 
         scanner.close();
     }
-}
+}*/
 
- /*       //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
+        //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
 
-        for (int i = 0; i <= 1; i++) {
+/*        for (int i = 0; i <= 1; i++) {
             Customer customer = new Customer();
             customer.setUserEmail("userEmail_" + i);
             customer.setUserLoginName("userLoginName_" + i);
@@ -131,7 +135,7 @@ public class MyWebAppApplication implements CommandLineRunner {
             customer.setCustomerSurname("Hifhra_" + i);
             customer.addRole(Role.CUSTOMER);
             LocalDate birthDate = LocalDate.of(1990, 9, 14);
-            customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
+            // customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
 
             CustomerAddress address = new CustomerAddress();
             address.setCity("Musterstadt");
@@ -227,7 +231,7 @@ public class MyWebAppApplication implements CommandLineRunner {
         Random rn = new Random();
         int quantityRn = rn.nextInt(10) + 1;
         product1.setProductQuantity(quantityRn);
-        productService.save(product1);
+        //productService.save(product1);
 
 
         Customer customer2 = new Customer();
@@ -267,7 +271,8 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             System.out.println(); // Add a blank line to separate orders
         }*/
-
+    }
+}
 
 
 

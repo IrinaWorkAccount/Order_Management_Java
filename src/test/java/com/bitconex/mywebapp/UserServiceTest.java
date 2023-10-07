@@ -7,6 +7,7 @@ import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.repository.UserRepository;
 import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,10 +30,10 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-private Customer customer;
+    private Customer customer;
     private User user;
     private Admin admin;
-private final List<Customer> customerList = new ArrayList<>();
+    private final List<Customer> customerList = new ArrayList<>();
     @Mock
     private UserRepository userRepository;
 
@@ -42,9 +43,37 @@ private final List<Customer> customerList = new ArrayList<>();
     }
 
     @Test
-    public void testAddCustomer(){
+    public void testAddCustomer() {
 
     }
+
+    @Test
+    public void testListAllJSOn() {
+        Admin admin1 = new Admin();
+        admin1.setId(7L);
+        admin1.setUserEmail("userEmail_1");
+        admin1.setUserLoginName("userLoginName_1");
+        admin1.setUserPassword("userPassword_1");
+        admin1.addRole(Role.ADMIN);
+        Admin admin2 = new Admin();
+        admin2.setId(8L);
+        admin2.setUserEmail("userEmail_2");
+        admin2.setUserLoginName("userLoginName_2");
+        admin2.setUserPassword("userPassword_2");
+        admin2.addRole(Role.ADMIN);
+        when(userService.listAll()).thenReturn(List.of(admin1, admin2));
+        String jsonResult = null;
+        try {
+            jsonResult = userService.listAllJSOn();
+            System.out.println(jsonResult);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        assertEquals("[{\"id\":7,\"userLoginName\":\"userLoginName_1\",\"userEmail\":\"userEmail_1\",\"userPassword\":\"userPassword_1\",\"role\":\"ADMIN\",\"orders\":null},{\"id\":8,\"userLoginName\":\"userLoginName_2\",\"userEmail\":\"userEmail_2\",\"userPassword\":\"userPassword_2\",\"role\":\"ADMIN\",\"orders\":null}]",
+        jsonResult);
+    }
+
+
     @Test
     public void testListAllCusts() {
         Customer customer1 = new Customer();
@@ -64,7 +93,6 @@ private final List<Customer> customerList = new ArrayList<>();
         address1.setZipCode("81546");
 
         customer1.setCustomerAddress(address1);
-        //userService.save(customer1);
 
         Customer customer2 = new Customer();
         customer2.setUserEmail("userEmail_1");
@@ -83,13 +111,13 @@ private final List<Customer> customerList = new ArrayList<>();
         address2.setZipCode("81546");
 
         customer2.setCustomerAddress(address2);
-       // userService.save(customer2);
 
         when(userService.listAll()).thenReturn(List.of(customer1,customer2));
         var result = userService.listAll();
 
         assertNotNull(result);
         assertEquals(2,result.size());
+
         assertEquals(customer1,result.get(0));
         assertEquals(customer2,result.get(1));
 
@@ -102,13 +130,11 @@ private final List<Customer> customerList = new ArrayList<>();
         admin1.setUserLoginName("userLoginName_1");
         admin1.setUserPassword("userPassword_1");
         admin1.addRole(Role.ADMIN);
-        //userService.save(admin1);
         Admin admin2 = new Admin();
         admin2.setUserEmail("userEmail_2");
         admin2.setUserLoginName("userLoginName_2");
         admin2.setUserPassword("userPassword_2");
         admin2.addRole(Role.ADMIN);
-        //userService.save(admin2);
         when(userService.listAll()).thenReturn(List.of(admin1,admin2));
         var result = userService.listAll();
 
