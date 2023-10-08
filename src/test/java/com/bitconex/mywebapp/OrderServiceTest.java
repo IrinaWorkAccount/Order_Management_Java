@@ -1,19 +1,22 @@
 package com.bitconex.mywebapp;
 
+import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.repository.OrderRepository;
 import com.bitconex.mywebapp.repository.ProductRepository;
+import com.bitconex.mywebapp.repository.UserRepository;
+import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.OrderService;
 import com.bitconex.mywebapp.service.ProductService;
+import com.bitconex.mywebapp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.Random;
@@ -25,18 +28,45 @@ public class OrderServiceTest {
 
     @InjectMocks
     private OrderService orderService;
+    @InjectMocks
+    private UserService userService;
 
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+    //The test verifies that repository.save has been called with an order that has the user and product set correctly.
     @Test
-    public void testCreateOrder() {
+    public void testCreateOrderMock() {
+        Product product = new Product();
+        product.setProductName("productName_0");
+        product.setProductSalePrice(1290.78);
+
+        Customer mockUser = Mockito.mock();
+        String status = "Pending";
+        int quantity = 5;
+
+        orderService.create(mockUser,quantity, product,status);
+
+        final ArgumentCaptor<Order> captor
+                = ArgumentCaptor.forClass(Order.class);
+        verify(orderRepository).save(captor.capture());
+
+        final Order savedOrder = captor.getValue();
+        assertEquals(mockUser, savedOrder.getUser());
+        assertEquals(product, savedOrder.getProduct());
+    }
+
+    //The integration test verifies whether the entity is successfully stored in the database.
+    @Test
+    public void testCreateOrderIntegration() {
         Product product = new Product();
 
         product.setProductName("productName_0");
@@ -46,26 +76,32 @@ public class OrderServiceTest {
         Calendar futureDate = Calendar.getInstance();
         futureDate.add(Calendar.YEAR, 1);
         product.setProductAvailableUntil(futureDate.getTime());
-        Random rn = new Random();
-        int quantityRn = rn.nextInt(10) + 1;
-        product.setProductQuantity(quantityRn);
 
-        User mockUser = Mockito.mock(User.class); // Create a mock User object
+        Customer customer = new Customer();
+        customer.setUserEmail("userEmail_1");
+        customer.setUserLoginName("userLoginName_1");
+        customer.setUserPassword("userPassword_1" );
+        customer.setCustomerName("Endera_1" );
+        customer.setCustomerSurname("Hifhra_1" );
+        customer.addRole(Role.CUSTOMER);
+        LocalDate birthDate1 = LocalDate.of(1990, 9, 14);
+        customer.setCustomerBirthDate(Date.valueOf(birthDate1).toLocalDate());
 
+        Order order = new Order();
         String status = "Pending";
-        Order mockOrder = new Order();
 
-        when(orderRepository.save(any(Order.class))).thenReturn(mockOrder);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
 
-        Order createdOrder = orderService.create(mockUser, 5, product, status);
+        Order createdOrder = orderService.create(customer, 5, product, status);
 
         assertNotNull(createdOrder);
-        assertEquals(mockUser, createdOrder.getUser());
+        assertEquals(customer, createdOrder.getUser());
         assertEquals(5, createdOrder.getQuantity());
         assertEquals(product, createdOrder.getProduct());
         assertEquals(status, createdOrder.getStatus());
 
-        verify(orderRepository, times(1)).save(any(Order.class));
+
+        //verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test

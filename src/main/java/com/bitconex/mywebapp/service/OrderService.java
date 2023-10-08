@@ -1,5 +1,6 @@
 package com.bitconex.mywebapp.service;
 
+import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.model.User;
@@ -43,12 +44,13 @@ public class OrderService {
         return or.findById(orderId);
     }*/
 
-    public Order create(User user, int quantity, Product product, String status) {
+    public Order create(Customer customer, int quantity, Product product, String status) {
         Order newOrder = new Order();
-        newOrder.setUser(user);
+        newOrder.setUser(customer);
         newOrder.setQuantity(quantity);
         newOrder.setProduct(product);
         newOrder.setStatus(status);
+
         return or.save(newOrder);
     }
 
