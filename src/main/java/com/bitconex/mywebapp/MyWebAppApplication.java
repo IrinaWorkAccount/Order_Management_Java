@@ -48,80 +48,94 @@ public class MyWebAppApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("Hallo User");
-        LOG.info("\n 2. EXECUTING : command line runner");
+        System.out.println("Hello User"); // Greeting message
+        LOG.info("\n 2. EXECUTING : command line runner"); // Logging execution
         System.out.println(userService.listAllJSOn());
 
-/*        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         boolean isRunning = true;
+        Customer customer = null;
 
         while (isRunning) {
             System.out.println("Order Management System");
-            System.out.println("1. Neue Bestellung aufgeben");
-            System.out.println("2. Bestellung anzeigen");
-            System.out.println("3. Programm beenden");
-            System.out.print("Bitte geben Sie die gewünschte Option ein: ");
+            System.out.println("1. Place a new order");
+            System.out.println("2. View orders");
+            System.out.println("3. Exit program");
+            System.out.print("Please enter the desired option: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Geben Sie die Benutzer-ID ein: ");
+                    System.out.print("Enter the user ID: ");
                     long userId = scanner.nextLong();
+
                     Optional<Customer> customerOptional = customerRepository.findById(userId);
 
                     if (customerOptional.isPresent()) {
-                        Customer customer = customerOptional.get();
-                        // Verwenden Sie 'customer' für weitere Verarbeitung
+                        customer = customerOptional.get();
+                        if (customer.getRole() == Role.CUSTOMER) {
+                            System.out.print("Enter the product ID you want to order: ");
+                            long productId = scanner.nextLong();
+                            Optional<Product> productOptional = productRepository.findById(productId);
+
+                            if (productOptional.isPresent()) {
+
+                                Product product = productOptional.get();
+                                int quantity = 0;
+
+                                while (quantity <= 0) {
+                                    System.out.print("Enter the desired quantity you want to order: ");
+                                    quantity = scanner.nextInt();
+
+                                    if (quantity <= 0) {
+                                        System.out.println("Invalid quantity. Quantity must be greater than 0.");
+                                    } else if (quantity > product.getProductQuantity()) {
+                                        System.out.println("Not enough items in stock. Please specify a different quantity.");
+                                        quantity = 0; // Reset the quantity to 0 to repeat the loop
+                                    }
+                                }
+
+                                Order newOrder = orderService.create(customer, quantity, product, "In Progress");
+
+                                System.out.println("Order created successfully.");
+
+                            } else {
+                                System.out.println("Product with ID " + productId + " not found.");
+                            }
+                        } else {
+                            System.out.println("User with ID " + userId + " does not have the required 'CUSTOMER' role.");
+                        }
                     } else {
-                        System.out.println("Benutzer mit der ID " + userId + " wurde nicht gefunden.");
-                        break;
-                    }
-                    System.out.print("Geben Sie die Produkt-ID ein: ");
-                    long productId = scanner.nextLong();
-                    Optional<Product> productOptional = productRepository.findById(productId);
-
-                    if (productOptional.isPresent()) {
-                        Product product = productOptional.get();
-                        // Verwenden Sie 'product' für weitere Verarbeitung
-                    } else {
-                        System.out.println("Produkt mit der ID " + productId + " wurde nicht gefunden.");
-                        break;
-                    }
-
-                case 2:
-                    System.out.println("Sie haben die Option 'Bestellung anzeigen' gewählt.");
-                    // Bestellungen anzeigen
-                    System.out.print("Geben Sie die Bestellung-ID ein, um Bestellungen anzuzeigen: ");
-                    Long orderId = scanner.nextLong();
-
-                    Optional<Order> orderOptional = orderRepository.findById(orderId);
-
-                    if (orderOptional.isPresent()) {
-                        Order order = orderOptional.get();
-                        System.out.println("Bestellungs-ID: " + order.getId());
-                        System.out.println("Status: " + order.getStatus());
-                        System.out.println("Produkt: " + order.getProduct().getProductName());
-                        System.out.println("Menge: " + order.getQuantity());
-                        System.out.println("Customer ID: " + order.getUser().getId());
-                    } else {
-                        System.out.println("Bestellung mit der ID " + orderId + " wurde nicht gefunden.");
+                        System.out.println("User with ID " + userId + " not found.");
                     }
                     break;
+                case 2:
+                    if (customer != null) {
+                        Optional<Order> customerOrders = orderRepository.findByCustomer(customer);
+                        String ordersJson = orderService.convertOrdersToJson();
+                        System.out.println("Your orders in JSON format:");
+                        System.out.println(ordersJson);
+                    } else {
+                        System.out.println("No customer selected. Please enter a customer ID first.");
+                        long userId1=scanner.nextLong();
+                    }
+                    break;
+
                 case 3:
-                    System.out.println("Programm wird beendet.");
+                    System.out.println("Program is exiting.");
                     isRunning = false;
                     break;
                 default:
-                    System.out.println("Ungültige Option. Bitte wählen Sie eine gültige Option.");
+                    System.out.println("Invalid option. Please select a valid option.");
             }
         }
 
         scanner.close();
-    }
-}*/
+
+
 
         //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
 
@@ -231,7 +245,7 @@ public class MyWebAppApplication implements CommandLineRunner {
         Random rn = new Random();
         int quantityRn = rn.nextInt(10) + 1;
         product1.setProductQuantity(quantityRn);
-        //productService.save(product1);
+        productService.save(product1);
 
 
         Customer customer2 = new Customer();
@@ -245,6 +259,9 @@ public class MyWebAppApplication implements CommandLineRunner {
         List<Order> allOrds = orderService.listAll();
         allOrds.add(7, order1);
         allOrds.add(2, order2);
+
+        orderService.save(order1);
+        orderService.save(order2);
 
         String orderList = allOrds.toString();
 
@@ -271,9 +288,10 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             System.out.println(); // Add a blank line to separate orders
         }*/
+
+
     }
 }
-
 
 
 

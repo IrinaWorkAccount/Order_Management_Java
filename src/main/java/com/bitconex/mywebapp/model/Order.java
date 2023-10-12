@@ -1,5 +1,6 @@
 package com.bitconex.mywebapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,6 @@ public class Order {
 
     private int quantity;
 
-
     @ManyToOne
     //@JoinColumn
     private Product product;
@@ -28,6 +28,11 @@ public class Order {
     @ManyToOne//(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
     private User user;
+
+    @ManyToOne
+    @JsonBackReference
+  //  @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(name = "status")
     private String status;
@@ -59,7 +64,6 @@ public class Order {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
     public Product getProduct() {
         return product;

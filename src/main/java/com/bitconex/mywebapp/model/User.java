@@ -41,7 +41,7 @@ public abstract class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL) //mappedBy = "users" losgelassen, da es Fehler angezeigt wird
     @JoinColumn(name = "user_id")
     private List<Order> orders;

@@ -1,5 +1,6 @@
 package com.bitconex.mywebapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -19,13 +20,15 @@ public class Product {
     private String productName;
     @Column(name = "sale_price")
     private double salePrice;
+    @JsonIgnore
     @Column(name = "available_from")
     @Temporal(TemporalType.DATE)
     private Date availableFrom;
+    @JsonIgnore
     @Column(name = "available_until")
     @Temporal(TemporalType.DATE)
-
     private Date availableUntil;
+    @JsonIgnore
     @Column(name = "quantity")
     private int quantity;
 

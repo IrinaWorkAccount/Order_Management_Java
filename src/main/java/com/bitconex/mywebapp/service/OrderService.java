@@ -5,9 +5,14 @@ import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.repository.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,6 +86,14 @@ public class OrderService {
             throw new IllegalArgumentException("Order with ID " + id + " not found.");
         }
     }
+        @Transactional
+        public String convertOrdersToJson()throws JsonProcessingException {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Iterable<Order> orderList =  or.findAll();
+            List<Order>target = new ArrayList<>();
+            orderList.forEach(target::add);
+            return objectMapper.writeValueAsString(orderList);
+        }
 
 }
 
