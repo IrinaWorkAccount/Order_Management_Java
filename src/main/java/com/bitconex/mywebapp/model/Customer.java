@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import static com.bitconex.mywebapp.security.Role.CUSTOMER;
@@ -24,13 +25,13 @@ public class Customer extends User  {
 
     @JsonIgnore
     @Temporal(TemporalType.DATE)
-    private LocalDate customerBirthDate;
+    private Date customerBirthDate;
 
     @JsonIgnore
     @Embedded
     private CustomerAddress customerAddress;
 
-    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, LocalDate customerBirthDate, CustomerAddress customerAddress) {
+    public Customer(String userLoginName, String userEmail, String userPassword, String customerName, String customerSurname, Date customerBirthDate, CustomerAddress customerAddress) {
         super(userLoginName, userEmail, userPassword, CUSTOMER);
         this.customerName = customerName;
         this.customerSurname = customerSurname;
@@ -64,11 +65,11 @@ public class Customer extends User  {
         this.customerSurname = surname;
     }
 
-    public LocalDate getCustomerBirthDate() {
+    public Date getCustomerBirthDate() {
         return customerBirthDate;
     }
 
-    public void setCustomerBirthDate(LocalDate birthDate) {
+    public void setCustomerBirthDate(Date birthDate) {
         this.customerBirthDate = birthDate;
     }
 

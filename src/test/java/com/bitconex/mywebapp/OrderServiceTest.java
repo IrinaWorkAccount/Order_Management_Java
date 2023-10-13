@@ -3,13 +3,10 @@ package com.bitconex.mywebapp;
 import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.Product;
-import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.repository.OrderRepository;
-import com.bitconex.mywebapp.repository.ProductRepository;
 import com.bitconex.mywebapp.repository.UserRepository;
 import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.OrderService;
-import com.bitconex.mywebapp.service.ProductService;
 import com.bitconex.mywebapp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +16,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,13 +75,13 @@ public class OrderServiceTest {
 
         Customer customer = new Customer();
         customer.setUserEmail("userEmail_1");
-        customer.setUserLoginName("userLoginName_1");
+        customer.setUserLogin("userLoginName_1");
         customer.setUserPassword("userPassword_1" );
         customer.setCustomerName("Endera_1" );
         customer.setCustomerSurname("Hifhra_1" );
-        customer.addRole(Role.CUSTOMER);
-        LocalDate birthDate1 = LocalDate.of(1990, 9, 14);
-        customer.setCustomerBirthDate(Date.valueOf(birthDate1).toLocalDate());
+        customer.setRole(Role.CUSTOMER);
+        Date birthDate1 = new Date(1990-9-14);
+        customer.setCustomerBirthDate(birthDate1);
 
         Order order = new Order();
         String status = "Pending";

@@ -29,10 +29,11 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Login", length = 128)
+    @Column(name = "login", length = 128)
     @NonNull
-    private String userLoginName;
+    private String userLogin;
     @Column(name = "email")//später hinzufügen : , unique = true
+    //@Email(message = "Invalid email format")
     private String userEmail;
     @Column(name = "password")
     @JsonIgnore
@@ -46,9 +47,9 @@ public abstract class User {
     @JoinColumn(name = "user_id")
     private List<Order> orders;
 
-    public User(@NonNull String userLoginName, String userEmail, String userPassword, Role role) {
+    public User(@NonNull String userLogin, String userEmail, String userPassword, Role role) {
         super();
-        this.userLoginName = userLoginName;
+        this.userLogin = userLogin;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.role = role;
@@ -62,17 +63,17 @@ public abstract class User {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @NonNull
-    public String getUserLoginName() {
-        return userLoginName;
+    public String getUserLogin() {
+        return userLogin;
     }
 
-    public void setUserLoginName(@NonNull String loginName) {
-        this.userLoginName = loginName;
+    public void setUserLogin(@NonNull String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public String getUserEmail() {
@@ -91,10 +92,10 @@ public abstract class User {
         this.userPassword = password;
     }
 
-    @Enumerated(EnumType.STRING)
+/*    @Enumerated(EnumType.STRING)
     public void addRole(Role role) {
         this.role = role;
-    }
+    }*/
 
     @Enumerated(EnumType.STRING)
     public Role getRole() {

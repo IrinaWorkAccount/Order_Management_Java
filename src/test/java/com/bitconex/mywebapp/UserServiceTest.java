@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.bitconex.mywebapp.security.Role.ADMIN;
-import static com.bitconex.mywebapp.security.Role.CUSTOMER;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,15 +50,15 @@ public class UserServiceTest {
         Admin admin1 = new Admin();
         admin1.setId(7L);
         admin1.setUserEmail("userEmail_1");
-        admin1.setUserLoginName("userLoginName_1");
+        admin1.setUserLogin("userLoginName_1");
         admin1.setUserPassword("userPassword_1");
-        admin1.addRole(Role.ADMIN);
+        admin1.setRole(Role.ADMIN);
         Admin admin2 = new Admin();
         admin2.setId(8L);
         admin2.setUserEmail("userEmail_2");
-        admin2.setUserLoginName("userLoginName_2");
+        admin2.setUserLogin("userLoginName_2");
         admin2.setUserPassword("userPassword_2");
-        admin2.addRole(Role.ADMIN);
+        admin2.setRole(Role.ADMIN);
         when(userService.listAll()).thenReturn(List.of(admin1, admin2));
         String jsonResult = null;
         try {
@@ -69,7 +67,7 @@ public class UserServiceTest {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        assertEquals("[{\"id\":7,\"userLoginName\":\"userLoginName_1\",\"userEmail\":\"userEmail_1\",\"userPassword\":\"userPassword_1\",\"role\":\"ADMIN\",\"orders\":null},{\"id\":8,\"userLoginName\":\"userLoginName_2\",\"userEmail\":\"userEmail_2\",\"userPassword\":\"userPassword_2\",\"role\":\"ADMIN\",\"orders\":null}]",
+        assertEquals("[{\"id\":7,\"userLogin\":\"userLoginName_1\",\"userEmail\":\"userEmail_1\",\"role\":\"ADMIN\"},{\"id\":8,\"userLogin\":\"userLoginName_2\",\"userEmail\":\"userEmail_2\",\"role\":\"ADMIN\"}]",
         jsonResult);
     }
 
@@ -78,15 +76,15 @@ public class UserServiceTest {
     public void testListAllCusts() {
         Customer customer1 = new Customer();
         customer1.setUserEmail("userEmail_1");
-        customer1.setUserLoginName("userLoginName_1");
+        customer1.setUserLogin("userLoginName_1");
         customer1.setUserPassword("userPassword_1" );
         customer1.setCustomerName("Endera_1" );
         customer1.setCustomerSurname("Hifhra_1" );
-        customer1.addRole(Role.CUSTOMER);
-        LocalDate birthDate1 = LocalDate.of(1990, 9, 14);
-        customer1.setCustomerBirthDate(Date.valueOf(birthDate1).toLocalDate());
+        customer1.setRole(Role.CUSTOMER);
+        Date birthDate1 = new Date(1990-9-14);
+        customer1.setCustomerBirthDate(birthDate1);
 
-        CustomerAddress address1 = new CustomerAddress();
+        CustomerAddress address1 = new CustomerAddress(null,null,null,null);
         address1.setCity("Musterstadt");
         address1.setCountry("Musterland");
         address1.setStreet("Muster Str. 21");
@@ -96,15 +94,15 @@ public class UserServiceTest {
 
         Customer customer2 = new Customer();
         customer2.setUserEmail("userEmail_1");
-        customer2.setUserLoginName("userLoginName_1");
+        customer2.setUserLogin("userLoginName_1");
         customer2.setUserPassword("userPassword_1" );
         customer2.setCustomerName("Endera_1" );
         customer2.setCustomerSurname("Hifhra_1" );
-        customer2.addRole(Role.CUSTOMER);
-        LocalDate birthDate2= LocalDate.of(1980, 7, 10);
-        customer2.setCustomerBirthDate(Date.valueOf(birthDate2).toLocalDate());
+        customer2.setRole(Role.CUSTOMER);
+        Date birthDate2 = new Date(1980-7-10);
+        customer2.setCustomerBirthDate(birthDate2);
 
-        CustomerAddress address2 = new CustomerAddress();
+        CustomerAddress address2 = new CustomerAddress(null,null,null,null);
         address2.setCity("Musterstadt");
         address2.setCountry("Musterland");
         address2.setStreet("Muster Str. 21");
@@ -127,14 +125,14 @@ public class UserServiceTest {
     public void testListAllAdmins() {
         Admin admin1 = new Admin();
         admin1.setUserEmail("userEmail_1");
-        admin1.setUserLoginName("userLoginName_1");
+        admin1.setUserLogin("userLoginName_1");
         admin1.setUserPassword("userPassword_1");
-        admin1.addRole(Role.ADMIN);
+        admin1.setRole(Role.ADMIN);
         Admin admin2 = new Admin();
         admin2.setUserEmail("userEmail_2");
-        admin2.setUserLoginName("userLoginName_2");
+        admin2.setUserLogin("userLoginName_2");
         admin2.setUserPassword("userPassword_2");
-        admin2.addRole(Role.ADMIN);
+        admin2.setRole(Role.ADMIN);
         when(userService.listAll()).thenReturn(List.of(admin1,admin2));
         var result = userService.listAll();
 
@@ -179,7 +177,7 @@ public class UserServiceTest {
         String loginName = "testUser";
         User mockUser = Mockito.mock(User.class); // Create a mock User object
 
-        when(userRepository.findByUserLoginName(loginName)).thenReturn(Optional.of(mockUser));
+        when(userRepository.findByUserLogin(loginName)).thenReturn(Optional.of(mockUser));
 
         userService.delete(loginName);
 
@@ -190,7 +188,7 @@ public class UserServiceTest {
     public void testDeleteUserNotFound() {
         String loginName = "nonExistentUser";
 
-        when(userRepository.findByUserLoginName(loginName)).thenReturn(Optional.empty());
+        when(userRepository.findByUserLogin(loginName)).thenReturn(Optional.empty());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userService.delete(loginName);

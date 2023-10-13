@@ -25,7 +25,7 @@ public class AdminRepositoryTests {
     public void testAddNewAdmin() {
 
         Admin admin = new Admin();
-        admin.setUserLoginName("userLoginName");
+        admin.setUserLogin("userLoginName");
         admin.setUserEmail("userEmail");
         admin.setUserPassword("userPassword");
         admin.setRole(Role.ADMIN);

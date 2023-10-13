@@ -14,6 +14,17 @@ public class CustomerAddress {
     @Column(name = "country")
     private String country;
 
+    public CustomerAddress(String street, String zipCode, String city, String country) {
+        this.street = street;
+        this.zipCode = zipCode;
+        this.city = city;
+        this.country = country;
+    }
+
+    public CustomerAddress() {
+        //Default constructor
+    }
+
     public String getStreet() {
         return street;
     }

@@ -27,7 +27,7 @@ public class CustomerRepositoryTests {
     @Test
     public void testAddNewCustomer() {
         Customer customer = new Customer();
-        customer.setUserLoginName("Endera_Hifhra");
+        customer.setUserLogin("Endera_Hifhra");
         customer.setUserEmail("Endera_Hifhra@gmail.com");
         customer.setUserPassword("querty1234");
         customer.setCustomerName("Endera");
@@ -35,10 +35,10 @@ public class CustomerRepositoryTests {
 
         customer.setRole(Role.CUSTOMER);
 
-        LocalDate birthDate = LocalDate.of(1990, 9, 14);
-        customer.setCustomerBirthDate(Date.valueOf(birthDate).toLocalDate());
+        Date birthDate = new Date(1990-9-14);
+        customer.setCustomerBirthDate(birthDate);
 
-        CustomerAddress address = new CustomerAddress();
+        CustomerAddress address = new CustomerAddress(null,null,null,null);
         address.setCity("Musterstadt");
         address.setCountry("Musterland");
         address.setStreet("Feuer Str. 21");
@@ -68,7 +68,7 @@ public class CustomerRepositoryTests {
         Customer customer = optionalCustomer.orElse(null);
         assert customer != null;
 
-        CustomerAddress address = new CustomerAddress();
+        CustomerAddress address = new CustomerAddress(null,null,null,null);
         address.setStreet("Locchauer Str. 5");
         address.setZipCode("81755");
         address.setCity("Musterstadt");

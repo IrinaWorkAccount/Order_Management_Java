@@ -19,6 +19,7 @@ public class Product {
     @Column(name = "product_name", nullable = false)
     private String productName;
     @Column(name = "sale_price")
+   // @Min(value = 0, message = "Sale price must be greater than or equal to 0")
     private double salePrice;
     @JsonIgnore
     @Column(name = "available_from")
@@ -27,9 +28,11 @@ public class Product {
     @JsonIgnore
     @Column(name = "available_until")
     @Temporal(TemporalType.DATE)
+    //@Future(message = "Available from date must be in the future")
     private Date availableUntil;
     @JsonIgnore
     @Column(name = "quantity")
+    //@Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private int quantity;
 
 

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for the entity Order.
+ */
 @Repository
     public interface OrderRepository extends CrudRepository<Order, Long> {
         long countById(Long id);

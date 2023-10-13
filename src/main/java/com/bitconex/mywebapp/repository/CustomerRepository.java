@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for the entity Customer.
+ */
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     long countById(Long id);
-   Optional<Customer> findByUserLoginName(String userLoginName);
+  // Optional<Customer> findByUserLogin(String userLogin);
 }

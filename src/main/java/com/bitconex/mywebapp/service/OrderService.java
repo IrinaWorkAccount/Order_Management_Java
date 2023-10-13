@@ -21,16 +21,34 @@ import java.util.Optional;
  */
 @Service
 public class OrderService {
-    @Autowired
-    OrderRepository or;
 
+    // ==============
+    // PRIVATE FIELDS
+    // ==============
+    @Autowired
+    private OrderRepository or;
+
+    // ==============
+    // PUBLIC METHODS
+    // ==============
+
+    /**
+     * Saves an order in the database.
+     */
     public void save(Order order) {
         or.save(order);
     }
+
+    /**
+     * Retrieves all orders from the database.
+     */
     public List<Order> listAll(){
         return (List<Order>) or.findAll();
     }
 
+    /**
+     * Searches for an order by its ID and returns it.
+     */
     public Order find(Long id) {
         Optional<Order> existingOrder= or.findById(id);
         if(existingOrder.isPresent()){
@@ -49,23 +67,30 @@ public class OrderService {
         return or.findById(orderId);
     }*/
 
+    /**
+     * Creates a new order with the specified parameters and saves it in the database.
+     */
     public Order create(Customer customer, int quantity, Product product, String status) {
         Order newOrder = new Order();
         newOrder.setUser(customer);
         newOrder.setQuantity(quantity);
         newOrder.setProduct(product);
         newOrder.setStatus(status);
-
-        return or.save(newOrder);
+        or.save(newOrder);
+        return newOrder;
     }
 
-    public double confirmOrder(Order order) {
-        double totalPrice = calculateTotalPrice(order);
-        order.setStatus("bestätigt");
+    /**
+     * Confirms an order and change the status to "confirmed".
+     */
+    public void confirmOrder(Order order) {
+        order.setStatus("confirmed");
         or.save(order);
-        return totalPrice;
     }
 
+    /**
+     * Calculates the total price.
+     */
     private double calculateTotalPrice(Order order) {
 
         List<Product> products = order.getProducts();
@@ -78,6 +103,9 @@ public class OrderService {
         return totalPrice;
     }
 
+    /**
+     *  Deletes an order by its ID from the database.
+     */
     public void delete(Long id) {
         Optional<Order> existingOrder= or.findById(id);
         if(existingOrder.isPresent()){
@@ -86,6 +114,10 @@ public class OrderService {
             throw new IllegalArgumentException("Order with ID " + id + " not found.");
         }
     }
+
+    /**
+     * Converts all orders into JSON format.
+     */
         @Transactional
         public String convertOrdersToJson()throws JsonProcessingException {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -94,6 +126,10 @@ public class OrderService {
             orderList.forEach(target::add);
             return objectMapper.writeValueAsString(orderList);
         }
-
+    @Transactional
+    public String convertOrdersToJson(Optional<Order> orderList) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(orderList);
+    }
 }
 

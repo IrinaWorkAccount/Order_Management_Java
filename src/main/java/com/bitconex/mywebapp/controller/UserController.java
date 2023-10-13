@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Controller
 public class UserController {
-/*    @Autowired
+    @Autowired
     private UserService service;
 
     @GetMapping("/users")
@@ -32,21 +32,21 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/users/new")
+/*    @GetMapping("/users/new")
     public String showNewForm(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("pageTitle", "Add New User");
         return "user_form";
-    }
+    }*/
 
-    @PostMapping("/users/save")
+/*    @PostMapping("/users/save")
     public String saveUser(User user, RedirectAttributes ra) {
         service.save(user);
         ra.addFlashAttribute("message", "The user has been saved successfully.");
         return "redirect:/users";
-    }
+    }*/
 
-    @GetMapping("/users/edit/{id}")
+/*    @GetMapping("/users/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         try {
             User user = service.getUser(id);
@@ -58,9 +58,9 @@ public class UserController {
             ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/users";
         }
-    }
+    }*/
 
-    @GetMapping("/users/delete/{id}")
+/*    @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id, RedirectAttributes ra) {
         try {
             service.deleteUser(id);
@@ -69,10 +69,10 @@ public class UserController {
             ra.addFlashAttribute("message", e.getMessage());
         }
         return "redirect:/users";
-    }
+    }*/
 
 
-    @GetMapping("/")
+/*    @GetMapping("/")
     public void save() {
         User user = new User();
         user.setRole(Role.CUSTOMER);
