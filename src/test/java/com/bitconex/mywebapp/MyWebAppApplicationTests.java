@@ -26,7 +26,8 @@ public class MyWebAppApplicationTests  {
             assertNotNull(user);
 
             session.getTransaction().commit();
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

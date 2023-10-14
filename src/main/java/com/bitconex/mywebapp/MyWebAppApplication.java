@@ -20,8 +20,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.expression.ParseException;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EntityScan("com.bitconex.mywebapp")
@@ -55,13 +57,14 @@ public class MyWebAppApplication implements CommandLineRunner {
 
         System.out.println("Hello User"); // Greeting message
         LOG.info("\n 2. EXECUTING : command line runner"); // Logging execution
-        System.out.println(userService.listAllJSOn());
+
 
         Scanner scanner = new Scanner(System.in);
 
         boolean isRunning = true;
         Customer customer = null;
-        boolean isAdmin = false;
+        int quantity=0;
+        Product product=null;
 
         System.out.print("Enter your login name: ");
         String enteredLogin = scanner.nextLine();
@@ -194,7 +197,7 @@ public class MyWebAppApplication implements CommandLineRunner {
                                         Date availableUntilDateNew = userService.scanToDate(availableUntilDate);
 
                                         System.out.print("Enter the quantity of product instances available for sale: ");
-                                        int quantity = scanner.nextInt();
+                                        quantity = scanner.nextInt();
                                         scanner.nextLine();
 
                                         productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
@@ -251,74 +254,73 @@ public class MyWebAppApplication implements CommandLineRunner {
 
                     switch (choice) {
                         case 1:
-                            System.out.print("Enter the user ID: ");
-                            long userId = scanner.nextLong();
-
-                            Optional<User> customerOptional = userRepository.findById(userId);
+                            long userId = user.getId(); // Holen Sie die Benutzer-ID aus dem authentifizierten Benutzer
+                            Optional<Customer> customerOptional = customerRepository.findById(userId);
 
                             if (customerOptional.isPresent()) {
-                                User user1 = customerOptional.get();
-                                if (customer.getRole() == Role.CUSTOMER) {
-                                    System.out.print("Enter the product ID you want to order: ");
-                                    long productId = scanner.nextLong();
-                                    Optional<Product> productOptional = productRepository.findById(productId);
+                                customer = customerOptional.get();
 
-                                    if (productOptional.isPresent()) {
+                                System.out.print("Enter the product ID you want to order: ");
+                                long productId = scanner.nextLong();
+                                Optional<Product> productOptional = productRepository.findById(productId);
 
-                                        Product product = productOptional.get();
-                                        int quantity = 0;
+                                if (productOptional.isPresent()) {
+                                    product = productOptional.get();
 
-                                        while (quantity <= 0) {
-                                            System.out.print("Enter the desired quantity you want to order: ");
-                                            quantity = scanner.nextInt();
+                                    quantity = 0;
 
-                                            if (quantity <= 0) {
-                                                System.out.println("Invalid quantity. Quantity must be greater than 0.");
-                                            } else if (quantity > product.getProductQuantity()) {
-                                                System.out.println("Not enough items in stock. Please specify a different quantity.");
-                                                quantity = 0; // Reset the quantity to 0 to repeat the loop
-                                            }
+                                    while (quantity <= 0) {
+                                        System.out.print("Enter the desired quantity you want to order: ");
+                                        quantity = scanner.nextInt();
+
+                                        if (quantity <= 0) {
+                                            System.out.println("Invalid quantity. Quantity must be greater than 0.");
+                                        } else if (quantity > product.getProductQuantity()) {
+                                            System.out.println("Not enough items in stock. Please specify a different quantity.");
+                                            quantity = 0; // Reset the quantity to 0 to repeat the loop
                                         }
-
-                                        Order newOrder = orderService.create(customer, quantity, product, "In Progress");
-
-                                        System.out.println("Order created successfully.");
-
-                                    } else {
-                                        System.out.println("Product with ID " + productId + " not found.");
                                     }
+
+                                    Order newOrder = orderService.create(customer, quantity, product, "In Progress");
+
+                                    System.out.println("Order created successfully.");
                                 } else {
-                                    System.out.println("User with ID " + userId + " does not have the required 'CUSTOMER' role.");
+                                    System.out.println("Product with ID " + productId + " not found.");
                                 }
                             } else {
-                                System.out.println("User with ID " + userId + " not found.");
+                                System.out.println("Customer with ID " + userId + " not found.");
                             }
                             break;
+
                         case 2:
-                            while (true) {
+                            System.out.println("Sie haben die Option 'Bestellung anzeigen' gewählt.");
+                            userId = user.getId();
+                            Optional<Order> customerOrders = orderRepository.findById(userId);
 
+                            if(customerOrders.isEmpty()) {
+                            System.out.println("Keine Bestellungen für diesen Benutzer gefunden.");
+                        } else {
+                                System.out.println("Ihre Bestellungen:");
+                                System.out.println("Bestellungen für den Benutzer in JSON-Format:");
+                                String ordersJson = orderService.convertOrdersToJsonArg(customerOrders);
+                                System.out.println("Your orders in JSON format:");
+                                System.out.println(ordersJson);
 
-                                if (customer != null) {
-                                    Optional<Order> customerOrders = orderRepository.findByCustomer(customer);
-                                    String ordersJson = orderService.convertOrdersToJson(customerOrders);
-                                    System.out.println("List of all orders in JSON format:");
-                                    System.out.println(ordersJson);
+                                //Order customerOrder = customerOrders.get();
 
-
-                                } else {
-                                    System.out.println("No customer selected. Please enter a customer ID first.");
-                                    long userId1 = scanner.nextLong();
+                                    /*System.out.println("Bestellungs-ID: " + customerOrder.getId());
+                                    System.out.println("Status: " + customerOrder.getStatus());
+                                    System.out.println("Produkt: " + customerOrder.getProduct().getProductName());
+                                    System.out.println("Menge: " + customerOrder.getQuantity());
+                                    System.out.println("Customer ID: " + customerOrder.getUser().getId());*/
                                 }
-
-                                break;
-                            }
-
+                            break;
                         case 3:
-                            System.out.println("Program is exiting.");
+                            System.out.println("Programm wird beendet.");
                             isRunning = false;
                             break;
                         default:
-                            System.out.println("Invalid option. Please select a valid option.");
+                            System.out.println("Ungültige Option. Bitte wählen Sie eine gültige Option.");
                     }
                 }
             }

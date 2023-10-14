@@ -29,21 +29,21 @@ public class CustomerController {
         return "customers";
     }
 
-    @GetMapping("/customers/new")
+/*    @GetMapping("/customers/new")
     public String showNewForm(Model model) {
         model.addAttribute("customer", new Customer());
         model.addAttribute("pageTitle", "Add New Customer");
         return "customer_form";
-    }
+    }*/
 
-    @PostMapping("/customers/save")
+/*    @PostMapping("/customers/save")
     public String saveCustomer(Customer customer, RedirectAttributes ra) {
         us.save(customer);
         ra.addFlashAttribute("message", "The customer has been saved successfully.");
         return "redirect:/customers";
-    }
+    }*/
 
-    @GetMapping("/customers/edit/{id}")
+/*    @GetMapping("/customers/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         try {
             User customer = us.get(id);
@@ -55,7 +55,7 @@ public class CustomerController {
             ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/customers";
         }
-    }
+    }*/
 
   /*  @GetMapping("/customers/delete/{id}")
     public String deleteCustomer(@PathVariable("id") Long id, RedirectAttributes ra) {

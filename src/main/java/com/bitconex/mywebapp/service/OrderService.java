@@ -42,7 +42,7 @@ public class OrderService {
     /**
      * Retrieves all orders from the database.
      */
-    public List<Order> listAll(){
+    public List<Order> listAll() {
         return (List<Order>) or.findAll();
     }
 
@@ -50,8 +50,8 @@ public class OrderService {
      * Searches for an order by its ID and returns it.
      */
     public Order find(Long id) {
-        Optional<Order> existingOrder= or.findById(id);
-        if(existingOrder.isPresent()){
+        Optional<Order> existingOrder = or.findById(id);
+        if (existingOrder.isPresent()) {
             or.findById(id);
         } else {
             throw new IllegalArgumentException("Order with ID " + id + " not found.");
@@ -91,7 +91,7 @@ public class OrderService {
     /**
      * Calculates the total price.
      */
-    private double calculateTotalPrice(Order order) {
+    /* private double calculateTotalPrice(Order order) {
 
         List<Product> products = order.getProducts();
 
@@ -103,12 +103,14 @@ public class OrderService {
         return totalPrice;
     }
 
+     */
+
     /**
-     *  Deletes an order by its ID from the database.
+     * Deletes an order by its ID from the database.
      */
     public void delete(Long id) {
-        Optional<Order> existingOrder= or.findById(id);
-        if(existingOrder.isPresent()){
+        Optional<Order> existingOrder = or.findById(id);
+        if (existingOrder.isPresent()) {
             or.deleteById(id);
         } else {
             throw new IllegalArgumentException("Order with ID " + id + " not found.");
@@ -118,18 +120,29 @@ public class OrderService {
     /**
      * Converts all orders into JSON format.
      */
-        @Transactional
-        public String convertOrdersToJson()throws JsonProcessingException {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Iterable<Order> orderList =  or.findAll();
-            List<Order>target = new ArrayList<>();
-            orderList.forEach(target::add);
-            return objectMapper.writeValueAsString(orderList);
-        }
     @Transactional
-    public String convertOrdersToJson(Optional<Order> orderList) throws JsonProcessingException {
+    public String convertOrdersToJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
+        Iterable<Order> orderList = or.findAll();
+        List<Order> target = new ArrayList<>();
+        orderList.forEach(target::add);
         return objectMapper.writeValueAsString(orderList);
+    }
+
+    @Transactional
+    public String convertOrdersToJsonArg(Optional<Order> orderListToConvert) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Order myOrder = orderListToConvert.orElse(null);
+        if (myOrder == null) {
+            return "No Orders found.";
+        } else {
+            try {
+                return objectMapper.writeValueAsString(myOrder);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return "Error converting orders to JSON";
+            }
+        }
     }
 }
 
