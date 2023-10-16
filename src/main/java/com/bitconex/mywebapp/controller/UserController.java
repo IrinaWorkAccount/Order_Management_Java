@@ -1,7 +1,7 @@
 package com.bitconex.mywebapp.controller;
 
 
-import com.bitconex.mywebapp.exception.UserNotFoundException;
+//import com.bitconex.mywebapp.exception.UserNotFoundException;
 import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.User;
 import com.bitconex.mywebapp.security.Role;
@@ -20,12 +20,13 @@ import java.util.Optional;
  *
  * @autor Irina Barvenko
  */
+@RequestMapping("/users")
 @RestController
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/users")
+    @GetMapping("")
     public List<User> showUserList(Model model) { //
         List<User> listUsers = userService.listAll();
         model.addAttribute("listUsers", listUsers);
@@ -33,7 +34,7 @@ public class UserController {
         return listUsers;
     }
 
-    @RequestMapping("/users/delete/{login}")
+    @RequestMapping("/delete/{login}")
     public String deleteUser(@PathVariable String login) {//, RedirectAttributes ra) {
         // try {
         userService.delete(login);
@@ -49,24 +50,24 @@ public class UserController {
         return userService.get(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/users")
+/*    @RequestMapping(method = RequestMethod.POST, value = "/users")
     public void addUser(@RequestBody User user) {
         userService.save(user);
-    }
+    }*/
 
-    @GetMapping("/")
+/*    @GetMapping("/")
     public String save(User user, RedirectAttributes ra) {
         userService.save(user);
         ra.addFlashAttribute("message", "The user has been saved successfully.");
         return "redirect:/users";
-    }
+    }*/
 
-    @GetMapping("/users/edit/{id}")
+/*    @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
         User user = userService.get(id);
         model.addAttribute("user", user);
         model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
         return "user_form";
-    }
+    }*/
 }
 

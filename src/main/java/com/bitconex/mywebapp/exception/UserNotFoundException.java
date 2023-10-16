@@ -1,3 +1,4 @@
+/*
 package com.bitconex.mywebapp.exception;
 
 public class UserNotFoundException extends Throwable{
@@ -6,4 +7,5 @@ public class UserNotFoundException extends Throwable{
             super(message);
         }
     }
+*/
 

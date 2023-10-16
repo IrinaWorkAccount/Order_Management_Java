@@ -63,17 +63,24 @@ public class MyWebAppApplication implements CommandLineRunner {
 
         boolean isRunning = true;
         Customer customer = null;
-        int quantity=0;
-        Product product=null;
+        int quantity = 0;
+        Product product = null;
+        User user = null;
 
+        while (isRunning) {
         System.out.print("Enter your login name: ");
         String enteredLogin = scanner.nextLine();
 
         System.out.print("Enter your password: ");
         String enteredPassword = scanner.nextLine();
 
-        User user = userService.authenticateUser(enteredLogin, enteredPassword);
+        user = userService.authenticateUser(enteredLogin, enteredPassword);
         if (user != null) {
+            break;
+        } else {
+            System.out.println("User or password is incorrect. Please try again.");
+        }
+    }
             if (user.getRole() == Role.ADMIN) {
 
                 System.out.println("Welcome, Admin!");
@@ -111,6 +118,8 @@ public class MyWebAppApplication implements CommandLineRunner {
 
                                         User admin = new Admin(loginName, email, password);
                                         userService.save(admin);
+                                        System.out.println("Admin created successfully.");
+
 
                                     } else if (userRoleChoice == 2) {
                                         // Create a Customer
@@ -138,19 +147,17 @@ public class MyWebAppApplication implements CommandLineRunner {
                                         User customerToCreate = new Customer(loginName, email, password, name, surname, birthDateNew, new CustomerAddress(street, zipCode, city, country));
                                         userService.save(customerToCreate);
 
-                                    }
-
                                     System.out.println("Customer created successfully.");
 
-                                    break;
+                                }
 
-
+                                    return;
                                 } catch (ParseException e) {
                                     System.out.println("Invalid input. Please enter again.");
                                 } catch (Exception e) {
                                     System.out.println("An error occurred: " + e.getMessage());
                                 }
-
+                                break;
                             }
 
                         case 2: // List all users
@@ -180,28 +187,65 @@ public class MyWebAppApplication implements CommandLineRunner {
 
                                 switch (productCatalogChoice) {
                                     case 1: // Add a new product
-                                        System.out.print("Enter the product name: ");
-                                        String productName = scanner.nextLine();
-
-                                        System.out.print("Enter the sale price of the product: ");
-                                        double salePrice = scanner.nextDouble();
-                                        scanner.nextLine();
-
-                                        System.out.print("Enter the available from date (YYYY-MM-DD): ");
-                                        String availableFromDate = scanner.nextLine();
-                                        Date availableFromDateNew = userService.scanToDate(availableFromDate);
+                                      while (true) {
+                                          String productName=null;
+                                          double salePrice=0.0;
+                                          Date availableFromDateNew=null;
+                                          Date availableUntilDateNew=null;
 
 
-                                        System.out.print("Enter the available until date (YYYY-MM-DD): ");
-                                        String availableUntilDate = scanner.nextLine();
-                                        Date availableUntilDateNew = userService.scanToDate(availableUntilDate);
+                                            try {
+                                                System.out.print("Enter the product name: ");
+                                                productName = scanner.nextLine();
+                                            } catch (Exception  e) {
+                                                System.out.println("Invalid input. Please enter again.");
+                                                continue;
+                                            }
 
-                                        System.out.print("Enter the quantity of product instances available for sale: ");
-                                        quantity = scanner.nextInt();
-                                        scanner.nextLine();
+
+                                            try {
+                                                System.out.print("Enter the sale price of the product: ");
+                                                salePrice = scanner.nextDouble();
+                                                scanner.nextLine();
+                                            } catch (Exception  e) {
+                                                System.out.println("Invalid input. Please enter again.");
+                                                continue;
+                                            }
+
+                                            try {
+                                                System.out.print("Enter the available from date (YYYY-MM-DD): ");
+                                                String availableFromDate = scanner.nextLine();
+                                                availableFromDateNew = userService.scanToDate(availableFromDate);
+                                            } catch (Exception  e) {
+                                                System.out.println("Invalid input. Please enter again.");
+                                                continue;
+                                            }
+
+
+                                            try {
+                                                System.out.print("Enter the available until date (YYYY-MM-DD): ");
+                                                String availableUntilDate = scanner.nextLine();
+                                                availableUntilDateNew = userService.scanToDate(availableUntilDate);
+                                            } catch (Exception  e) {
+                                                System.out.println("Invalid input. Please enter again.");
+                                                continue;
+                                            }
+
+
+                                            try {
+                                                System.out.print("Enter the quantity of product instances available for sale: ");
+                                                quantity = scanner.nextInt();
+                                                scanner.nextLine();
+                                            } catch (Exception  e) {
+                                                System.out.println("Invalid input. Please enter again.");
+                                                continue;
+                                            }
 
                                         productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
                                         System.out.println("Product added successfully.");
+
+                                        break;
+                                      }
                                         break;
 
                                     case 2: // List all products
@@ -325,7 +369,7 @@ public class MyWebAppApplication implements CommandLineRunner {
                 }
             }
         }
-        scanner.close();
+      //  scanner.close();
 
 
         //Insert the required number of new entries (of type 'customer') into the User table. The loop increments each individual Customer by 1.
@@ -482,7 +526,7 @@ public class MyWebAppApplication implements CommandLineRunner {
 
 
     }
-}
+
 
 
 

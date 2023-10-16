@@ -29,43 +29,5 @@ public class CustomerController {
         return "customers";
     }
 
-/*    @GetMapping("/customers/new")
-    public String showNewForm(Model model) {
-        model.addAttribute("customer", new Customer());
-        model.addAttribute("pageTitle", "Add New Customer");
-        return "customer_form";
-    }*/
-
-/*    @PostMapping("/customers/save")
-    public String saveCustomer(Customer customer, RedirectAttributes ra) {
-        us.save(customer);
-        ra.addFlashAttribute("message", "The customer has been saved successfully.");
-        return "redirect:/customers";
-    }*/
-
-/*    @GetMapping("/customers/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
-        try {
-            User customer = us.get(id);
-            model.addAttribute("customer", customer);
-            model.addAttribute("pageTitle", "Edit Customer (ID: " + id + ")");
-
-            return "customer_form";
-        } catch (Exception e) {
-            ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/customers";
-        }
-    }*/
-
-  /*  @GetMapping("/customers/delete/{id}")
-    public String deleteCustomer(@PathVariable("id") Long id, RedirectAttributes ra) {
-        try {
-            service.delete(id);
-            ra.addFlashAttribute("message", "The customer ID " + id + " has been deleted.");
-        } catch (Exception e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/customers";
-    }*/
 }
 
