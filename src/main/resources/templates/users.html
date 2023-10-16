@@ -30,7 +30,7 @@
       <th:block th:each="user : ${listUsers}">
         <tr>
           <td>[[${user.id}]]</td>
-          <td>[[${user.userLoginName}]]</td>
+          <td>[[${user.userLogin}]]</td>
           <td>[[${user.userEmail}]]</td>
           <td>
             <a class="h4 mr-3" th:href="@{'/users/edit/' + ${user.id}}">Edit</a>
