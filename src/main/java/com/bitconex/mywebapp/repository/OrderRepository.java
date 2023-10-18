@@ -14,9 +14,7 @@ import java.util.Optional;
  */
 @Repository
     public interface OrderRepository extends CrudRepository<Order, Long> {
-        long countById(Long id);
-    Optional<Order> findByCustomer(Customer customer);
-
+        Long countById(Long id);
 
     Optional<Order> findById(Long id);
     }

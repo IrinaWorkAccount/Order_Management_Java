@@ -59,13 +59,13 @@ public class OrderService {
         return null;
     }
 
-/*    public List<Order> findOrdersById(Long orderId) {
+    public Optional<Order> findOrdersById(Long orderId) {
         return or.findById(orderId);
     }
 
-    public List<Order> getAllOrdersForUser(Long orderId) {
+    public Optional<Order> getAllOrdersForUser(Long orderId) {
         return or.findById(orderId);
-    }*/
+    }
 
     /**
      * Creates a new order with the specified parameters and saves it in the database.
@@ -124,25 +124,27 @@ public class OrderService {
     public String convertOrdersToJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Iterable<Order> orderList = or.findAll();
-        List<Order> target = new ArrayList<>();
-        orderList.forEach(target::add);
         return objectMapper.writeValueAsString(orderList);
     }
 
+
+    public Optional<Order> getOrdersByUserId(Long userId) {
+        return or.findById(userId);
+    }
     @Transactional
-    public String convertOrdersToJsonArg(Optional<Order> orderListToConvert) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Order myOrder = orderListToConvert.orElse(null);
-        if (myOrder == null) {
-            return "No Orders found.";
+    public String getOrdersJsonForUser(Long userId) throws JsonProcessingException {
+        Optional<Order> order = getOrdersByUserId(userId);
+        if (order.isPresent()) {
+            String json = orderToJson(order.get());
+            return json;
         } else {
-            try {
-                return objectMapper.writeValueAsString(myOrder);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return "Error converting orders to JSON";
-            }
+            return "No orders found for the user";
         }
     }
-}
+    private String orderToJson(Order order) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(order);
+    }
+    }
+
 
