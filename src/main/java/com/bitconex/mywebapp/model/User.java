@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -91,11 +90,6 @@ public abstract class User {
     public void setUserPassword(String password) {
         this.userPassword = password;
     }
-
-/*    @Enumerated(EnumType.STRING)
-    public void addRole(Role role) {
-        this.role = role;
-    }*/
 
     @Enumerated(EnumType.STRING)
     public Role getRole() {

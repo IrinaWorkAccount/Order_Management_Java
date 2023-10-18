@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-    long countById(Long id);
+    //long countById(Long id);
 }

@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Optional;
 
 

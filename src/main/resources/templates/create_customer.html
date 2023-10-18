@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create customer</title>
+</head>
+<body>
+<form method="post" action="http://localhost:8081/users/create/customer">
+  <label for="userLoginName">Login Name:</label>
+  <input type="text" id="userLoginName" name="userLoginName" required><br>
+
+  <label for="userEmail">Email:</label>
+  <input type="email" id="userEmail" name="userEmail" required><br>
+
+  <label for="userPassword">Password:</label>
+  <input type="password" id="userPassword" name="userPassword" required><br>
+
+  <label for="customerName">Customer Name:</label>
+  <input type="text" id="customerName" name="customerName" required><br>
+
+  <label for="customerSurname">Customer Surname:</label>
+  <input type="text" id="customerSurname" name="customerSurname" required><br>
+
+  <label for="customerBirthDate">Birth Date:</label>
+  <input type="text" id="customerBirthDate" name="customerBirthDate" required><br>
+
+  <label for="customerAddressStreet">Street:</label>
+  <input type="text" id="customerAddressStreet" name="customerAddressStreet" required><br>
+
+  <label for="customerAddressZipCode">ZIP Code:</label>
+  <input type="text" id="customerAddressZipCode" name="customerAddressZipCode" required><br>
+
+  <label for="customerAddressCity">City:</label>
+  <input type="text" id="customerAddressCity" name="customerAddressCity" required><br>
+
+  <label for="customerAddressCountry">Country:</label>
+  <input type="text" id="customerAddressCountry" name="customerAddressCountry" required><br>
+
+  <input type="submit" value="Create Customer">
+</form>
+</body>
+</html>

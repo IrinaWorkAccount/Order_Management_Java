@@ -1,6 +1,8 @@
 package com.bitconex.mywebapp.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import static com.bitconex.mywebapp.security.Role.ADMIN;
 

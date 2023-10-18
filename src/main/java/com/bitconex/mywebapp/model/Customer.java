@@ -3,9 +3,7 @@ package com.bitconex.mywebapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 import static com.bitconex.mywebapp.security.Role.CUSTOMER;
 
@@ -46,8 +44,6 @@ public class Customer extends User  {
    /*public Long getId() {
         return id;
     }*/
-
-
 
     public String getCustomerName() {
         return customerName;

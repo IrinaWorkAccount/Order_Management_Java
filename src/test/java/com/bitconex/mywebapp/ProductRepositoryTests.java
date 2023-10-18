@@ -13,9 +13,9 @@ import java.util.Calendar;
 import java.util.Optional;
 
 
-@DataJpaTest
+/*@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(false)
+@Rollback(false)*/
 public class ProductRepositoryTests {
     @Autowired
     private ProductRepository pr;

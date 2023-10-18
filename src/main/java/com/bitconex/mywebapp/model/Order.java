@@ -3,8 +3,6 @@ package com.bitconex.mywebapp.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.List;
-
 /**
  * A class that represents an order and contains the selected products and the customer.
  */
@@ -21,9 +19,6 @@ public class Order {
     @ManyToOne
     //@JoinColumn
     private Product product;
-
-    //@ManyToMany
-    // private List<Product> products;
 
     @ManyToOne//(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
@@ -47,7 +42,6 @@ public class Order {
         this.product = product;
         this.quantity = quantity;
     }
-
 
     public Long getId() {
         return id;
@@ -73,12 +67,6 @@ public class Order {
         this.product = product;
     }
 
-    //public List<Product> getProducts() {
-    //    return products;
-    //}
-    //public void setProducts(List<Product> products) {
-    //    this.products = products;
-    //}
     public User getUser() {
         return user;
     }

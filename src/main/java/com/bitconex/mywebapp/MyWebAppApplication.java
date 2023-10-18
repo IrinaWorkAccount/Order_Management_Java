@@ -58,10 +58,8 @@ public class MyWebAppApplication implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
 
         boolean isRunning = true;
-        Customer customer = null;
-        int quantity = 0;
-        Product product = null;
         User user = null;
+
         while (isRunning) {
             System.out.print("Enter your login name: ");
             String enteredLogin = scanner.nextLine();
@@ -78,14 +76,14 @@ public class MyWebAppApplication implements CommandLineRunner {
         }
 
         if (user.getRole() == Role.ADMIN) {
-            adminPanel(user, scanner);
+            adminPanel(scanner);
         } else if (user.getRole() == Role.CUSTOMER) {
             customerPanel(user, scanner);
         }
     }
 
     // Admin Panel
-    private void adminPanel(User user, Scanner scanner) throws JsonProcessingException {
+    private void adminPanel(Scanner scanner) throws JsonProcessingException {
         System.out.println("Welcome, Admin!");
 
         while (true) {
@@ -103,19 +101,19 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             switch (choice) {
                 case 1: // Create a new user
-                    createUser(userService, scanner);
+                    createUser(scanner);
                     break;
                 case 2: // List all users
-                    listAllUsers(userService);
+                    listAllUsers();
                     break;
                 case 3: // Delete a user
-                    deleteUser(userService, scanner);
+                    deleteUser(scanner);
                     break;
                 case 4: // Product Catalog
                     productCatalog(scanner);
                     break;
                 case 5: // List all orders
-                    listAllOrders(orderService);
+                    listAllOrders();
                     break;
                 case 6: // Exit program
                     return;
@@ -125,7 +123,7 @@ public class MyWebAppApplication implements CommandLineRunner {
         }
     }
 
-    private void createUser(UserService userService, Scanner scanner) {
+    private void createUser(Scanner scanner) {
         System.out.print("Select the role of the new user (1 for Admin, 2 for Customer): ");
         int userRoleChoice = scanner.nextInt();
         scanner.nextLine();
@@ -174,13 +172,13 @@ public class MyWebAppApplication implements CommandLineRunner {
         }
     }
 
-    private void listAllUsers(UserService userService) throws JsonProcessingException {
+    private void listAllUsers() throws JsonProcessingException {
         String usersJson = userService.listAllJSOn();
         System.out.println("List of all users in JSON format:");
         System.out.println(usersJson);
     }
 
-    private void deleteUser(UserService userService, Scanner scanner) {
+    private void deleteUser(Scanner scanner) {
         System.out.print("Enter the login name of the user to delete: ");
         String userLoginToDelete = scanner.nextLine();
         userService.delete(userLoginToDelete);
@@ -201,13 +199,13 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             switch (productCatalogChoice) {
                 case 1: // Add a new product
-                    createProduct(productService, scanner);
+                    createProduct(scanner);
                     break;
                 case 2: // List all products
-                    listAllProducts(productService);
+                    listAllProducts();
                     break;
                 case 3: // Delete a product
-                    deleteProduct(productService, scanner);
+                    deleteProduct(scanner);
                     break;
                 case 4: // Back to Administration
                     return;
@@ -218,7 +216,7 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
     // Create a new product
-    private void createProduct(ProductService productService, Scanner scanner) {
+    private void createProduct(Scanner scanner) {
         System.out.print("Enter the product name: ");
         String productName = scanner.nextLine();
 
@@ -243,14 +241,14 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
     // List all products
-    private void listAllProducts(ProductService productService) throws JsonProcessingException {
+    private void listAllProducts() throws JsonProcessingException {
         String productsJson = productService.listAllProductsInJson();
         System.out.println("List of all products in the catalog in JSON format:");
         System.out.println(productsJson);
     }
 
     // Delete a product
-    private void deleteProduct(ProductService productService, Scanner scanner) {
+    private void deleteProduct(Scanner scanner) {
         System.out.print("Enter the ID of the product to delete: ");
         long productIdToDelete = scanner.nextLong();
         scanner.nextLine();
@@ -259,7 +257,7 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
     // List all orders
-    private void listAllOrders(OrderService orderService) throws JsonProcessingException {
+    private void listAllOrders() throws JsonProcessingException {
         String ordersJson = orderService.convertOrdersToJson();
         System.out.println("List of all orders in JSON format:");
         System.out.println(ordersJson);
@@ -281,7 +279,7 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             switch (choice) {
                 case 1: // Place a new order
-                    placeOrder(userService, productService, orderService, scanner, user);
+                    placeOrder(scanner, user);
                     break;
                 case 2: // View orders
                     viewOrders(orderService, user);
@@ -295,443 +293,83 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
 
-    private void placeOrder(UserService userService, ProductService productService, OrderService orderService, Scanner scanner, User user) {
+    private void placeOrder(Scanner scanner, User user) {
         long userId = user.getId();
         Optional<Customer> customerOptional = customerRepository.findById(userId);
 
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
 
-            System.out.print("Enter the product ID you want to order: ");
-            long productId = scanner.nextLong();
-            scanner.nextLine();
-            Optional<Product> productOptional = productRepository.findById(productId);
+            boolean addingMoreProducts = true;
 
-            if (productOptional.isPresent()) {
-                Product product = productOptional.get();
+            while (addingMoreProducts) {
+                System.out.print("Enter the product ID you want to order: ");
+                long productId = scanner.nextLong();
+                scanner.nextLine();
+                Optional<Product> productOptional = productRepository.findById(productId);
 
-                int quantity = 0;
+                if (productOptional.isPresent()) {
+                    Product product = productOptional.get();
 
-                while (quantity <= 0) {
-                    System.out.print("Enter the desired quantity you want to order: ");
-                    quantity = scanner.nextInt();
+                    int quantity = 0;
 
-                    if (quantity <= 0) {
-                        System.out.println("Invalid quantity. Quantity must be greater than 0.");
-                    } else if (quantity > product.getProductQuantity()) {
-                        System.out.println("Not enough items in stock. Please specify a different quantity.");
-                        quantity = 0; // Reset the quantity to 0 to repeat the loop
+                    while (quantity <= 0) {
+                        System.out.print("Enter the desired quantity you want to order: ");
+                        quantity = scanner.nextInt();
+
+                        if (quantity <= 0) {
+                            System.out.println("Invalid quantity. Quantity must be greater than 0.");
+                        } else if (quantity > product.getProductQuantity()) {
+                            System.out.println("Not enough items in stock. Please specify a different quantity.");
+                            quantity = 0; // Reset the quantity to 0 to repeat the loop
+                        }
                     }
-                }
 
-                Order newOrder = orderService.create(customer, quantity, product, "In Progress");
-                System.out.println("Order created successfully.");
-            } else {
-                System.out.println("Product with ID " + productId + " not found.");
+                    orderService.create(customer, quantity, product, "In Progress");
+                    System.out.println("Product added to the order.");
+
+                    // Ask the user if they want to add more products or confirm the order
+                    System.out.print("Options: 1 for confirm, 2 for add another product: ");
+                    int option = scanner.nextInt();
+                    if (option == 1) {
+                        addingMoreProducts = false; // Exit the loop if the user confirms
+                    }
+
+                    // If option is 2, continue the loop to add another product
+
+                    // Calculate the total price for the current order
+                    double totalPrice = orderService.calculateTotalPrice(user);
+                    List<Order> lastOrders = orderService.findLastOrderForUser(user);
+                    // The list of recent orders along with individual prices and the total prices
+                    System.out.println("Last Orders for User " + user.getUserLogin() + ":");
+                    for (Order order : lastOrders) {
+                        double orderTotal = order.getProduct().getProductSalePrice() * order.getQuantity();
+                        System.out.println("Product Name: " + order.getProduct().getProductName());
+                        System.out.println("Quantity: " + order.getQuantity());
+                        System.out.println("Unit price: " + order.getProduct().getProductSalePrice());
+                        System.out.println("Individual Price: $" + orderTotal);
+                        System.out.println("-----");
+                    }
+                    System.out.println("The total sum for all your orders: $" + totalPrice);
+                } else {
+                    System.out.println("Product with ID " + productId + " not found.");
+                }
             }
         } else {
             System.out.println("Customer with ID " + userId + " not found.");
         }
-    }
+        }
+
 
     private void viewOrders(OrderService orderService, User user) throws JsonProcessingException {
         Long userId = user.getId();
-        //Optional<Order> customerOrders = orderRepository.findById(userId);
         if (userId != null) {
-            String ordersJson = orderService.getOrdersJsonForUser(userId);
+            String ordersJson = orderService.getOrdersJsonForUser(user);
             System.out.println("Your orders in JSON format:");
             System.out.println(ordersJson);
         }
     }
 }
-
-
-   /* @Override
-    public void run(String... args) throws Exception {
-
-        System.out.println("Hello User"); // Greeting message
-        LOG.info("\n 2. EXECUTING : command line runner"); // Logging execution
-
-        Scanner scanner = new Scanner(System.in);
-
-        boolean isRunning = true;
-        Customer customer = null;
-        int quantity = 0;
-        Product product = null;
-        User user = null;
-        while (isRunning) {
-            System.out.print("Enter your login name: ");
-            String enteredLogin = scanner.nextLine();
-
-            System.out.print("Enter your password: ");
-            String enteredPassword = scanner.nextLine();
-
-            user = userService.authenticateUser(enteredLogin, enteredPassword);
-            if (user != null) {
-                break;
-            } else {
-                System.out.println("User or password is incorrect. Please try again.");
-            }
-        }
-            if (user.getRole() == Role.ADMIN) {
-
-                System.out.println("Welcome, Admin!");
-
-                while (isRunning) {
-                    System.out.println("Administrator Panel");
-                    System.out.println("1. Create a New User");
-                    System.out.println("2. List of All Users");
-                    System.out.println("3. Delete a User");
-                    System.out.println("4. Product Catalog");
-                    System.out.println("5. List of All Orders");
-                    System.out.println("6. Exit program");
-                    System.out.print("Please enter the desired option: ");
-
-                    int choice = scanner.nextInt();
-                    scanner.nextLine();
-
-                    switch (choice) {
-                        case 1: //create a new user
-                            while (true) {
-
-                                String loginName = null;
-                                String password = null;
-                                String email = null;
-                                boolean validInput = false;
-                                int userRoleChoice = 0;
-
-
-                                try {
-
-                                    try {
-                                        System.out.print("Select the role of the new user (1 for Admin, 2 for Customer): ");
-                                        userRoleChoice = scanner.nextInt();
-                                        scanner.nextLine();
-                                    } catch (Exception e) {
-                                        System.out.println("Invalid input for the user role. Please enter again.");
-                                        break;
-
-
-                                    }
-                                    try {
-                                        System.out.print("Enter the login name: ");
-                                        loginName = scanner.nextLine();
-                                    } catch (Exception e) {
-                                        System.out.println("Invalid input for the admin login name. Please enter again.");
-                                        continue;
-                                    }
-                                    System.out.print("Enter the password: ");
-                                    password = scanner.nextLine();
-
-                                    System.out.print("Enter the email address: ");
-                                    email = scanner.nextLine();
-                                    if (userRoleChoice == 1) {
-
-                                        User admin = new Admin(loginName, email, password);
-                                        userService.save(admin);
-                                        System.out.println("Admin created successfully.");
-
-
-                                    } else if (userRoleChoice == 2) {
-                                        // Create a Customer
-                                        String name = null;
-                                        String surname = null;
-                                        Date birthDateNew = null;
-                                        String street = null;
-                                        String zipCode = null;
-                                        String city = null;
-                                        String country = null;
-                                        try {
-                                            System.out.print("Enter the name: ");
-                                            name = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the surname: ");
-                                            surname = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the birth date (YYYY-MM-DD): ");
-                                            String birthDate = scanner.nextLine();
-                                            birthDateNew = userService.scanToDate(birthDate);
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the street and house number: ");
-                                            street = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the zip code: ");
-                                            zipCode = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the city: ");
-                                            city = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        try {
-                                            System.out.print("Enter the country: ");
-                                            country = scanner.nextLine();
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                            continue;
-                                        }
-                                        User customerToCreate = new Customer(loginName, email, password, name, surname, birthDateNew, new CustomerAddress(street, zipCode, city, country));
-                                        userService.save(customerToCreate);
-
-                                        System.out.println("Customer created successfully.");
-
-                                    }
-
-                                    return;
-
-                                } catch (ParseException e) {
-                                    System.out.println("Invalid input. Please enter again.");
-                                } catch (Exception e) {
-                                    System.out.println("An error occurred: " + e.getMessage());
-                                }
-                                break;
-                            }
-
-                        case 2: // List all users
-                            String usersJson = userService.listAllJSOn();
-                            System.out.println("List of all users in JSON format:");
-                            System.out.println(usersJson);
-                            break;
-
-                        case 3: // Delete a user
-                            try {
-                                System.out.print("Enter the login name of the user to delete: ");
-                                String userLoginToDelete = scanner.nextLine();
-                                userService.delete(userLoginToDelete);
-                                System.out.println("User deleted successfully.");
-                            } catch (Exception e) {
-                                System.out.println("Invalid input. Please try again.");
-                            }
-                            break;
-
-                        case 4: // Product Catalog
-                            while (true) {
-                                System.out.println("Product Catalog");
-                                System.out.println("1. Add a new product");
-                                System.out.println("2. List all products");
-                                System.out.println("3. Delete a product");
-                                System.out.println("4. Back to Administration");
-                                System.out.print("Please enter the desired option: ");
-
-                                int productCatalogChoice = scanner.nextInt();
-                                scanner.nextLine();
-
-                                switch (productCatalogChoice) {
-                                    case 1: // Add a new product
-                                        while (true) {
-                                            String productName = null;
-                                            double salePrice = 0.0;
-                                            Date availableFromDateNew = null;
-                                            Date availableUntilDateNew = null;
-
-
-                                            try {
-                                                System.out.print("Enter the product name: ");
-                                                productName = scanner.nextLine();
-                                            } catch (Exception e) {
-                                                System.out.println("Invalid input. Please enter again.");
-                                                continue;
-                                            }
-
-
-                                            try {
-                                                System.out.print("Enter the sale price of the product: ");
-                                                salePrice = scanner.nextDouble();
-                                                scanner.nextLine();
-                                            } catch (Exception e) {
-                                                System.out.println("Invalid input. Please enter again.");
-                                                continue;
-                                            }
-
-                                            try {
-                                                System.out.print("Enter the available from date (YYYY-MM-DD): ");
-                                                String availableFromDate = scanner.nextLine();
-                                                availableFromDateNew = userService.scanToDate(availableFromDate);
-                                            } catch (Exception e) {
-                                                System.out.println("Invalid input. Please enter again.");
-                                                continue;
-                                            }
-
-
-                                            try {
-                                                System.out.print("Enter the available until date (YYYY-MM-DD): ");
-                                                String availableUntilDate = scanner.nextLine();
-                                                availableUntilDateNew = userService.scanToDate(availableUntilDate);
-                                            } catch (Exception e) {
-                                                System.out.println("Invalid input. Please enter again.");
-                                                continue;
-                                            }
-
-
-                                            try {
-                                                System.out.print("Enter the quantity of product instances available for sale: ");
-                                                quantity = scanner.nextInt();
-                                                scanner.nextLine();
-                                            } catch (Exception e) {
-                                                System.out.println("Invalid input. Please enter again.");
-                                                continue;
-                                            }
-
-                                            productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
-                                            System.out.println("Product added successfully.");
-
-                                            break;
-                                        }
-                                        break;
-
-                                    case 2: // List all products
-                                        String productsJson = productService.listAllProductsInJson();
-                                        System.out.println("List of all products in the catalog in JSON format:");
-                                        System.out.println(productsJson);
-                                        break;
-
-                                    case 3: // Delete a product
-                                        try {
-                                            System.out.print("Enter the ID of the product to delete: ");
-                                            long productIdToDelete = scanner.nextLong();
-                                            productService.delete(productIdToDelete);
-                                            System.out.println("Product deleted successfully.");
-                                        } catch (Exception e) {
-                                            System.out.println("Invalid input. Please enter again.");
-                                        }
-                                        break;
-
-                                    case 4: // Back to Administration
-                                        break;
-
-                                    default:
-                                        System.out.println("Invalid option. Please select a valid option.");
-                                }
-
-                                if (productCatalogChoice == 4) {
-                                    break; // Return to the main Administration menu
-                                }
-                            }
-                            break;
-
-                        case 5: // List all orders
-                            String ordersJson = orderService.convertOrdersToJson();
-                            System.out.println("List of all orders in JSON format:");
-                            System.out.println(ordersJson);
-                            break;
-                    }
-                }
-
-
-            } else if (user.getRole() == Role.CUSTOMER) {
-
-                System.out.println("Welcome, Customer!");
-
-                while (isRunning) {
-
-                    System.out.println("Customer Panel");
-                    System.out.println("1. Place a new order");
-                    System.out.println("2. View orders");
-                    System.out.println("3. Exit program");
-                    System.out.print("Please enter the desired option: ");
-
-                    int choice = scanner.nextInt();
-                    scanner.nextLine();
-
-                    switch (choice) {
-                        case 1:
-                            long userId = user.getId();
-                            Optional<Customer> customerOptional = customerRepository.findById(userId);
-
-                            if (customerOptional.isPresent()) {
-                                customer = customerOptional.get();
-
-                                System.out.print("Enter the product ID you want to order: ");
-                                long productId = scanner.nextLong();
-                                Optional<Product> productOptional = productRepository.findById(productId);
-
-                                if (productOptional.isPresent()) {
-                                    product = productOptional.get();
-
-                                    quantity = 0;
-
-                                    while (quantity <= 0) {
-                                        System.out.print("Enter the desired quantity you want to order: ");
-                                        quantity = scanner.nextInt();
-
-                                        if (quantity <= 0) {
-                                            System.out.println("Invalid quantity. Quantity must be greater than 0.");
-                                        } else if (quantity > product.getProductQuantity()) {
-                                            System.out.println("Not enough items in stock. Please specify a different quantity.");
-                                            quantity = 0; // Reset the quantity to 0 to repeat the loop
-                                        }
-                                    }
-
-                                    Order newOrder = orderService.create(customer, quantity, product, "In Progress");
-
-                                    System.out.println("Order created successfully.");
-                                } else {
-                                    System.out.println("Product with ID " + productId + " not found.");
-                                }
-                            } else {
-                                System.out.println("Customer with ID " + userId + " not found.");
-                            }
-                            break;
-
-                        case 2:
-                            System.out.println("You have chosen the 'View Orders' option.");
-                            userId = user.getId();
-                            Optional<Order> customerOrders = orderRepository.findById(userId);
-
-                            if (customerOrders.isEmpty()) {
-                                System.out.println("No orders found for this user.");
-                            } else {
-                                System.out.println("Your orders:");
-                                System.out.println("Orders for the user in JSON format:");
-                                String ordersJson = orderService.convertOrdersToJsonArg(customerOrders);
-                                System.out.println("Your orders in JSON format:");
-                                System.out.println(ordersJson);
-
-                                //Order customerOrder = customerOrders.get();
-
-                                    *//*System.out.println("Bestellungs-ID: " + customerOrder.getId());
-                                    System.out.println("Status: " + customerOrder.getStatus());
-                                    System.out.println("Produkt: " + customerOrder.getProduct().getProductName());
-                                    System.out.println("Menge: " + customerOrder.getQuantity());
-                                    System.out.println("Customer ID: " + customerOrder.getUser().getId());*//*
-                            }
-                            break;
-                        case 3:
-                            System.out.println("Programm wird beendet.");
-                            isRunning = false;
-                            break;
-                        default:
-                            System.out.println("Invalid option. Please select a valid option");
-                    }
-                }
-            }
-    }
-
-    //  scanner.close();
-
-
-    }*/
 
 
 

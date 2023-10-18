@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,14 +58,6 @@ public class OrderService {
         return null;
     }
 
-    public Optional<Order> findOrdersById(Long orderId) {
-        return or.findById(orderId);
-    }
-
-    public Optional<Order> getAllOrdersForUser(Long orderId) {
-        return or.findById(orderId);
-    }
-
     /**
      * Creates a new order with the specified parameters and saves it in the database.
      */
@@ -91,19 +82,26 @@ public class OrderService {
     /**
      * Calculates the total price.
      */
-    /* private double calculateTotalPrice(Order order) {
-
-        List<Product> products = order.getProducts();
+    public double calculateTotalPrice(User user) {
+        List<Order> userOrders = findLastOrderForUser(user);
 
         double totalPrice = 0.0;
-        for (Product product : products) {
-            totalPrice += product.getProductSalePrice() * order.getQuantity();
+
+        for (Order order : userOrders) {
+            double orderTotal = order.getProduct().getProductSalePrice() * order.getQuantity();
+            totalPrice += orderTotal;
         }
 
         return totalPrice;
     }
 
+    /**
+     * Find all "In Progress" orders for the user
      */
+    public List<Order> findLastOrderForUser(User user) {
+        return or.findAllByUserAndStatus(user, "In Progress");
+    }
+
 
     /**
      * Deletes an order by its ID from the database.
@@ -127,24 +125,21 @@ public class OrderService {
         return objectMapper.writeValueAsString(orderList);
     }
 
-
-    public Optional<Order> getOrdersByUserId(Long userId) {
-        return or.findById(userId);
-    }
     @Transactional
-    public String getOrdersJsonForUser(Long userId) throws JsonProcessingException {
-        Optional<Order> order = getOrdersByUserId(userId);
-        if (order.isPresent()) {
-            String json = orderToJson(order.get());
-            return json;
+    public String getOrdersJsonForUser(User user) throws JsonProcessingException {
+        Iterable<Order> userOrders = or.findAllByUser(user);
+        if (userOrders.iterator().hasNext()) {
+            System.out.println("Orders for user " + user + " in JSON format:");
+            List<Order> orderJsonList = new ArrayList<>();
+            for (Order order : userOrders) {
+                orderJsonList.add(order);
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(orderJsonList);
         } else {
             return "No orders found for the user";
         }
     }
-    private String orderToJson(Order order) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(order);
-    }
-    }
+}
 
 

@@ -76,8 +76,6 @@ public class ProductServiceTest {
         product1.setProductAvailableUntil(futureDate1.getTime());
         product1.setProductQuantity(10);
 
-        // productService.save(product1);
-
         Product product2 = new Product();
         product2.setProductName("productName_2");
         product2.setProductSalePrice(34.87);
@@ -87,8 +85,6 @@ public class ProductServiceTest {
         futureDate2.add(Calendar.YEAR, 2);
         product2.setProductAvailableUntil(futureDate2.getTime());
         product2.setProductQuantity(77);
-
-        // productService.save(product2);
 
         when(productService.listAll()).thenReturn(List.of(product1, product2));
         var result = productService.listAll();

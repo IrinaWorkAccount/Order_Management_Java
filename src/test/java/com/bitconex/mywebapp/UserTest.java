@@ -16,33 +16,22 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
+public class UserTest {
 
     @InjectMocks
     private UserService userService;
-    private Customer customer;
-    private User user;
-    private Admin admin;
-    private final List<Customer> customerList = new ArrayList<>();
     @Mock
     private UserRepository userRepository;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    public void testAddCustomer() {
-
     }
 
     @Test
@@ -71,9 +60,8 @@ public class UserServiceTest {
         jsonResult);
     }
 
-
     @Test
-    public void testListAllCusts() {
+    public void testListAll1() {
         Customer customer1 = new Customer();
         customer1.setUserEmail("userEmail_1");
         customer1.setUserLogin("userLoginName_1");
@@ -122,7 +110,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testListAllAdmins() {
+    public void testListAll2() {
         Admin admin1 = new Admin();
         admin1.setUserEmail("userEmail_1");
         admin1.setUserLogin("userLoginName_1");
@@ -156,8 +144,6 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findById(userId);
     }
 
-
-
     @Test
     public void testGetUserByIdNotFound() {
         Long userId = 1L;
@@ -169,7 +155,6 @@ public class UserServiceTest {
         });
 
         assertEquals("Could not find any users with ID 1", exception.getMessage());
-
     }
 
     @Test
@@ -198,4 +183,23 @@ public class UserServiceTest {
 
         verify(userRepository, never()).delete(any(User.class));
     }
+
+    @Test
+    public void testUpdateAdmin() {
+        Admin admin1 = new Admin();
+        admin1.setId(7L);
+        admin1.setUserEmail("userEmail_1");
+        admin1.setUserLogin("userLoginName_1");
+        admin1.setUserPassword("userPassword_1");
+        admin1.setRole(Role.ADMIN);
+
+        admin1.setUserEmail("userEmailNew");
+        admin1.setUserLogin("userLoginNew");
+        admin1.setUserPassword("query");
+
+        assertEquals("userEmailNew", admin1.getUserEmail());
+        assertEquals("userLoginNew", admin1.getUserLogin());
+        assertEquals("query", admin1.getUserPassword());
+    }
+
 }

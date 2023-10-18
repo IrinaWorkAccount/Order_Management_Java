@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,10 +50,13 @@ public class UserService {
     }
 
     /**
-     *  Saves a user in the database.
+     * Saves a user in the database.
+     *
+     * @return
      */
-    public void save(User user) {
+    public User save(User user) {
         ur.save(user);
+        return user;
     }
 
     /**
@@ -82,20 +83,19 @@ public class UserService {
     }
 
     public User authenticateUser(String enteredLogin, String enteredPassword) {
-       Optional<User>optionalUser = ur.findByUserLogin(enteredLogin);
+        Optional<User> optionalUser = ur.findByUserLogin(enteredLogin);
 
-       if(optionalUser.isPresent()){
-           User user = optionalUser.get();
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
 
-           if(user.getUserPassword().equals(enteredPassword)){
-               return user;
-           }
-       }
-       return null;
+            if (user.getUserPassword().equals(enteredPassword)) {
+                return user;
+            }
+        }
+        return null;
     }
 
-
-   public Date scanToDate(String input) throws ParseException {
+    public Date scanToDate(String input) throws ParseException {
         try (Scanner scanner = new Scanner(input)) {
             String dateString = scanner.next();
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -105,9 +105,4 @@ public class UserService {
         }
     }
 
-
-    //help methods
-    /*public Optional<User> findByLoginName(String loginName) {
-        return ur.findByUserLogin(userLogin);
-    }*/
 }

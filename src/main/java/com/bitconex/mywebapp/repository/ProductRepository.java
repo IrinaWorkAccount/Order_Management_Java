@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    long countById(Long id);
+   // long countById(Long id);
 
     //Optional<Product> findById(Long productId);
 }
