@@ -57,10 +57,8 @@ public class MyWebAppApplication implements CommandLineRunner {
         LOG.info("\n 2. EXECUTING : command line runner"); // Logging execution
         Scanner scanner = new Scanner(System.in);
 
-        boolean isRunning = true;
-        User user = null;
+        User user;
 
-        while (isRunning) {
             System.out.print("Enter your login name: ");
             String enteredLogin = scanner.nextLine();
 
@@ -69,12 +67,11 @@ public class MyWebAppApplication implements CommandLineRunner {
             user = userService.authenticateUser(enteredLogin, enteredPassword);
 
             if (user != null) {
-                break;
             } else {
                 System.out.println("User or password is incorrect. Please try again.");
             }
-        }
 
+        assert user != null;
         if (user.getRole() == Role.ADMIN) {
             adminPanel(scanner);
         } else if (user.getRole() == Role.CUSTOMER) {
@@ -144,31 +141,79 @@ public class MyWebAppApplication implements CommandLineRunner {
             System.out.println("Admin created successfully.");
         } else if (userRoleChoice == 2) {
             // Create a Customer
-            System.out.print("Enter the name: ");
-            String name = scanner.nextLine();
 
-            System.out.print("Enter the surname: ");
-            String surname = scanner.nextLine();
+            while (true) {
 
-            System.out.print("Enter the birth date (YYYY-MM-DD): ");
-            String birthDate = scanner.nextLine();
-            Date birthDateNew = userService.scanToDate(birthDate);
+                String name;
+                String surname;
+                Date birthDateNew;
+                String street;
+                String zipCode;
+                String city;
+                String country;
 
-            System.out.print("Enter the street and house number: ");
-            String street = scanner.nextLine();
+                try {
+                    System.out.print("Enter the name: ");
+                    name = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
 
-            System.out.print("Enter the zip code: ");
-            String zipCode = scanner.nextLine();
+                try {
+                    System.out.print("Enter the surname: ");
+                    surname = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
 
-            System.out.print("Enter the city: ");
-            String city = scanner.nextLine();
+                try {
+                    System.out.print("Enter the birth date (YYYY-MM-DD): ");
+                    String birthDate = scanner.nextLine();
+                    birthDateNew = userService.scanToDate(birthDate);
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
 
-            System.out.print("Enter the country: ");
-            String country = scanner.nextLine();
+                try {
+                    System.out.print("Enter the street and house number: ");
+                    street = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
 
-            User customerToCreate = new Customer(loginName, email, password, name, surname, birthDateNew, new CustomerAddress(street, zipCode, city, country));
-            userService.save(customerToCreate);
-            System.out.println("Customer created successfully.");
+                try {
+                    System.out.print("Enter the zip code: ");
+                    zipCode = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
+
+                try {
+                    System.out.print("Enter the city: ");
+                    city = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
+
+                try {
+                    System.out.print("Enter the country: ");
+                    country = scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
+
+                User customerToCreate = new Customer(loginName, email, password, name, surname, birthDateNew, new CustomerAddress(street, zipCode, city, country));
+                userService.save(customerToCreate);
+                System.out.println("Customer created successfully.");
+                break;
+            }
         }
     }
 
@@ -179,10 +224,16 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
     private void deleteUser(Scanner scanner) {
-        System.out.print("Enter the login name of the user to delete: ");
-        String userLoginToDelete = scanner.nextLine();
-        userService.delete(userLoginToDelete);
-        System.out.println("User deleted successfully.");
+        String userLoginToDelete=null;
+            try {
+                System.out.print("Enter the login name of the user to delete: ");
+                userLoginToDelete = scanner.nextLine();
+
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+            }
+            userService.delete(userLoginToDelete);
+            System.out.println("User deleted successfully.");
     }
 
     private void productCatalog(Scanner scanner) throws JsonProcessingException {
@@ -217,27 +268,61 @@ public class MyWebAppApplication implements CommandLineRunner {
 
     // Create a new product
     private void createProduct(Scanner scanner) {
-        System.out.print("Enter the product name: ");
-        String productName = scanner.nextLine();
+        while (true) {
 
-        System.out.print("Enter the sale price of the product: ");
-        double salePrice = scanner.nextDouble();
-        scanner.nextLine();
+            String productName;
+            double salePrice;
+            Date availableFromDateNew;
+            Date availableUntilDateNew;
+            int quantity;
 
-        System.out.print("Enter the available from date (YYYY-MM-DD): ");
-        String availableFromDate = scanner.nextLine();
-        Date availableFromDateNew = userService.scanToDate(availableFromDate);
+            try {
+                System.out.print("Enter the product name: ");
+                productName = scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+                continue;
+            }
 
-        System.out.print("Enter the available until date (YYYY-MM-DD): ");
-        String availableUntilDate = scanner.nextLine();
-        Date availableUntilDateNew = userService.scanToDate(availableUntilDate);
+            try {
+                System.out.print("Enter the sale price of the product: ");
+                salePrice = scanner.nextDouble();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+                continue;
+            }
 
-        System.out.print("Enter the quantity of product instances available for sale: ");
-        int quantity = scanner.nextInt();
-        scanner.nextLine();
+            try {
+                System.out.print("Enter the available from date (YYYY-MM-DD): ");
+                String availableFromDate = scanner.nextLine();
+                availableFromDateNew = userService.scanToDate(availableFromDate);
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+                continue;
+            }
 
-        productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
-        System.out.println("Product added successfully.");
+            try {
+                System.out.print("Enter the available until date (YYYY-MM-DD): ");
+                String availableUntilDate = scanner.nextLine();
+                availableUntilDateNew = userService.scanToDate(availableUntilDate);
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+                continue;
+            }
+
+            try {
+                System.out.print("Enter the quantity of product instances available for sale: ");
+                quantity = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+                continue;
+            }
+
+            productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
+            System.out.println("Product added successfully.");
+        }
     }
 
     // List all products
@@ -249,11 +334,18 @@ public class MyWebAppApplication implements CommandLineRunner {
 
     // Delete a product
     private void deleteProduct(Scanner scanner) {
-        System.out.print("Enter the ID of the product to delete: ");
-        long productIdToDelete = scanner.nextLong();
-        scanner.nextLine();
-        productService.delete(productIdToDelete);
-        System.out.println("Product deleted successfully.");
+        while (true) {
+            long productIdToDelete = 0;
+            try {
+                System.out.print("Enter the ID of the product to delete: ");
+                productIdToDelete = scanner.nextLong();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter again.");
+            }
+            productService.delete(productIdToDelete);
+            System.out.println("Product deleted successfully.");
+        }
     }
 
     // List all orders
@@ -299,18 +391,17 @@ public class MyWebAppApplication implements CommandLineRunner {
 
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
-
             boolean addingMoreProducts = true;
 
             while (addingMoreProducts) {
                 System.out.print("Enter the product ID you want to order: ");
                 long productId = scanner.nextLong();
                 scanner.nextLine();
+
                 Optional<Product> productOptional = productRepository.findById(productId);
 
                 if (productOptional.isPresent()) {
                     Product product = productOptional.get();
-
                     int quantity = 0;
 
                     while (quantity <= 0) {
@@ -328,29 +419,13 @@ public class MyWebAppApplication implements CommandLineRunner {
                     orderService.create(customer, quantity, product, "In Progress");
                     System.out.println("Product added to the order.");
 
-                    // Ask the user if they want to add more products or confirm the order
-                    System.out.print("Options: 1 for confirm, 2 for add another product: ");
-                    int option = scanner.nextInt();
+                    int option = getUserOption(scanner);
+
                     if (option == 1) {
-                        addingMoreProducts = false; // Exit the loop if the user confirms
+                        addingMoreProducts = false;
                     }
 
-                    // If option is 2, continue the loop to add another product
-
-                    // Calculate the total price for the current order
-                    double totalPrice = orderService.calculateTotalPrice(user);
-                    List<Order> lastOrders = orderService.findLastOrderForUser(user);
-                    // The list of recent orders along with individual prices and the total prices
-                    System.out.println("Last Orders for User " + user.getUserLogin() + ":");
-                    for (Order order : lastOrders) {
-                        double orderTotal = order.getProduct().getProductSalePrice() * order.getQuantity();
-                        System.out.println("Product Name: " + order.getProduct().getProductName());
-                        System.out.println("Quantity: " + order.getQuantity());
-                        System.out.println("Unit price: " + order.getProduct().getProductSalePrice());
-                        System.out.println("Individual Price: $" + orderTotal);
-                        System.out.println("-----");
-                    }
-                    System.out.println("The total sum for all your orders: $" + totalPrice);
+                    displayOrderDetails(user);
                 } else {
                     System.out.println("Product with ID " + productId + " not found.");
                 }
@@ -358,7 +433,28 @@ public class MyWebAppApplication implements CommandLineRunner {
         } else {
             System.out.println("Customer with ID " + userId + " not found.");
         }
+    }
+
+    private int getUserOption(Scanner scanner) {
+        System.out.print("Options: 1 for confirm, 2 for add another product: ");
+        return scanner.nextInt();
+    }
+
+    private void displayOrderDetails(User user) {
+        double totalPrice = orderService.calculateTotalPrice(user);
+        List<Order> lastOrders = orderService.findLastOrderForUser(user);
+
+        System.out.println("Last Orders for User " + user.getUserLogin() + ":");
+        for (Order order : lastOrders) {
+            double orderTotal = order.getProduct().getProductSalePrice() * order.getQuantity();
+            System.out.println("Product Name: " + order.getProduct().getProductName());
+            System.out.println("Quantity: " + order.getQuantity());
+            System.out.println("Unit price: " + order.getProduct().getProductSalePrice());
+            System.out.println("Individual Price: $" + orderTotal);
+            System.out.println("-----");
         }
+        System.out.println("The total sum for all your orders: $" + totalPrice);
+    }
 
 
     private void viewOrders(OrderService orderService, User user) throws JsonProcessingException {
