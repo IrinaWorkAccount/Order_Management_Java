@@ -10,7 +10,7 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 /**
- * An abstract class that contains the common properties of users (Admin and Customer), such a login name, password and email.
+ * The User class is an abstract class that serves as the base class for specific user types, such as `Admin` and `Customer`. It contains common properties like login name, email, and password, as well as the user's role and a list of associated orders.
  */
 
 @Getter
@@ -37,7 +37,6 @@ public abstract class User {
     @Column(name = "password")
     @JsonIgnore
     private String userPassword;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
@@ -46,6 +45,14 @@ public abstract class User {
     @JoinColumn(name = "user_id")
     private List<Order> orders;
 
+    /**
+     * Constructs a new user with the specified login name, email, password, and role.
+     *
+     * @param userLogin    The user's login name.
+     * @param userEmail    The user's email address.
+     * @param userPassword The user's password.
+     * @param role         The user's role (e.g., Admin or Customer).
+     */
     public User(@NonNull String userLogin, String userEmail, String userPassword, Role role) {
         super();
         this.userLogin = userLogin;
@@ -54,10 +61,14 @@ public abstract class User {
         this.role = role;
     }
 
+    /**
+     * Default constructor for the `User` class.
+     */
     public User() {
         //Default constructor
     }
 
+    // Getters and setters for class properties
     public Long getId() {
         return id;
     }

@@ -1,10 +1,7 @@
 package com.bitconex.mywebapp;
 
-import com.bitconex.mywebapp.model.Customer;
-import com.bitconex.mywebapp.model.CustomerAddress;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.ProductRepository;
-import com.bitconex.mywebapp.security.Role;
 import com.bitconex.mywebapp.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,17 +9,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class ProductServiceTest {
+/**
+ * The `ProductTest` class contains test cases for the `ProductService` and `ProductRepository` classes.
+ */
+public class ProductTest {
 
     @InjectMocks
     private ProductService productService;
@@ -35,6 +32,7 @@ public class ProductServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Test case to verify that a product is added and stored in the repository correctly.
     @Test
     public void testAddProduct() {
         Product product = new Product();
@@ -52,7 +50,7 @@ public class ProductServiceTest {
         Product addedProduct = productService.add(product);
 
         when(productService.listAll()).thenReturn(List.of(product));
-        var result = productService.listAll();
+        productService.listAll();
 
         assertNotNull(addedProduct);
         assertEquals("productName", addedProduct.getProductName());
@@ -64,6 +62,7 @@ public class ProductServiceTest {
         verify(productRepository, times(1)).save(any(Product.class));
     }
 
+    // Test case to verify that all products are listed.
     @Test
     public void testListAllProducts() {
         Product product1 = new Product();
@@ -94,6 +93,8 @@ public class ProductServiceTest {
         assertEquals(product1, result.get(0));
         assertEquals(product2, result.get(1));
     }
+
+    // Test case to verify that a product is deleted from the repository.
     @Test
     public void testDeleteProduct() {
         Long productId = 1L;
@@ -106,15 +107,14 @@ public class ProductServiceTest {
         verify(productRepository, times(1)).deleteById(productId);
     }
 
+    // Test case to verify that an exception is thrown when attempting to delete a non-existent product.
     @Test
     public void testDeleteProductNotFound() {
         Long productId = 1L;
 
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            productService.delete(productId);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> productService.delete(productId));
 
         assertEquals("Product with ID 1 not found.", exception.getMessage());
 

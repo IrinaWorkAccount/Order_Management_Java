@@ -3,6 +3,9 @@ package com.bitconex.mywebapp.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+/**
+ * The `CustomerAddress` class represents the address information of a customer, including street, zip code, city, and country.
+ */
 @Embeddable
 public class CustomerAddress {
     @Column(name = "street")
@@ -14,6 +17,14 @@ public class CustomerAddress {
     @Column(name = "country")
     private String country;
 
+    /**
+     * Constructs a new customer address with the specified properties.
+     *
+     * @param street  The street address.
+     * @param zipCode The zip code of the address.
+     * @param city    The city of the address.
+     * @param country The country of the address.
+     */
     public CustomerAddress(String street, String zipCode, String city, String country) {
         this.street = street;
         this.zipCode = zipCode;
@@ -21,10 +32,14 @@ public class CustomerAddress {
         this.country = country;
     }
 
+    /**
+     * Default constructor for the `CustomerAddress` class.
+     */
     public CustomerAddress() {
         //Default constructor
     }
 
+    // Getters and setters for class properties
     public String getStreet() {
         return street;
     }

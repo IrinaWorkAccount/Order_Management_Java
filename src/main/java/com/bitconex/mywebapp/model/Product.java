@@ -6,16 +6,14 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 /**
- * A class that represents a product in the product catalog, including name, sale price, availability dates and quantity
+ * The Product class represents a product in the product catalog. It includes properties such as the product name, sale price, availability dates, and quantity.
  */
-
 @Entity
 @Table(name = "products", schema = "public")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "product_name", nullable = false)
     private String productName;
     @Column(name = "sale_price")
@@ -35,8 +33,15 @@ public class Product {
     //@Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private int quantity;
 
-
-
+    /**
+     * Constructs a new product with the specified properties.
+     *
+     * @param productName    The name of the product.
+     * @param salePrice      The sale price of the product.
+     * @param availableFrom  The availability date from which the product can be purchased.
+     * @param availableUntil The availability date until which the product can be purchased.
+     * @param quantity       The quantity of the product in stock.
+     */
     public Product(String productName, double salePrice, Date availableFrom, Date availableUntil, int quantity) {
         this.productName = productName;
         this.salePrice = salePrice;
@@ -45,13 +50,18 @@ public class Product {
         this.quantity = quantity;
     }
 
+    /**
+     * Default constructor for the `Product` class.
+     */
     public Product() {
         //Default constructor
     }
 
+    // Getters and setters for class properties
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -94,7 +104,6 @@ public class Product {
     public void setProductQuantity(int quantity) {
         this.quantity = quantity;
     }
-
 
 }
 

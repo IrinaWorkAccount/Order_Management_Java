@@ -1,7 +1,6 @@
 package com.bitconex.mywebapp.controller;
 
 
-//import com.bitconex.mywebapp.exception.UserNotFoundException;
 import com.bitconex.mywebapp.model.Admin;
 import com.bitconex.mywebapp.model.Customer;
 import com.bitconex.mywebapp.model.CustomerAddress;
@@ -11,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,6 +26,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
     // Endpoint for creating a new admin
     @PostMapping("/create/admin")
     public String createAdmin(@RequestParam String userName, @RequestParam String userPassword, @RequestParam String userEmail) {
@@ -37,12 +34,19 @@ public class UserController {
         userService.save(newUser);
         return "The user has been successfully saved.";
     }
+
     // Endpoint for creating a new customer
     @PostMapping("/create/customer")
-    public String createCustomer(@RequestParam String userLoginName, @RequestParam String userPassword, @RequestParam String userEmail,
-                                 @RequestParam String customerName, @RequestParam String customerSurname, @RequestParam String customerBirthDate,
-                                 @RequestParam String customerAddressStreet, @RequestParam String customerAddressZipCode,
-                                 @RequestParam String customerAddressCity, @RequestParam String customerAddressCountry) {
+    public String createCustomer(@RequestParam String userLoginName,
+                                 @RequestParam String userPassword,
+                                 @RequestParam String userEmail,
+                                 @RequestParam String customerName,
+                                 @RequestParam String customerSurname,
+                                 @RequestParam String customerBirthDate,
+                                 @RequestParam String customerAddressStreet,
+                                 @RequestParam String customerAddressZipCode,
+                                 @RequestParam String customerAddressCity,
+                                 @RequestParam String customerAddressCountry) {
         CustomerAddress address = new CustomerAddress(customerAddressStreet, customerAddressZipCode, customerAddressCity, customerAddressCountry);
         Date birthDate = parseBirthDate(customerBirthDate);
         Customer newCustomer = new Customer(userLoginName, userEmail, userPassword, customerName, customerSurname, birthDate, address);
@@ -70,7 +74,7 @@ public class UserController {
 
     // Endpoint for deleting a user by ID
     @RequestMapping("/delete/{login}")
-    public ResponseEntity<String> deleteUser(@PathVariable String login){
+    public ResponseEntity<String> deleteUser(@PathVariable String login) {
         userService.delete(login);
         return ResponseEntity.ok("User " + login + " has been deleted.");
     }
@@ -81,33 +85,41 @@ public class UserController {
         return userService.get(userId);
     }
 
-// Endpoint for verifying and authenticating a user
+    // Endpoint for verifying and authenticating a user
     @PostMapping("/autenticate")
-    public ResponseEntity<User>authenticateUser(@RequestParam String login, @RequestParam String password){
+    public ResponseEntity<User> authenticateUser(@RequestParam String login, @RequestParam String password) {
         User authenticatedUser = userService.authenticateUser(login, password);
-        if(authenticatedUser != null){
+        if (authenticatedUser != null) {
             return ResponseEntity.ok(authenticatedUser);
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
     // Endpoint for edit a user
-    @PutMapping("/edit/{userId}")
-    public ResponseEntity<User> editUser(@PathVariable Long userId, @RequestBody User user) {
-        User existingUser = userService.get(userId);
-
-        if (existingUser != null) {
-            existingUser.setUserLogin(user.getUserLogin());
-            existingUser.setUserPassword(user.getUserPassword());
-            existingUser.setUserEmail(user.getUserEmail());
-
-            User updatedUser = userService.save(existingUser);
-
-            return ResponseEntity.ok(updatedUser);
+    @PostMapping("/edit/{userId}")
+    public ResponseEntity<?> editUser(
+            @PathVariable Long userId,
+            @RequestParam String newUserName,
+            @RequestParam String newUserEmail,
+            @RequestParam String newUserPassword) {
+        User editedUser = userService.editUser(userId, newUserName, newUserEmail, newUserPassword);
+        if (editedUser != null) {
+            System.out.println("The user has been successfully edited");
+            return ResponseEntity.ok(editedUser);
         } else {
-            return ResponseEntity.notFound().build();
+            String errorMessage = "Error: The user was not found or the editing failed.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+
         }
     }
 
+
 }
+
+
+
+
+
+
 

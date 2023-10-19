@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * The `UserService` class provides methods for managing user-related functions, such as retrieving user details, authentication, and managing user data. It also offers functionality to retrieve a list of all users in JSON format.
+ */
 @Service
 public class UserService {
 
@@ -31,7 +34,9 @@ public class UserService {
     // ==============
 
     /**
-     * Retrieves all users from the user database without their passwords.
+     * Retrieves a list of all users from the user database without their passwords.
+     *
+     * @return A list of users with password information removed.
      */
     public List<User> listAll() {
         List <User> users = ur.findAll();
@@ -41,6 +46,9 @@ public class UserService {
 
     /**
      * Converts all users into JSON format.
+     *
+     * @return A JSON representation of all users in the database.
+     * @throws JsonProcessingException if there is an issue converting users to JSON.
      */
     @Transactional
     public String listAllJSOn()throws JsonProcessingException {
@@ -52,15 +60,19 @@ public class UserService {
     /**
      * Saves a user in the database.
      *
-     * @return
+     * @param user The user to be saved.
+     * @return The saved user.
      */
-    public User save(User user) {
+    public void save(User user) {
         ur.save(user);
-        return user;
     }
 
     /**
      * Searches for a user by their ID and returns them.
+     *
+     * @param id The ID of the user to search for.
+     * @return The user with the specified ID.
+     * @throws IllegalArgumentException if no user is found with the given ID.
      */
     public User get(Long id) {
         Optional<User> existingUser = ur.findById(id);
@@ -72,6 +84,9 @@ public class UserService {
 
     /**
      * Deletes a user by their username from the database.
+     *
+     * @param userLogin The username of the user to be deleted.
+     * @throws IllegalArgumentException if no user is found with the given username.
      */
    public void delete(String userLogin) {
         Optional<User> existingUser = ur.findByUserLogin(userLogin);
@@ -82,7 +97,16 @@ public class UserService {
         }
     }
 
+    /**
+     * Authenticates a user based on entered login and password.
+     *
+     * @param enteredLogin The entered login/username.
+     * @param enteredPassword The entered password.
+     * @return The authenticated user if login and password match; otherwise, returns null.
+     */
     public User authenticateUser(String enteredLogin, String enteredPassword) {
+        System.out.println("This is the entered login: " + enteredLogin);
+        System.out.println("This is the entered password: " + enteredPassword);
         Optional<User> optionalUser = ur.findByUserLogin(enteredLogin);
 
         if (optionalUser.isPresent()) {
@@ -95,6 +119,33 @@ public class UserService {
         return null;
     }
 
+    /**
+     * Edits a user's information.
+     *
+     * @param userId The ID of the user to be edited.
+     * @param newUserName The new username for the user.
+     * @param newUserEmail The new email for the user.
+     * @param newUserPassword The new password for the user.
+     * @return The edited user if found and updated; otherwise, returns null.
+     */
+    public User editUser(Long userId, String newUserName, String newUserEmail, String newUserPassword) {
+        User user = ur.findById(userId).orElse(null);
+        if (user != null) {
+            user.setUserLogin(newUserName);
+            user.setUserEmail(newUserEmail);
+            user.setUserPassword(newUserPassword);
+            return ur.save(user);
+        }
+        return null;
+    }
+
+    /**
+     * Parses a date string into a `Date` object.
+     *
+     * @param input The date string to be parsed.
+     * @return A `Date` object representing the parsed date.
+     * @throws ParseException if there is an issue parsing the date string.
+     */
     public Date scanToDate(String input) throws ParseException {
         try (Scanner scanner = new Scanner(input)) {
             String dateString = scanner.next();

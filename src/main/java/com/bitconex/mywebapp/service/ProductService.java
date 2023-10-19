@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A class that implements product catalog functions, such as adding, listing and deleteing products.
+ * The `ProductService` class provides methods for managing the product catalog in the system, including adding, listing, updating, and deleting products. It also offers functionality to retrieve a list of all products in JSON format.
  */
 @Service
 public class ProductService {
@@ -31,6 +31,9 @@ public class ProductService {
 
     /**
      * Adds a new product to the product database.
+     *
+     * @param product The product to be added to the catalog.
+     * @return The newly added product with generated ID.
      */
     public Product add(Product product) {
 
@@ -41,18 +44,21 @@ public class ProductService {
         product.setProductQuantity(product.getProductQuantity());
 
         return pr.save(product);
-
     }
 
     /**
      * Updates an existing product in the database.
+     *
+     * @param product The product to be updated.
      */
     public void save(Product product) {
         pr.save(product);
     }
 
     /**
-     * Retrieves all products from the product database.
+     * Retrieves a list of all products from the product database.
+     *
+     * @return A list of all products in the catalog.
      */
     public List<Product> listAll() {
         return (List<Product>) pr.findAll();
@@ -60,6 +66,9 @@ public class ProductService {
 
     /**
      * Deletes a product by its ID from the database.
+     *
+     * @param id The ID of the product to be deleted.
+     * @throws IllegalArgumentException if the product with the given ID is not found.
      */
     public void delete(Long id) {
         Optional<Product> existingProduct = pr.findById(id);
@@ -69,12 +78,17 @@ public class ProductService {
             throw new IllegalArgumentException("Product with ID " + id + " not found.");
         }
     }
+
+    /**
+     * Retrieves a list of all products in JSON format.
+     *
+     * @return A JSON representation of all products in the catalog.
+     * @throws JsonProcessingException if there is an issue converting products to JSON.
+     */
     @Transactional
     public String listAllProductsInJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         Iterable<Product> productList = pr.findAll();
-        List<Product>target=new ArrayList<>();
-        productList.forEach(target::add);
         return objectMapper.writeValueAsString(productList);
     }
 }

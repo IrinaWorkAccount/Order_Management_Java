@@ -5,11 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Repository for the entity Product.
+ * The `ProductRepository` is a repository interface for the `Product` entity. It provides access to basic CRUD (Create, Read, Update, Delete) operations for `Product` entities.
  */
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-   // long countById(Long id);
-
-    //Optional<Product> findById(Long productId);
+    // No additional custom methods defined in this repository.
 }

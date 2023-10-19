@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Repository for the entity Admin.
+ * The `AdminRepository` is a repository interface for the `Admin` entity. It provides access to basic CRUD (Create, Read, Update, Delete) operations for `Admin` entities.
  */
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-    //long countById(Long id);
+    // No additional methods are defined in this repository.
 }

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A class that implements the order process and includes functions to create orders, display the order history of a customer and confirm the order.
+ * The `OrderService` class provides methods for managing orders in the system, such as creating, retrieving, and updating orders. It also includes functionality for calculating the total price of a user's orders, fetching orders in JSON format, and confirming orders.
  */
 @Service
 public class OrderService {
@@ -32,14 +32,18 @@ public class OrderService {
     // ==============
 
     /**
-     * Saves an order in the database.
+     * Saves the given order to the database.
+     *
+     * @param order The order to be saved.
      */
     public void save(Order order) {
         or.save(order);
     }
 
     /**
-     * Retrieves all orders from the database.
+     * Retrieves a list of all orders from the database.
+     *
+     * @return A list of all orders in the database.
      */
     public List<Order> listAll() {
         return (List<Order>) or.findAll();
@@ -47,6 +51,10 @@ public class OrderService {
 
     /**
      * Searches for an order by its ID and returns it.
+     *
+     * @param id The ID of the order to find.
+     * @return The found order or `null` if not found.
+     * @throws IllegalArgumentException if the order with the given ID is not found.
      */
     public Order find(Long id) {
         Optional<Order> existingOrder = or.findById(id);
@@ -60,6 +68,12 @@ public class OrderService {
 
     /**
      * Creates a new order with the specified parameters and saves it in the database.
+     *
+     * @param customer The customer who placed the order.
+     * @param quantity The quantity of the product in the order.
+     * @param product  The product included in the order.
+     * @param status   The status of the order (e.g., "In Progress").
+     * @return The newly created order.
      */
     public Order create(Customer customer, int quantity, Product product, String status) {
         Order newOrder = new Order();
@@ -72,15 +86,10 @@ public class OrderService {
     }
 
     /**
-     * Confirms an order and change the status to "confirmed".
-     */
-    public void confirmOrder(Order order) {
-        order.setStatus("confirmed");
-        or.save(order);
-    }
-
-    /**
-     * Calculates the total price.
+     * Calculates the total price of all "In Progress" orders for a user.
+     *
+     * @param user The user for whom to calculate the total price.
+     * @return The calculated total price of the user's orders.
      */
     public double calculateTotalPrice(User user) {
         List<Order> userOrders = findLastOrderForUser(user);
@@ -96,7 +105,10 @@ public class OrderService {
     }
 
     /**
-     * Find all "In Progress" orders for the user
+     * Finds all "In Progress" orders for a user.
+     *
+     * @param user The user for whom to find orders.
+     * @return A list of "In Progress" orders for the user.
      */
     public List<Order> findLastOrderForUser(User user) {
         return or.findAllByUserAndStatus(user, "In Progress");
@@ -105,6 +117,9 @@ public class OrderService {
 
     /**
      * Deletes an order by its ID from the database.
+     *
+     * @param id The ID of the order to be deleted.
+     * @throws IllegalArgumentException if the order with the given ID is not found.
      */
     public void delete(Long id) {
         Optional<Order> existingOrder = or.findById(id);
@@ -117,6 +132,9 @@ public class OrderService {
 
     /**
      * Converts all orders into JSON format.
+     *
+     * @return A JSON representation of all orders in the database.
+     * @throws JsonProcessingException if there is an issue converting orders to JSON.
      */
     @Transactional
     public String convertOrdersToJson() throws JsonProcessingException {
@@ -125,6 +143,13 @@ public class OrderService {
         return objectMapper.writeValueAsString(orderList);
     }
 
+    /**
+     * Retrieves orders for a specific user in JSON format.
+     *
+     * @param user The user for whom to fetch orders.
+     * @return A JSON representation of the user's orders.
+     * @throws JsonProcessingException if there is an issue converting orders to JSON.
+     */
     @Transactional
     public String getOrdersJsonForUser(User user) throws JsonProcessingException {
         Iterable<Order> userOrders = or.findAllByUser(user);
@@ -140,6 +165,7 @@ public class OrderService {
             return "No orders found for the user";
         }
     }
+
 }
 
 

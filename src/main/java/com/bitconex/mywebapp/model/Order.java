@@ -4,38 +4,38 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 /**
- * A class that represents an order and contains the selected products and the customer.
+ * The Order class represents an order and contains information about the selected products, the customer, and the order status.
  */
-
 @Entity
 @Table(name = "orders", schema = "public")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private int quantity;
-
     @ManyToOne
     //@JoinColumn
     private Product product;
-
     @ManyToOne//(fetch = FetchType.LAZY)
     //Multiple orders can belong to one customer. This means that a customer can place several orders.
     private User user;
 
     @ManyToOne
     @JsonBackReference
-  //  @JoinColumn(name = "customer_id")
+    //  @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Column(name = "status")
     private String status;
 
-    public Order() {
-        //Default constructor
-    }
-
+    /**
+     * Constructs a new order with the specified properties.
+     *
+     * @param user     The user who placed the order.
+     * @param status   The status of the order (e.g., "In Progress" or "Confirmed").
+     * @param product  The product included in the order.
+     * @param quantity The quantity of the product in the order.
+     */
     public Order(User user, String status, Product product, int quantity) {
         this.user = user;
         this.status = status;
@@ -43,6 +43,14 @@ public class Order {
         this.quantity = quantity;
     }
 
+    /**
+     * Default constructor for the `Order` class.
+     */
+    public Order() {
+        //Default constructor
+    }
+
+    // Getters and setters for class properties
     public Long getId() {
         return id;
     }
