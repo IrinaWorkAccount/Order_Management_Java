@@ -54,6 +54,7 @@ public class MyWebAppApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Hello User"); // Greeting message
+
         LOG.info("\n 2. EXECUTING : command line runner"); // Logging execution
         Scanner scanner = new Scanner(System.in);
 
@@ -224,16 +225,19 @@ public class MyWebAppApplication implements CommandLineRunner {
     }
 
     private void deleteUser(Scanner scanner) {
-        String userLoginToDelete=null;
+        while (true) {
+            String userLoginToDelete;
             try {
                 System.out.print("Enter the login name of the user to delete: ");
                 userLoginToDelete = scanner.nextLine();
+                userService.delete(userLoginToDelete);
+                System.out.println("User deleted successfully.");
+                break;
 
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter again.");
             }
-            userService.delete(userLoginToDelete);
-            System.out.println("User deleted successfully.");
+        }
     }
 
     private void productCatalog(Scanner scanner) throws JsonProcessingException {
@@ -299,6 +303,7 @@ public class MyWebAppApplication implements CommandLineRunner {
                 availableFromDateNew = userService.scanToDate(availableFromDate);
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter again.");
+                scanner.nextLine();
                 continue;
             }
 
@@ -322,6 +327,7 @@ public class MyWebAppApplication implements CommandLineRunner {
 
             productService.add(new Product(productName, salePrice, availableFromDateNew, availableUntilDateNew, quantity));
             System.out.println("Product added successfully.");
+            break;
         }
     }
 
@@ -335,16 +341,18 @@ public class MyWebAppApplication implements CommandLineRunner {
     // Delete a product
     private void deleteProduct(Scanner scanner) {
         while (true) {
-            long productIdToDelete = 0;
+            long productIdToDelete;
             try {
                 System.out.print("Enter the ID of the product to delete: ");
                 productIdToDelete = scanner.nextLong();
+                productService.delete(productIdToDelete);
                 scanner.nextLine();
+                System.out.println("Product deleted successfully.");
+                break;
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter again.");
+                scanner.nextLine();
             }
-            productService.delete(productIdToDelete);
-            System.out.println("Product deleted successfully.");
         }
     }
 

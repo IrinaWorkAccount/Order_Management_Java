@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>Delete Order</title>
+</head>
+<body>
+<h1>Delete Order</h1>
+<form id="deleteOrderForm">
+  <label for="orderId">Order ID:</label>
+  <input type="text" id="orderId" name="orderId" required>
+  <button type="submit">Delete Order</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+  document.getElementById("deleteOrderForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const orderId = document.getElementById("orderId").value;
+    fetch(`/delete/${orderId}`, {
+      method: 'DELETE',
+    })
+            .then(response => {
+              if (response.status === 200) {
+                document.getElementById("result").textContent = "Order deleted successfully.";
+              } else if (response.status === 404) {
+                document.getElementById("result").textContent = "Order not found.";
+              } else {
+                document.getElementById("result").textContent = "Error deleting order.";
+              }
+            })
+            .catch(error => {
+              document.getElementById("result").textContent = "Error: " + error;
+            });
+  });
+</script>
+
+</body>
+</html>

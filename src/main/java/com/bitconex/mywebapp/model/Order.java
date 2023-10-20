@@ -1,6 +1,5 @@
 package com.bitconex.mywebapp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 /**
@@ -14,16 +13,10 @@ public class Order {
     private Long id;
     private int quantity;
     @ManyToOne
-    //@JoinColumn
+    @JoinColumn
     private Product product;
-    @ManyToOne//(fetch = FetchType.LAZY)
-    //Multiple orders can belong to one customer. This means that a customer can place several orders.
+    @ManyToOne(fetch = FetchType.EAGER)//es werden alle user abgerufen, wenn man Order anruft
     private User user;
-
-    @ManyToOne
-    @JsonBackReference
-    //  @JoinColumn(name = "customer_id")
-    private Customer customer;
 
     @Column(name = "status")
     private String status;

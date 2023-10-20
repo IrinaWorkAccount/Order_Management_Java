@@ -1,9 +1,6 @@
 package com.bitconex.mywebapp.controller;
 
 import com.bitconex.mywebapp.model.Product;
-import com.bitconex.mywebapp.model.User;
-import com.bitconex.mywebapp.repository.CustomerRepository;
-import com.bitconex.mywebapp.repository.ProductRepository;
 import com.bitconex.mywebapp.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,5 +32,4 @@ public class ProductController {
         return ResponseEntity.ok( "The product" + id + " has been deleted. ");
     }
 
-   // @GetMapping("/")
 }

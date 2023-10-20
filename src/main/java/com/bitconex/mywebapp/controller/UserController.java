@@ -32,7 +32,7 @@ public class UserController {
     public String createAdmin(@RequestParam String userName, @RequestParam String userPassword, @RequestParam String userEmail) {
         Admin newUser = new Admin(userName, userPassword, userEmail);
         userService.save(newUser);
-        return "The user has been successfully saved.";
+        return "The admin has been successfully saved.";
     }
 
     // Endpoint for creating a new customer
@@ -52,7 +52,7 @@ public class UserController {
         Customer newCustomer = new Customer(userLoginName, userEmail, userPassword, customerName, customerSurname, birthDate, address);
         userService.save(newCustomer);
 
-        return "redirect:/success";
+        return "The customer has been successfully saved.";
     }
 
     private Date parseBirthDate(String customerBirthDate) {

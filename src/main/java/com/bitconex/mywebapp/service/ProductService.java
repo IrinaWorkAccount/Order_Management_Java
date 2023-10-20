@@ -4,11 +4,11 @@ import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.ProductRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,7 +88,11 @@ public class ProductService {
     @Transactional
     public String listAllProductsInJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
+        // Disable the default date format
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         Iterable<Product> productList = pr.findAll();
         return objectMapper.writeValueAsString(productList);
     }
+
 }

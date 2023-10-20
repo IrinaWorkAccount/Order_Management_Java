@@ -1,18 +1,16 @@
 package com.bitconex.mywebapp.controller;
 
 import com.bitconex.mywebapp.model.Customer;
+import com.bitconex.mywebapp.model.Order;
 import com.bitconex.mywebapp.model.Product;
 import com.bitconex.mywebapp.repository.CustomerRepository;
+import com.bitconex.mywebapp.repository.OrderRepository;
 import com.bitconex.mywebapp.repository.ProductRepository;
 import com.bitconex.mywebapp.service.OrderService;
-import com.bitconex.mywebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -25,6 +23,8 @@ public class OrderController {
     private CustomerRepository customerRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @PostMapping("/create")
     public ResponseEntity<String> createOrder(
@@ -57,7 +57,23 @@ public class OrderController {
         }
         return null;
     }
+
+    @DeleteMapping("/delete/{orderId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long orderId) {
+        Optional<Order>orderOptional=orderRepository.findById(orderId);
+        try {
+            if (orderOptional.isPresent()) {
+                orderService.delete(orderId);
+                return new ResponseEntity<>("Order deleted successfully.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Order with ID " + orderId + " not found.", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error deleting order: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+
 
 
 

@@ -31,7 +31,7 @@ public abstract class User {
     @Column(name = "login", length = 128)
     @NonNull
     private String userLogin;
-    @Column(name = "email")//später hinzufügen : , unique = true
+    @Column(name = "email", unique = true)
     //@Email(message = "Invalid email format")
     private String userEmail;
     @Column(name = "password")
@@ -41,7 +41,7 @@ public abstract class User {
     @Column(name = "role")
     private Role role;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL) //mappedBy = "users" losgelassen, da es Fehler angezeigt wird
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<Order> orders;
 
